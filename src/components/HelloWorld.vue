@@ -101,8 +101,9 @@ export default {
 <style scoped lang="scss">
 .ceshi {
   width: 750px;
-  height: 37.5px;
+  height: 70px;
   background-color: red;
+  font-size: 30px;
 }
 h3 {
   margin: 40px 0 0;
