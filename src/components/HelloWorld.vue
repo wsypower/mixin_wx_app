@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
     <van-button type="primary">默认按钮</van-button>
+    <van-button type="danger">危险按钮</van-button>
     <div class="ceshi">123123123</div>
     <h1>{{ msg }}</h1>
     <p>
