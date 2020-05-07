@@ -18,7 +18,7 @@ function resolve(dir) {
   return path.join(__dirname, dir);
 }
 
-const name = defaultSettings.title || "vue模板-title"; // page title
+const name = defaultSettings.title || "vue模板"; // page title
 // ──────────────────────────────────────────────── I ──────────
 //   :::::: P O R T : :  :   :    :     :        :          :
 // ──────────────────────────────────────────────────────────
