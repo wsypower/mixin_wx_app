@@ -110,6 +110,7 @@ export default {
   height: 70px;
   background-color: red;
   font-size: 30px;
+  @include bg-image("~assets/images/no_data");
 }
 h3 {
   margin: 40px 0 0;

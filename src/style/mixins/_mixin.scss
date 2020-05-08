@@ -18,6 +18,7 @@
     @if $extend {
         @extend %center-block;
     }
+
     @else {
         margin-left: auto;
         margin-right: auto;
@@ -33,12 +34,15 @@
     @if $extend {
         @extend %clearfix;
     }
+
     @else {
+
         &::before,
         &::after {
             content: "";
             display: table;
         }
+
         &::after {
             clear: both;
         }
@@ -49,12 +53,23 @@
     @include clearfix(false);
 }
 
+// 切换二倍图，三倍图
+@mixin bg-image($url) {
+    background-image: url($url + "@2x.png");
+
+    @media (-webkit-min-device-pixel-ratio:3),
+    (min-device-pixel-ratio:3) {
+        background-image: url($url + "@3x.png")
+    }
+}
+
 // Hide only visually, but have it available for screenreaders
 // 只隐藏于视觉，屏幕浏览器可以阅读
 @mixin hidden-clip($extend: true) {
     @if $extend {
         @extend %hidden-clip;
     }
+
     @else {
         position: absolute;
         clip: rect(1px, 1px, 1px, 1px);
@@ -70,6 +85,7 @@
     @if $extend {
         @extend %ellipsis;
     }
+
     @else {
         overflow: hidden;
         white-space: nowrap;
@@ -96,6 +112,7 @@
     @if $extend {
         @extend %word-break;
     }
+
     @else {
         white-space: normal;
         word-wrap: break-word;
@@ -114,6 +131,7 @@
     color: $colorText !important;
     cursor: default !important;
     pointer-events: none !important;
+
     @if $colorBorder {
         border: 1px solid map-get($colorDisabled, border);
     }
@@ -128,6 +146,7 @@
     @if $extend {
         @extend %ir;
     }
+
     @else {
         font: 0/0 a;
         text-shadow: none;
@@ -145,12 +164,17 @@
     position: fixed;
     left: 0;
     right: 0;
-    @if $pos == bottom {
+
+    @if $pos==bottom {
         bottom: 0;
-    } @else if $pos == all {
+    }
+
+    @else if $pos==all {
         top: 0;
         bottom: 0;
-    } @else {
+    }
+
+    @else {
         top: $pos;
     }
 }
@@ -169,6 +193,7 @@
     @if $extend {
         @extend %justify;
     }
+
     @else {
         display: flex;
         justify-content: space-between;
@@ -183,7 +208,9 @@
 // 0.5px实现 ios9
 @mixin retina-one-px() {
     @supports (border-width: 0.5px) {
-        @media only screen and (-webkit-min-device-pixel-ratio: 2), screen and (-webkit-min-device-pixel-ratio: 3) {
+
+        @media only screen and (-webkit-min-device-pixel-ratio: 2),
+        screen and (-webkit-min-device-pixel-ratio: 3) {
             border-width: 0.5px;
         }
     }
@@ -193,36 +220,46 @@
 // 安卓4.3- 不支持background-size的百分比
 @mixin retina-one-px-bg($direction: top, $color: $colorBorder) {
     background-repeat: no-repeat;
-    @if $direction == top {
+
+    @if $direction==top {
         background-image: linear-gradient(to bottom, $color 50%, transparent 50%);
         background-size: 100% 1px;
     }
-    @if $direction == bottom {
+
+    @if $direction==bottom {
         background-image: linear-gradient(to top, $color 50%, transparent 50%);
         background-size: 100% 1px;
         background-position: left bottom;
     }
-    @if $direction == left {
+
+    @if $direction==left {
         background-image: linear-gradient(to right, $color 50%, transparent 50%);
         background-size: 1px 100%;
     }
-    @if $direction == right {
+
+    @if $direction==right {
         background-image: linear-gradient(to left, $color 50%, transparent 50%);
         background-size: 1px 100%;
         background-position: right top;
     }
-    @if $direction == v { // 左右两个边框
-        background-image: linear-gradient(to right, $color 50%, transparent 50%),linear-gradient(to left, $color 50%, transparent 50%);
+
+    @if $direction==v {
+        // 左右两个边框
+        background-image: linear-gradient(to right, $color 50%, transparent 50%), linear-gradient(to left, $color 50%, transparent 50%);
         background-size: 1px 100%;
         background-position: left top, right top;
     }
-    @if $direction == h { // 上下两个边框
+
+    @if $direction==h {
+        // 上下两个边框
         background-image: linear-gradient(to bottom, $color 50%, transparent 50%), linear-gradient(to top, $color 50%, transparent 50%);
         background-size: 100% 1px;
         background-position: left top, left bottom;
     }
-    @if $direction == all { // 上下左右四个边框
-        background-image: linear-gradient(to bottom, $color 50%, transparent 50%), linear-gradient(to top, $color 50%, transparent 50%), linear-gradient(to right, $color 50%, transparent 50%),linear-gradient(to left, $color 50%, transparent 50%);
+
+    @if $direction==all {
+        // 上下左右四个边框
+        background-image: linear-gradient(to bottom, $color 50%, transparent 50%), linear-gradient(to top, $color 50%, transparent 50%), linear-gradient(to right, $color 50%, transparent 50%), linear-gradient(to left, $color 50%, transparent 50%);
         background-size: 100% 1px, 100% 1px, 1px 100%, 1px 100%;
         background-position: left top, left bottom, left top, right top;
     }
@@ -236,27 +273,31 @@
     top: 0;
     box-sizing: border-box;
 
-    @if $direction == top or $direction == bottom{
+    @if $direction==top or $direction==bottom {
         right: 0;
         height: 0;
         transform: scaleY(0.5);
         border-top: 1px solid $color;
     }
-    @if $direction == bottom {
+
+    @if $direction==bottom {
         top: auto;
         bottom: 0;
     }
-    @if $direction == right or $direction == left{
+
+    @if $direction==right or $direction==left {
         width: 0;
         bottom: 0;
         transform: scaleX(0.5);
         border-left: 1px solid $color;
     }
-    @if $direction == right {
+
+    @if $direction==right {
         left: auto;
         right: 0;
     }
-    @if $direction == all {
+
+    @if $direction==all {
         width: 200%;
         height: 200%;
         transform-origin: left top;
@@ -268,11 +309,13 @@
 // border top & bottom
 %border-tb {
     position: relative;
+
     &::before {
         content: "";
         @include retina-one-px-border(top);
         z-index: 1;
     }
+
     &::after {
         content: "";
         @include retina-one-px-border(bottom);
@@ -282,6 +325,7 @@
 // border all
 %border-all {
     position: relative;
+
     &::before {
         content: "";
         @include retina-one-px-border(all);
@@ -329,7 +373,8 @@
     #{unquote($child)} {
         flex: 1;
         width: 1%;
-        &:not(:first-of-type){
+
+        &:not(:first-of-type) {
             margin-left: $gap;
         }
     }
@@ -339,7 +384,9 @@
 @mixin line-equal-item($lr: true) {
     display: flex;
     justify-content: space-between;
+
     @if $lr {
+
         &::before,
         &::after {
             content: "";
@@ -350,14 +397,17 @@
 // flex center
 @mixin center-flex($direction: both) {
     display: flex;
-    @if $direction == both {
+
+    @if $direction==both {
         justify-content: center;
         align-items: center;
     }
-    @else if $direction == x {
+
+    @else if $direction==x {
         justify-content: center;
     }
-    @else if $direction == y {
+
+    @else if $direction==y {
         align-items: center;
     }
 }
@@ -365,16 +415,19 @@
 // translate center
 @mixin center-translate($direction: both) {
     position: absolute;
-    @if $direction == both {
+
+    @if $direction==both {
         top: 50%;
         left: 50%;
         transform: translate3d(-50%, -50%, 0);
     }
-    @else if $direction == x {
+
+    @else if $direction==x {
         left: 50%;
         transform: translate3d(-50%, 0, 0);
     }
-    @else if $direction == y {
+
+    @else if $direction==y {
         top: 50%;
         transform: translate3d(0, -50%, 0);
     }
@@ -407,22 +460,26 @@
 
 @mixin triangle($direction: top, $borderWidth: 6px, $borderColor: $colorC) {
     @extend %triangle-basic;
-    @if $direction == top {
+
+    @if $direction==top {
         border-bottom: $borderWidth solid $borderColor;
         border-left: $borderWidth dashed transparent;
         border-right: $borderWidth dashed transparent;
     }
-    @else if $direction == right {
+
+    @else if $direction==right {
         border-left: $borderWidth solid $borderColor;
         border-top: $borderWidth dashed transparent;
         border-bottom: $borderWidth dashed transparent;
     }
-    @else if $direction == bottom {
+
+    @else if $direction==bottom {
         border-top: $borderWidth solid $borderColor;
         border-left: $borderWidth dashed transparent;
         border-right: $borderWidth dashed transparent;
     }
-    @else if $direction == left {
+
+    @else if $direction==left {
         border-right: $borderWidth solid $borderColor;
         border-top: $borderWidth dashed transparent;
         border-bottom: $borderWidth dashed transparent;
@@ -435,22 +492,26 @@
     vertical-align: middle;
     width: $size;
     height: $size;
-    @if $direction == top {
+
+    @if $direction==top {
         border-top: $borderWidth solid currentColor;
         border-right: $borderWidth solid currentColor;
         transform: rotate(-45deg);
     }
-    @else if $direction == right {
+
+    @else if $direction==right {
         border-top: $borderWidth solid currentColor;
         border-right: $borderWidth solid currentColor;
         transform: rotate(45deg);
     }
-    @else if $direction == bottom {
+
+    @else if $direction==bottom {
         border-left: $borderWidth solid currentColor;
         border-bottom: $borderWidth solid currentColor;
         transform: rotate(-45deg);
     }
-    @if $direction == left {
+
+    @if $direction==left {
         border-left: $borderWidth solid currentColor;
         border-bottom: $borderWidth solid currentColor;
         transform: rotate(45deg);
@@ -472,11 +533,11 @@
 // }
 @mixin parent-state($states...) {
     $parent: nth(nth(&, 1), (length(nth(&, 1))-1));
-    
+
     @each $state in $states {
-      @at-root #{selector-replace(&, $parent, str-insert($state, $parent, 0))} {
-          @content;
-      }
+        @at-root #{selector-replace(&, $parent, str-insert($state, $parent, 0))} {
+            @content;
+        }
     }
 }
 
@@ -484,19 +545,20 @@
 // @include animation-fade
 // @include animation-fade($from: false, $to: .5);
 // @include animation-fade($from: 1, $to: 0);
-@mixin animation-fade($name: animationFade, $from: 0, $to: false){
-  @keyframes #{animationFade} {
-    @if $from {
-      from {
-        opacity: $from;
-      }
+@mixin animation-fade($name: animationFade, $from: 0, $to: false) {
+    @keyframes #{animationFade} {
+        @if $from {
+            from {
+                opacity: $from;
+            }
+        }
+
+        @if $to {
+            to {
+                opacity: $to;
+            }
+        }
     }
-    @if $to {
-      to {
-        opacity: $to;
-      }
-    }
-  }
 }
 
 // animation-translate
@@ -506,29 +568,34 @@
 // @include animation-translate($from: y 100px, $to: y 0px);
 @mixin animation-translate($name: animationTranslate, $from: y -100%, $to: false) {
     @keyframes #{$name} {
-        @if $from and length($from) > 1 {
+        @if $from and length($from)>1 {
             from {
-                @if nth($from, 1) == x {
-                  transform: translate(nth($from, 2), 0);
+                @if nth($from, 1)==x {
+                    transform: translate(nth($from, 2), 0);
                 }
-                @if nth($from, 1) == y {
-                  transform: translate(0, nth($from, 2));
+
+                @if nth($from, 1)==y {
+                    transform: translate(0, nth($from, 2));
                 }
-                @if nth($from, 1) == xy or nth($from, 1) == both {
-                  transform: translate(nth($from, 2), nth($from, 3));
+
+                @if nth($from, 1)==xy or nth($from, 1)==both {
+                    transform: translate(nth($from, 2), nth($from, 3));
                 }
             }
         }
-        @if $to and length($to) > 1 {
+
+        @if $to and length($to)>1 {
             to {
-                @if nth($to, 1) == x {
-                  transform: translate(nth($to, 2), 0);
+                @if nth($to, 1)==x {
+                    transform: translate(nth($to, 2), 0);
                 }
-                @if nth($to, 1) == y {
-                  transform: translate(0, nth($to, 2));
+
+                @if nth($to, 1)==y {
+                    transform: translate(0, nth($to, 2));
                 }
-                @if nth($to, 1) == xy or nth($to, 1) == both {
-                  transform: translate(nth($to, 2), nth($to, 3));
+
+                @if nth($to, 1)==xy or nth($to, 1)==both {
+                    transform: translate(nth($to, 2), nth($to, 3));
                 }
             }
         }
@@ -536,13 +603,14 @@
 }
 
 // iphone x
-@mixin iphonex(){
+@mixin iphonex() {
     @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
         @content;
     }
 }
+
 //微信
-@mixin weixin(){
+@mixin weixin() {
     @media only screen and (device-width: 375px) and (device-height: 672px) and (-webkit-device-pixel-ratio: 3) {
         @content;
     }
@@ -559,12 +627,15 @@
     position: relative;
     display: block;
     overflow: hidden;
-    @if $activeStateSwitch{
+
+    @if $activeStateSwitch {
+
         &:active,
         &:hover {
             background-color: darken($colorF, 3%);
         }
     }
+
     &:not(:first-of-type)::before {
         content: "";
         @include retina-one-px-border;
@@ -587,28 +658,32 @@
 }
 
 // 间隔列表
-%gap-item{
+%gap-item {
     position: relative;
     background: #fff;
     margin: 10px 0;
-    @if $activeStateSwitch{
+
+    @if $activeStateSwitch {
+
         &:active,
         &:hover {
             background-color: darken($colorF, 3%);
         }
     }
-    &::before{
+
+    &::before {
         content: "";
         @include retina-one-px-border;
     }
-    &::after{
+
+    &::after {
         content: "";
         @include retina-one-px-border(bottom);
     }
 }
 
 // fullscreen center
-%fullscreen-center{
+%fullscreen-center {
     position: absolute;
     top: 0;
     right: 0;
@@ -656,6 +731,7 @@
 @mixin btn-size($padding: 1em, $height: $barHeight, $radius: 3px) {
     padding: 0 $padding;
     line-height: $height - 2px; // 减掉2px的上下高度
+
     @if $radius {
         border-radius: $radius;
     }
@@ -666,25 +742,32 @@
 @mixin btn-color($colorText: #333, $colorBg: #666, $colorBorder: false) {
     color: nth($colorText, 1);
     background-color: nth($colorBg, 1);
+
     @if $colorBorder {
         border-color: nth($colorBorder, 1);
     }
+
     &:hover,
     &:active {
-        @if length($colorText) == 2 {
+        @if length($colorText)==2 {
             color: nth($colorText, 2);
         }
-        @if length($colorBg) == 2 {
+
+        @if length($colorBg)==2 {
             background-color: nth($colorBg, 2);
-        } @else {
-            @if lightness($colorBg) > 40% {
+        }
+
+        @else {
+            @if lightness($colorBg)>40% {
                 background-color: darken($colorBg, 5%);
             }
+
             @else {
                 background-color: lighten($colorBg, 5%);
             }
         }
-        @if $colorBorder and length($colorBorder) == 2 {
+
+        @if $colorBorder and length($colorBorder)==2 {
             border-color: nth($colorBorder, 2); // $colorBorder: #dbdbdb #ccc => #ccc
         }
     }
