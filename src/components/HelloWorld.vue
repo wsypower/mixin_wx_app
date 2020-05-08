@@ -2,7 +2,10 @@
   <div class="hello">
     <van-button type="primary">默认按钮</van-button>
     <van-button type="danger">危险按钮</van-button>
-    <div class="ceshi">123123123</div>
+    <div
+      class="ceshi"
+      flex="main:center cross:center"
+    >123123123</div>
     <h1>{{ msg }}</h1>
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
@@ -94,11 +97,13 @@ export default {
   },
   props: {
     msg: String
+  },
+  mounted() {
+    console.log(123);
   }
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .ceshi {
   width: 750px;
