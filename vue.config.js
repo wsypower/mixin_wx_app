@@ -6,14 +6,15 @@
 /*   By: wsy <2553241022@qq.com>                             +#++:++#  +#++:++#++ :#:           +#+          */
 /*                                                          +#+              +#+ +#+   +#+#    +#+           */
 /*   Created: 2020/05/06 21:48:07 by wsy                   #+#       #+#    #+# #+#    #+#    #+#            */
-/*   Updated: 2020/05/07 16:52:30 by wsy                  ########## ########   ######## ###########         */
+/*   Updated: 2020/05/08 14:25:58 by wsy                  ########## ########   ######## ###########         */
 /*                                                                                                           */
 /* ********************************************************************************************************* */
 
 "use strict";
 const path = require("path");
 const defaultSettings = require("./src/settings.js");
-
+//使用uglify-js进行js文件的压缩。
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
@@ -26,7 +27,7 @@ const name = defaultSettings.title || "vue模板"; // page title
 // 使用管理员权限执行命令行。
 // 例如，Mac：sudo npm run
 // 您可以通过以下方法更改端口：
-// port = 9527 npm run dev 或 npm run dev --port = 9527
+// port=9527 npm run serve 或 npm run serve --port=8080
 // ──────────────────────────────────────────────────────────────
 const port = process.env.port || process.env.npm_config_port || 9527; // dev port
 
@@ -77,7 +78,29 @@ module.exports = {
         return options;
       })
       .end();
-
+    config
+      // ~~~~~~~~~~~~~~~~~ 开发环境 ~~~~~~~~~~~~~~~~ //
+      .when(
+        process.env.NODE_ENV === "development",
+        // sourcemap不包含列信息
+        (config) => config.devtool("cheap-source-map")
+      )
+      // ~~~~~~~~~~~~~~~~ 非开发环境 ~~~~~~~~~~~~~~~~ //
+      .when(process.env.NODE_ENV !== "development", (config) => {
+        config.optimization.minimizer([
+          new UglifyJsPlugin({
+            uglifyOptions: {
+              // 移除 console
+              // 其它优化选项 https://segmentfault.com/a/1190000010874406
+              compress: {
+                drop_console: true,
+                drop_debugger: true,
+                pure_funcs: ["console.log"],
+              },
+            },
+          }),
+        ]);
+      });
     config.when(process.env.NODE_ENV !== "development", (config) => {
       config
         .plugin("ScriptExtHtmlWebpackPlugin")
