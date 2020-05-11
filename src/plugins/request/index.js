@@ -13,48 +13,7 @@
 import Vue from "vue";
 import axios from "axios";
 import Qs from "qs";
-// import { message } from 'ant-design-vue'
-// import util from "@/utils/util";
-// import store from "@/store";
-/*=============================================
-=             axios-记录和显示错误              =
-=============================================*/
-// 创建一个错误
-const errorCreate = (msg) => {
-  const error = new Error(msg);
-  errorLog(error);
-  throw error;
-};
 
-/**
- * @description 记录和显示错误
- * @author weiyafei
- * @date 2019-06-16-17:57:43
- * @param {error} catch捕获的错误
- */
-const errorLog = (error) => {
-  // 打印到控制台
-  if (process.env.NODE_ENV === "development") {
-    // util.log.danger('>>>>>> Error >>>>>>')
-    util.log.capsule(" cg-Admin ", `💀 ${error}`, "danger");
-  }
-  // 显示提示,依赖于Ant Dedign of Vue
-  // message.error(error.message);
-};
-/*=============================================
-=                axios-成功提示                =
-=============================================*/
-/**
- * @description 提示连接成功
- * @author weiyafei
- * @date 2019-06-16-17:57:43
- */
-const success = (success) => {
-  // 打印到控制台
-  if (process.env.NODE_ENV === "development") {
-    util.log.capsule(" cg-Admin ", `🌝 ${success}`, "success");
-  }
-};
 // ##################################################################### //
 // ############################ axios默认请求头配置 ########################### //
 // ##################################################################### //
@@ -117,19 +76,15 @@ service.interceptors.response.use(
     switch (code >>> 0) {
       case 111:
         // [ 示例 ] code === 111 代表code不存在，为外部接口直接返回结果
-        // success(response.config.url);
         return dataAxios;
       case 0:
         // [ 示例 ] code === 0 代表成功
-        // success(response.config.url);
         return dataAxios.result;
       case 401:
         // [ 示例 ] code === 401 代表没有权限
-        // errorCreate(`${dataAxios.msg}`);
         break;
       default:
         // 不是正确的 code
-        // errorCreate(`${dataAxios.msg}: ${response.config.url}`);
         break;
     }
   },
@@ -176,7 +131,6 @@ service.interceptors.response.use(
           break;
       }
     }
-    // errorLog(error);
     return Promise.reject(error);
   }
 );

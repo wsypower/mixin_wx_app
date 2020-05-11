@@ -1,12 +1,24 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
+    <transition :name="transitionName">
+      <router-view />
+    </transition>
   </div>
 </template>
+<script>
+import defaultSetting from "./settings";
+export default {
+  name: "app",
+  computed: {
+    transitionName() {
+      if (defaultSetting.needPageTrans) {
+        return this.$store.state.pagesAnimation.direction;
+      }
+      return "";
+    }
+  }
+};
+</script>
 <style lang="scss">
 @import "@/style/flex";
 #app {
