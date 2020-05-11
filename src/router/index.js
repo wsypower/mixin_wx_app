@@ -13,7 +13,6 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "@/views/Home.vue";
-import vueg from "vueg";
 import store from "@/store";
 // ##################################################################### //
 // ################################# 首页 ################################ //
@@ -35,13 +34,11 @@ Vue.use(Router);
 // ##################################################################### //
 const routerContext = require.context("./", true, /\.js$/);
 routerContext.keys().forEach((route) => {
-  console.log(route);
   // 如果是根目录的 index.js 、不处理
   if (route.startsWith("./index")) {
     return;
   }
   const routerModule = routerContext(route);
-  console.log(routerModule);
   /**
    * 兼容 import export 和 require module.export 两种规范
    */
@@ -59,19 +56,13 @@ const createRouter = () =>
   });
 const myRouter = createRouter();
 Vue.use(myRouter);
-// Vue.use(vueg, myRouter);
+
 // ##################################################################### //
 // ############################### 前置导航守卫 ############################## //
 // ##################################################################### //
 
-const history = window.sessionStorage;
-history.clear();
-let historyCount = history.getItem("count") * 1 || 0;
-history.setItem("/", 0);
-
 myRouter.beforeEach((to, from, next) => {
   store.dispatch("pagesAnimation/pageSwitchEvent", { to, from });
- 
   next();
 });
 export default myRouter;

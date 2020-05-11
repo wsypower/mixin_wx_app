@@ -1,3 +1,8 @@
+const history = window.sessionStorage;
+history.clear();
+let historyCount = history.getItem("count") * 1 || 0;
+history.setItem("/", 0);
+
 export default {
   namespaced: true,
   state: {
@@ -9,12 +14,18 @@ export default {
       state.direction = direction;
     },
   },
+  /**
+   * @description
+   * 判断方向，添加动画
+   * @author weiyafei
+   * @date 2020-05-11-21:19:27
+   * @param {Object} { commit }
+   * @param {Router} 路由的to,from
+   */
   actions: {
-    pageSwitchEvent({ state, commit }, { to, form }) {
-      console.log("1", to);
-      console.log("2", form);
+    pageSwitchEvent({ commit }, { to, from }) {
       if (to.params.direction) {
-        store.commit("pagesAnimation/updateDirection", to.params.direction);
+        commit("updateDirection", to.params.direction);
       } else {
         const toIndex = history.getItem(to.path);
         const fromIndex = history.getItem(from.path);
@@ -25,15 +36,15 @@ export default {
             parseInt(toIndex, 10) > parseInt(fromIndex, 10) ||
             (toIndex === "0" && fromIndex === "0")
           ) {
-            store.commit("pagesAnimation/updateDirection", "forward");
+            commit("updateDirection", "forward");
           } else {
-            store.commit("pagesAnimation/updateDirection", "back");
+            commit("updateDirection", "back");
           }
         } else {
           ++historyCount;
           history.setItem("count", historyCount);
           to.path !== "/" && history.setItem(to.path, historyCount);
-          store.commit("pagesAnimation/updateDirection", "forward");
+          commit("updateDirection", "forward");
         }
       }
     },

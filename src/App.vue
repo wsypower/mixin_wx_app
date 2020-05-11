@@ -7,20 +7,23 @@
 </template>
 <script>
 import defaultSetting from "./settings";
+import { createNamespacedHelpers } from "vuex";
+const { mapState } = createNamespacedHelpers("pagesAnimation");
 export default {
   name: "app",
   computed: {
+    ...mapState({
+      direction: state => state.direction
+    }),
     transitionName() {
-      if (defaultSetting.needPageTrans) {
-        return this.$store.state.pagesAnimation.direction;
-      }
-      return "";
+      return defaultSetting.needPageTrans ? this.direction : "";
     }
   }
 };
 </script>
 <style lang="scss">
 @import "@/style/flex";
+@import "@/style/animations/pageAnimations";
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
