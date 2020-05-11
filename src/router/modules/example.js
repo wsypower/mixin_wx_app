@@ -13,6 +13,9 @@ const routes = [
     name: "ceshi",
     component: () =>
       import(/* webpackChunkName: "router" */ "@/views/router.vue"),
+    meta: {
+      title: "犬类列表",
+    },
   },
 ];
 export default routes;

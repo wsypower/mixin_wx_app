@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <transition :name="transitionName">
-      <router-view />
+      <router-view v-wechat-title="$route.meta.title" />
     </transition>
   </div>
 </template>

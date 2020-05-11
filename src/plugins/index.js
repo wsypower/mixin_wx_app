@@ -9,13 +9,15 @@
 /*   Updated: 2020/05/08 21:59:52 by wsy                  ########## ########   ######## ###########         */
 /*                                                                                                           */
 /* ********************************************************************************************************* */
+import vueWechatTitle from "vue-wechat-title";
 
 import service from "./request/index";
 export default {
-  install(Vue, options) {
+  install(Vue) {
     // 设置为 false 以阻止 vue 在启动时生成生产提示
     // https://cn.vuejs.org/v2/api/#productionTip
     Vue.config.productionTip = false;
     Vue.use(service);
+    Vue.use(vueWechatTitle);
   },
 };

@@ -17,6 +17,7 @@ export default {
   /**
    * @description
    * 判断方向，添加动画
+   * ['forward','back']
    * @author weiyafei
    * @date 2020-05-11-21:19:27
    * @param {Object} { commit }
@@ -31,15 +32,11 @@ export default {
         const fromIndex = history.getItem(from.path);
         // 判断并记录跳转页面是否访问过，以此判断跳转过渡方式
         if (toIndex) {
-          if (
-            !fromIndex ||
-            parseInt(toIndex, 10) > parseInt(fromIndex, 10) ||
-            (toIndex === "0" && fromIndex === "0")
-          ) {
-            commit("updateDirection", "forward");
-          } else {
-            commit("updateDirection", "back");
-          }
+          !fromIndex ||
+          parseInt(toIndex, 10) > parseInt(fromIndex, 10) ||
+          (toIndex === "0" && fromIndex === "0")
+            ? commit("updateDirection", "forward")
+            : commit("updateDirection", "back");
         } else {
           ++historyCount;
           history.setItem("count", historyCount);
