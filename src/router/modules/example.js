@@ -1,4 +1,6 @@
-
+// ##################################################################### //
+// ################################ 测试路由 ############################### //
+// ##################################################################### //
 const routes = [
   {
     path: "/about",
@@ -10,7 +12,7 @@ const routes = [
     path: "/ceshi",
     name: "ceshi",
     component: () =>
-      import(/* webpackChunkName: "about" */ "@/views/router.vue"),
+      import(/* webpackChunkName: "router" */ "@/views/router.vue"),
   },
 ];
 export default routes;
