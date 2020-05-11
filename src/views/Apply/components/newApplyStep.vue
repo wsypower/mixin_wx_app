@@ -1,0 +1,94 @@
+<template>
+    <div class="apply-step" flex="main:center">
+        <div class="background_line"></div>
+        <div class="apply-step-content" flex="dir:left cross:center main:justify">
+            <div class="step-item"
+                 v-for="(item, index) in stepList"
+                 :key="item"
+                 :class="{active: index === activeStep}"
+                 flex="dir:top cross:center">
+                <div class="step-item_icon-wai"><div class="step-item_icon-nei" flex="cross:center main:center">{{index + 1}}</div></div>
+                <div class="step-item_text">{{item}}</div>
+            </div>
+        </div>
+    </div>
+</template>
+<script type="text/ecmascript-6">
+    export default{
+        name: 'applyStep',
+        props: {
+            activeStep: {
+                type: Number,
+                default: 0
+            }
+        },
+        data(){
+            return {
+                stepList: ['犬主信息','犬只信息','申请材料','上传材料']
+            }
+        }
+    }
+</script>
+<style lang="scss" scoped>
+    .apply-step{
+        width: 100%;
+        height: 160px;
+        position: relative;
+        .background_line{
+            margin-top: 55px;
+            width: 580px;
+            height: 6px;
+            background-color: #cad6f5;
+        }
+        .apply-step-content{
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            padding: 0px 20px;
+            .step-item{
+                width: 130px;
+                &_icon-wai{
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 100%;
+                    background-color: rgba(48, 108, 231, 0.3);
+                }
+                &_icon-nei{
+                    margin-top: 4px;
+                    margin-left: 4px;
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 100%;
+                    border: solid 6px rgba(48, 108, 231, 0.45);
+                    background-color: #ffffff;
+                    font-family: PingFang-SC-Bold;
+                    font-size: 26px;
+                    color: rgba(48, 108, 231, 0.9);
+                }
+                &_text{
+                    margin-top: 14px;
+                    font-family: PingFang-SC-Medium;
+                    font-size: 28px;
+                    line-height: 34px;
+                    color: #306ce7;
+                    opacity: 0.95;
+                }
+                &.active {
+                    .step-item_icon-wai{
+                        background-color: rgba(48, 108, 231, 1);
+                    }
+                    .step-item_icon-nei{
+                        border: solid 6px rgba(48, 108, 231, 0.6);
+                        color: rgba(48, 108, 231, 1);
+                    }
+                    .step-item_text{
+                        font-weight: 600;
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+    }
+</style>

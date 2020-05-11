@@ -13,8 +13,13 @@ export default new Router({
     },
     {
       path: '/apply',
-      name: 'about',
-        component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      name: 'apply',
+        component: () => import(/* webpackChunkName: "about" */ './views/Apply/index.vue')
+    },
+    {
+        path: '/stepOneForPerson',
+        name: 'stepOneForPerson',
+        component: () => import(/* webpackChunkName: "about" */ './views/Apply/stepOneForPerson.vue')
     },
     {
       path: '/about',
