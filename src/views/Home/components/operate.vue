@@ -73,7 +73,7 @@
     box-shadow: 0px 3px 7px 0px rgba(209, 209, 209, 0.35);
     border-radius: 10px;
     flex-wrap: wrap;
-    padding-left: 20px;
+    padding-left: 15px;
     .operate-item{
         width: 165px;
         height: 150px;

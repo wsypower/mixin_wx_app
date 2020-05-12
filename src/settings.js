@@ -1,5 +1,5 @@
 module.exports = {
-   /**
+  /**
    * @type {boolean} true | false
    * @description 是否在右面板显示设置
    */
@@ -13,9 +13,9 @@ module.exports = {
 
   /**
    * @type {boolean} true | false
-   * @description 是否需要标签查看
+   * @description 是否需要页面切换动画
    */
-  tagsView: true,
+  needPageTrans: true,
 
   /**
    * @type {boolean} true | false

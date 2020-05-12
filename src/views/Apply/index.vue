@@ -84,6 +84,7 @@
     .apply-page{
         height: 100%;
         width: 100%;
+        background-color: #f5f5f5;
         .apply-main{
             width: 100%;
             padding-top: 108px;

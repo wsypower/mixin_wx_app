@@ -19,7 +19,7 @@ export default new Router({
     {
         path: '/stepOneForPerson',
         name: 'stepOneForPerson',
-        component: () => import(/* webpackChunkName: "about" */ './views/Apply/stepOneForPerson.vue')
+        component: () => import(/* webpackChunkName: "about" */ './views/Apply/applyStepForPerson.vue')
     },
     {
       path: '/about',

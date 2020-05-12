@@ -1,8 +1,11 @@
 <template>
     <div class="step-page">
         <page-header title="犬证新办"></page-header>
+        <apply-step :activeStep="0"></apply-step>
         <div class="page-body">
-            <apply-step :activeStep="0"></apply-step>
+            <transition>
+                <router-view/>
+            </transition>
         </div>
     </div>
 </template>
@@ -10,7 +13,7 @@
     import PageHeader from '@/components/pageHeader.vue'
     import ApplyStep from './components/newApplyStep.vue'
     export default {
-        name: 'stepOneForPerson',
+        name: 'applyStepForPerson',
         components: {
             PageHeader,
             ApplyStep
@@ -26,10 +29,10 @@
 .step-page{
     width: 100%;
     height: 100%;
+    padding-top: 88px;
     .page-body{
         width: 100%;
-        height: 100%;
-        padding-top: 88px;
+        height: calc(100% - 248px);
     }
 }
 </style>

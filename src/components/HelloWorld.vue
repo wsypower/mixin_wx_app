@@ -1,6 +1,9 @@
 <template>
   <div class="hello">
-    <van-button type="primary">默认按钮</van-button>
+    <van-button
+      type="primary"
+      @click="routerLink"
+    >默认按钮</van-button>
     <van-button type="danger">危险按钮</van-button>
     <div
       class="ceshi"
@@ -90,6 +93,7 @@
 
 <script>
 import { Button } from "vant";
+import { add } from "../api/example/list";
 export default {
   name: "HelloWorld",
   components: {
@@ -99,12 +103,25 @@ export default {
     msg: String
   },
   mounted() {
+    add().then(res => {
+      console.log(res);
+    });
     console.log(123);
+  },
+  methods: {
+    routerLink() {
+      this.$router.push("/ceshi");
+    }
   }
 };
 </script>
 
 <style scoped lang="scss">
+.hello {
+  width: 100%;
+  height: 100%;
+  background-color: silver;
+}
 .ceshi {
   width: 750px;
   height: 70px;

@@ -7,7 +7,9 @@
                  :key="item"
                  :class="{active: index === activeStep}"
                  flex="dir:top cross:center">
-                <div class="step-item_icon-wai"><div class="step-item_icon-nei" flex="cross:center main:center">{{index + 1}}</div></div>
+                <div class="step-item_icon-wai" flex="cross:center main:center">
+                    <div class="step-item_icon-nei" flex="cross:center main:center">{{index + 1}}</div>
+                </div>
                 <div class="step-item_text">{{item}}</div>
             </div>
         </div>
@@ -33,6 +35,7 @@
     .apply-step{
         width: 100%;
         height: 160px;
+        background-color: #ffffff;
         position: relative;
         .background_line{
             margin-top: 55px;
@@ -50,18 +53,16 @@
             .step-item{
                 width: 130px;
                 &_icon-wai{
-                    width: 60px;
-                    height: 60px;
+                    width: 62px;
+                    height: 62px;
                     border-radius: 100%;
-                    background-color: rgba(48, 108, 231, 0.3);
+                    background-color: #c0d3f8;
                 }
                 &_icon-nei{
-                    margin-top: 4px;
-                    margin-left: 4px;
                     width: 50px;
                     height: 50px;
                     border-radius: 100%;
-                    border: solid 6px rgba(48, 108, 231, 0.45);
+                    border: solid 6px #a2bdf4;
                     background-color: #ffffff;
                     font-family: PingFang-SC-Bold;
                     font-size: 26px;
@@ -77,11 +78,11 @@
                 }
                 &.active {
                     .step-item_icon-wai{
-                        background-color: rgba(48, 108, 231, 1);
+                        background-color: #306ce7;
                     }
                     .step-item_icon-nei{
-                        border: solid 6px rgba(48, 108, 231, 0.6);
-                        color: rgba(48, 108, 231, 1);
+                        border: solid 6px #83a7f1;
+                        color: #306ce7;
                     }
                     .step-item_text{
                         font-weight: 600;
