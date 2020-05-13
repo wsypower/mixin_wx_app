@@ -9,7 +9,7 @@
                 <div class="no-data_text">暂无办理记录~</div>
             </div>
             <div class="list-body-content">
-                <vue-scroll :ops="ops">
+                <my-scroll>
                     <div v-for="item in listData" :key="item.id" class="list-item" flex="dir:left cross:center main:justify" @click="gotoDetail(item)">
                         <div class="list-item_left">
                             <div flex="dir:left">
@@ -23,27 +23,19 @@
                             <span class="icon iconfont jt-right">&#xe60f;</span>
                         </div>
                     </div>
-                </vue-scroll>
+                </my-scroll>
             </div>
         </div>
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import vueScroll from 'vuescroll';
     import { Toast } from 'vant'
     export default {
         name: 'historyApplyList',
-        components:{
-            vueScroll
-        },
+        components:{},
         data(){
             return {
-                listData:[],
-                ops: {
-                    bar: {
-                        background: '#c1c1c1',
-                    }
-                },
+                listData:[]
             }
         },
         mounted(){

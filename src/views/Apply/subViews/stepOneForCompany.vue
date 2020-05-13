@@ -1,37 +1,32 @@
 <template>
     <div class="step-one-page">
-        <div class="step-one-page-header" flex="dir:left cross:center">
-            <span class="header-left">基本信息</span>
+        <div class="step-module-header" flex="dir:left cross:center">
+            <span class="header-left">监管人信息</span>
         </div>
         <van-form>
-            <van-field name="radio" label="犬主是否本人：">
+            <van-field name="radio" label="犬主是否本人：" class="label-width-200">
                 <template #input>
-                    <van-radio-group v-model="submitData.isOwner" direction="horizontal">
-                        <van-radio name="1">是</van-radio>
-                        <van-radio name="0">否</van-radio>
-                    </van-radio-group>
+                    <my-radio-group :initValue="submitData.isOwner" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isOwner', name)}"></my-radio-group>
                 </template>
             </van-field>
             <van-divider></van-divider>
-            <van-field name="radio" label="是否备案犬证：">
+            <van-field name="radio" label="是否备案犬证：" class="label-width-200">
                 <template #input>
-                    <van-radio-group v-model="submitData.isBeiAn" direction="horizontal">
-                        <van-radio name="1">是</van-radio>
-                        <van-radio name="0">否</van-radio>
-                    </van-radio-group>
+                    <my-radio-group :initValue="submitData.isBeiAn" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isBeiAn', name)}"></my-radio-group>
                 </template>
             </van-field>
             <div class="warn-note">（备案犬证后，后续您也可以对犬证进行管理）</div>
             <van-divider></van-divider>
-            <van-field name="radio" label="证件类型：">
-                <template #input>
-                    <van-radio-group v-model="submitData.fileType" direction="horizontal">
-                        <van-radio name="1">身份证</van-radio>
-                        <van-radio name="2">驾驶证</van-radio>
-                        <van-radio name="3">护照</van-radio>
-                    </van-radio-group>
-                </template>
-            </van-field>
+            <div class="upload-img sfz-file" flex="dir:left cross:center main:justify">
+                <div class="upload-item">
+                    <div class="file-zm_icon"></div>
+                    <div class="file-zm_text">拍摄身份证人像面</div>
+                </div>
+                <div class="upload-item">
+                    <div class="file-fm_icon"></div>
+                    <div class="file-zm_text">拍摄身份证反面</div>
+                </div>
+            </div>
             <van-divider></van-divider>
             <van-field v-model="submitData.ownerName" label="犬主姓名：" placeholder="请输入" input-align="right"/>
             <van-divider></van-divider>
@@ -45,8 +40,8 @@
                 </template>
             </van-field>
         </van-form>
-        <div class="step-one-page-header" flex="dir:left cross:center">
-            <span class="header-left">居住信息</span>
+        <div class="step-module-header" flex="dir:left cross:center">
+            <span class="header-left">单位信息</span>
         </div>
         <van-form>
             <van-field
@@ -114,36 +109,37 @@
             <div class="upload-img" flex="dir:left cross:center main:justify">
                 <div class="upload-item">
                     <div class="file-zm_icon"></div>
-                    <div class="file-zm_text">上传居住证明</div>
-                </div>
-                <div class="upload-item">
-                    <div class="file-fm_icon"></div>
-                    <div class="file-zm_text">上传居住证明</div>
+                    <div class="file-zm_text">上传单位营业执照</div>
                 </div>
             </div>
         </van-form>
         <div class="btn-panel" flex="dir:top cross:center main:center">
-            <van-button type="info" class="next-btn">下一步</van-button>
+            <van-button type="info" class="next-btn" @click="nextStep">下一步</van-button>
         </div>
-
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Divider, Form, Field, RadioGroup, Radio, Button, Popup, Picker } from 'vant';
+    import { Divider, Form, Field, Button, Popup, Picker } from 'vant';
+    import MyRadioGroup from '@/components/myRadioGroup.vue';
+    const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
+    const fileTypeArray = [{labelName: '身份证',value: '1'},{labelName: '驾驶证',value: '2'},{labelName: '护照',value: '3'}];
+    const sexArray = [{labelName: '男',value: '1'},{labelName: '女',value: '0'}];
     export default{
-        name: 'stepOne',
+        name: 'stepOneForCompany',
         components:{
             [Divider.name]: Divider,
             [Form.name]: Form,
             [Field.name]: Field,
-            [RadioGroup.name]: RadioGroup,
-            [Radio.name]: Radio,
             [Button.name]: Button,
             [Picker.name]: Picker,
-            [Popup.name]: Popup
+            [Popup.name]: Popup,
+            MyRadioGroup
         },
         data(){
             return {
+                ynArray,
+                fileTypeArray,
+                sexArray,
                 showCityPicker: false,
                 cityColumns:[
                 {
@@ -183,12 +179,16 @@
                     fileType: '1',
                     ownerName: '',
                     cardCode: '',
+                    firstName: '',
+                    lastName: '',
+                    country: '',
+                    hzcode: '',
+                    sex: '1',
                     phone: '',
                     qrCode: '',
                     cityValue: '',
                     streetValue: '',
                     communityValue: ''
-
                 }
             }
         },
@@ -207,6 +207,13 @@
                 console.log(`当前选中值：${value}，它的索引：${index}`);
                 this.submitData.communityValue = value;
                 this.showCommunityPicker = false;
+            },
+            getRealValue(attrName,value){
+                this.submitData[attrName] = value;
+            },
+            nextStep(){
+                console.log('submitData', this.submitData);
+                this.$router.push('/applyStep/stepTwo');
             }
         }
     }
@@ -215,7 +222,8 @@
 .step-one-page{
     width: 100%;
     height: 100%;
-    .step-one-page-header{
+    background-color: #f5f5f5;
+    .step-module-header{
         height: 90px;
         padding-left: 24px;
         .header-left{
@@ -235,6 +243,7 @@
         line-height: 40px;
         color: #ef0000;
         background-color: #ffffff;
+        padding: 0px 0px 20px 20px;
     }
     .upload-img{
         padding: 37px 45px;
@@ -253,6 +262,7 @@
                 background-size: 100% 100%;
             }
             .file-zm_text{
+                margin-top: 24px;
                 font-family: PingFangSC-Regular;
                 font-size: 24px;
                 font-weight: normal;
@@ -260,7 +270,13 @@
                 line-height: 23px;
                 letter-spacing: 0px;
                 color: #666666;
+                text-align: center;
             }
+        }
+    }
+    .sfz-file{
+        .upload-item .file-fm_icon{
+            @include bg-image("~assets/images/sfz-fm");
         }
     }
     .btn-panel{
@@ -275,13 +291,23 @@
 }
 </style>
 <style lang="scss">
-    .van-cell:not(:last-child)::after{
-        border-bottom-width: 0px;
-    }
-    .van-divider{
-        margin: 0px;
-    }
-    .van-divider::after, .van-divider::before{
-        height: 2px;
+    .step-one-page{
+        .van-cell:not(:last-child)::after{
+            border-bottom-width: 0px;
+        }
+        .van-divider{
+            margin: 0px;
+        }
+        .van-divider::after, .van-divider::before{
+            height: 2px;
+        }
+        .mini-line::after, .mini-line::before{
+            height: 1px;
+        }
+        .label-width-200{
+            .van-field__label{
+                width: 260px;
+            }
+        }
     }
 </style>

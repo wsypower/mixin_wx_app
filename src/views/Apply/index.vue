@@ -7,39 +7,13 @@
                     <div class="form-item" flex="dir:left cross:center">
                         <div class="from-item-label">养犬类型：</div>
                         <div class="from-item-inline">
-                            <van-radio-group v-model="yqType" direction="horizontal">
-                                <van-radio name="1" class="marginR" icon-size="14px">个人
-                                    <template #icon="props">
-                                        <span v-if="props.checked" class="icon iconfont icon-Time icon_radio checked"></span>
-                                        <span v-else class="icon iconfont icon-danxuanxuanzhong icon_radio"></span>
-                                    </template>
-                                </van-radio>
-                                <van-radio name="2" icon-size="14px">单位
-                                    <template #icon="props">
-                                        <span v-if="props.checked" class="icon iconfont icon-Time icon_radio checked"></span>
-                                        <span v-else class="icon iconfont icon-danxuanxuanzhong icon_radio"></span>
-                                    </template>
-                                </van-radio>
-                            </van-radio-group>
+                            <my-radio-group :initValue="yqType" :radioGroup="typeArray" @getRealValue="(name)=>{getRealValue('yqType', name)}"></my-radio-group>
                         </div>
                     </div>
                     <div class="form-item" flex="dir:left cross:center">
                         <div class="from-item-label">办证类型：</div>
                         <div class="from-item-inline">
-                            <van-radio-group v-model="bzType" direction="horizontal">
-                                <van-radio name="1" class="marginR" icon-size="14px">新办
-                                    <template #icon="props">
-                                        <span v-if="props.checked" class="icon iconfont icon-Time icon_radio checked"></span>
-                                        <span v-else class="icon iconfont icon-danxuanxuanzhong icon_radio"></span>
-                                    </template>
-                                </van-radio>
-                                <van-radio name="2" icon-size="14px">续办
-                                    <template #icon="props">
-                                        <span v-if="props.checked" class="icon iconfont icon-Time icon_radio checked"></span>
-                                        <span v-else class="icon iconfont icon-danxuanxuanzhong icon_radio"></span>
-                                    </template>
-                                </van-radio>
-                            </van-radio-group>
+                            <my-radio-group :initValue="bzType" :radioGroup="methodArray" @getRealValue="(name)=>{getRealValue('bzType', name)}"></my-radio-group>
                         </div>
                     </div>
                     <van-button class="next-btn" color="linear-gradient(0deg, #4b7ee5 0%, #306ce7 100%)" @click="nextPage">继续</van-button>
@@ -54,6 +28,9 @@
     import PageHeader from '@/components/pageHeader.vue'
     import CardLayout from './components/cardLayout.vue'
     import HistoryApplyList from './components/historyApplyList.vue'
+    import MyRadioGroup from '@/components/myRadioGroup.vue';
+    const typeArray = [{labelName: '个人',value:'1'},{labelName: '单位',value:'2'}];
+    const methodArray = [{labelName: '新办',value:'1'},{labelName: '续办',value:'2'}];
     export default {
         name: 'apply',
         components: {
@@ -62,10 +39,13 @@
             [Radio.name]: Radio,
             [Button.name]: Button,
             CardLayout,
-            HistoryApplyList
+            HistoryApplyList,
+            MyRadioGroup
         },
         data(){
             return {
+                typeArray,
+                methodArray,
                 yqType: '1',
                 bzType: '1'
             }
@@ -74,7 +54,19 @@
 
         },
         methods: {
+            getRealValue(attrName, value){
+                this[attrName] = value;
+            },
             nextPage(){
+                console.log(this.yqType, this.bzType);
+                //代表个人的新办
+                if(this.bzType==='1'&&this.yqType==='1'){
+                    this.$router.push('/applyStep/stepOneForPerson');
+                }
+                //代表单位的新办
+                else if(this.bzType==='1'&&this.yqType==='2'){
+                    this.$router.push('/applyStep/stepOneForCompany');
+                }
 
             }
         }

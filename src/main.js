@@ -34,7 +34,8 @@ Vue.use(vuescroll, {
     ops: {
         bar: {
             background: '#c1c1c1',
-            size: '2px'
+            size: '3px',
+            opacity: 0
         }
     },
     name: 'myScroll' // 在这里自定义组件名字，默认是vueScroll

@@ -18,7 +18,10 @@ export default {
     transitionName() {
       return defaultSetting.needPageTrans ? this.direction : "";
     }
-  }
+  },
+   mounted(){
+       this.$store.commit('global/updateSystem', navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1)
+   }
 };
 </script>
 <style lang="scss">

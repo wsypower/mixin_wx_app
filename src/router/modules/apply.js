@@ -5,25 +5,34 @@ const routes = [
         component: () => import(/* webpackChunkName: "apply" */ '@/views/Apply/index.vue')
     },
     {
-        path: '/applyStepForPerson',
-        name: 'applyStepForPerson',
-        component: () => import(/* webpackChunkName: "applyStepForPerson" */ '@/views/Apply/applyStepForPerson.vue'),
+        path: '/applyStep',
+        name: 'applyStep',
+        component: () => import(/* webpackChunkName: "applyStep" */ '@/views/Apply/applyStep.vue'),
         children: [
             {
-                path: 'stepOne',
-                component: () => import(/* webpackChunkName: "applyStepForPerson" */ '@/views/Apply/stepOne.vue'),
+                path: 'stepOneForPerson',
+                component: () => import(/* webpackChunkName: "applyStep" */ '@/views/Apply/subViews/stepOneForPerson.vue'),
+                meta: { index: 0 }
+            },
+            {
+                path: 'stepOneForCompany',
+                component: () => import(/* webpackChunkName: "applyStep" */ '@/views/Apply/subViews/stepOneForCompany.vue'),
+                meta: { index: 0 }
             },
             {
                 path: 'stepTwo',
-                component: () => import(/* webpackChunkName: "applyStepForPerson" */ '@/views/Apply/stepTwo.vue'),
+                component: () => import(/* webpackChunkName: "applyStep" */ '@/views/Apply/subViews/stepTwo.vue'),
+                meta: { index: 1 }
             },
             {
                 path: 'stepThree',
-                component: () => import(/* webpackChunkName: "applyStepForPerson" */ '@/views/Apply/stepThree.vue'),
+                component: () => import(/* webpackChunkName: "applyStep" */ '@/views/Apply/subViews/stepThree.vue'),
+                meta: { index: 2 }
             },
             {
                 path: 'stepFour',
-                component: () => import(/* webpackChunkName: "applyStepForPerson" */ '@/views/Apply/stepFour.vue'),
+                component: () => import(/* webpackChunkName: "applyStep" */ '@/views/Apply/subViews/stepFour.vue'),
+                meta: { index: 3 }
             }
         ]
     }
