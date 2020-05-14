@@ -18,20 +18,20 @@
     import PageHeader from '@/components/pageHeader.vue'
     import ApplyStepHeader from './components/applyStepHeader.vue'
     export default {
-        name: 'applyStep',
+        name: 'newApply',
         components: {
             PageHeader,
             ApplyStepHeader
         },
         data(){
             return {
-                activeStep: 0
+                //activeStep: 0
             }
         },
         watch:{
             '$route': function(newValue){
-                console.log(`route:`,newValue);
-                this.activeStep = newValue.meta.index;
+                // console.log(`route:`,newValue,this.direction);
+                // this.activeStep = newValue.meta.index;
                 this.$refs.myScroll.scrollTo({y:0},0);
             }
         },
@@ -41,6 +41,9 @@
             }),
             transitionName() {
                 return defaultSetting.needPageTrans ? this.direction : "";
+            },
+            activeStep(){
+                return this.$route.meta.index;
             }
         }
     }

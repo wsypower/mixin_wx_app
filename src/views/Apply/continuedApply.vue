@@ -1,16 +1,53 @@
 <template>
-    <div class="step-four-page">
-        <div class="step-module-header" flex="dir:left cross:center">
-            <span class="header-left">基本信息</span>
-        </div>
+    <div class="continued-step-page">
+        <page-header title="犬证续办"></page-header>
         <van-form>
-            <van-field name="radio" label="社区是否盖章：" class="label-width-200">
-                <template #input>
-                    <my-radio-group :initValue="submitData.isSeal" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isSeal', name)}"></my-radio-group>
-                </template>
-            </van-field>
-            <div class="warn-note">（若未盖章，请在“添加其他材料项”中，上传“房产证/租房合同/居住证（三者任选一项）”信息。）</div>
-            <van-divider class="large-line"></van-divider>
+            <van-field v-model="submitData.firstName" label="犬证编号：" placeholder="请输入犬证编号" input-align="right"/>
+            <van-divider></van-divider>
+            <van-field v-model="submitData.firstName" label="犬证芯片号：" placeholder="请输入芯片号（非必填）" input-align="right"/>
+            <van-divider></van-divider>
+            <van-field
+                    readonly
+                    clickable
+                    name="picker"
+                    :value="submitData.cityValue"
+                    label="免疫地点："
+                    placeholder="请选择地点"
+                    @click="showCityPicker = true"
+                    input-align="right"
+                    right-icon="arrow"
+            />
+            <van-popup v-model="showCityPicker" position="bottom">
+                <van-picker
+                        show-toolbar
+                        :columns="cityColumns"
+                        @confirm="onCityConfirm"
+                        @cancel="showCityPicker = false"
+                />
+            </van-popup>
+            <van-divider></van-divider>
+            <van-field v-model="submitData.dogType" label="免疫证编号：" placeholder="请输入编号" input-align="right"/>
+            <van-divider></van-divider>
+            <van-field
+                    readonly
+                    clickable
+                    name="picker"
+                    :value="submitData.communityValue"
+                    label="免疫登记日期"
+                    placeholder="请选择日期"
+                    @click="showCommunityPicker = true"
+                    input-align="right"
+                    right-icon="arrow"
+            />
+            <van-popup v-model="showCommunityPicker" position="bottom">
+                <van-picker
+                        show-toolbar
+                        :columns="communityColumns"
+                        @confirm="onCommunityConfirm"
+                        @cancel="showCommunityPicker = false"
+                />
+            </van-popup>
+            <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
                 <div class="upload-item">
                     <div class="file-zm_icon"></div>
@@ -30,6 +67,7 @@
             <van-divider></van-divider>
             <div class="form-item-label">备注：</div>
             <van-field
+                    class="remark"
                     type="textarea"
                     v-model="submitData.message"
                     rows="4"
@@ -38,26 +76,26 @@
                     placeholder="请输入备注信息"
             />
         </van-form>
-        <div class="btn-panel" flex="dir:left cross:center main:justify">
-            <van-button type="info" class="btn pre-btn" @click="preStep">上一步</van-button>
+        <div class="btn-panel" flex="dir:left cross:center main:center">
             <van-button type="info" class="btn next-btn" @click="submit">提交</van-button>
         </div>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import { Divider, Form, Field, Button, Popup, Picker } from 'vant';
-    import MyRadioGroup from '@/components/myRadioGroup.vue';
+    import PageHeader from '@/components/pageHeader.vue';
     const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
     export default{
         name: 'stepFour',
         components:{
+            PageHeader,
             [Divider.name]: Divider,
             [Form.name]: Form,
             [Field.name]: Field,
             [Button.name]: Button,
             [Picker.name]: Picker,
             [Popup.name]: Popup,
-            MyRadioGroup
+
         },
         data(){
             return {
@@ -83,31 +121,11 @@
     }
 </script>
 <style lang="scss" scoped>
-    .step-four-page{
+    .continued-step-page{
         width: 100%;
         height: 100%;
         background-color: #f5f5f5;
-        .step-module-header{
-            height: 90px;
-            padding-left: 24px;
-            .header-left{
-                font-family: PingFang-SC-Medium;
-                font-size: 30px;
-                line-height: 40px;
-                letter-spacing: 0px;
-                color: #4d4d4d;
-                border-left: 6px solid #306ce7;
-                padding-left: 10px;
-            }
-        }
-        .warn-note{
-            font-family: PingFang-SC-Medium;
-            font-size: 26px;
-            line-height: 40px;
-            color: #ef0000;
-            background-color: #ffffff;
-            padding: 0px 0px 20px 20px;
-        }
+        padding-top: 88px;
         .upload-img{
             padding: 37px 45px;
             background-color: #ffffff;
@@ -145,20 +163,15 @@
         .btn-panel{
             height: 170px;
             width: 100%;
-            padding: 0px 24px;
-            .btn{
-                width: 340px;
+            .next-btn{
+                width: 702px;
                 height: 80px;
             }
-            .pre-btn{
-                background-color: #6392f4;
-            }
         }
-
     }
 </style>
 <style lang="scss">
-    .step-four-page{
+    .continued-step-page{
         .van-cell:not(:last-child)::after{
             border-bottom-width: 0px;
         }
@@ -176,16 +189,18 @@
                 width: 260px;
             }
         }
-        .van-cell{
-            padding-top: 0px;
-            padding-bottom: 40px;
-        }
-        .van-cell__value--alone{
-            border-radius: 10px;
-            border: solid 2px #dfdfdf;
-        }
-        .van-field__body{
-            padding: 10px;
+        .remark{
+            .van-cell{
+                padding-top: 0px;
+                padding-bottom: 40px;
+            }
+            .van-cell__value--alone{
+                border-radius: 10px;
+                border: solid 2px #dfdfdf;
+            }
+            .van-field__body{
+                padding: 10px;
+            }
         }
     }
 </style>

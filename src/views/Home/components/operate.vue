@@ -26,7 +26,7 @@
                 },{
                     iconClass: 'qzgl',
                     name: '犬证管理',
-                    path: ''
+                    path: '/dogCertificateManage'
                 },{
                     iconClass: 'cwly',
                     name: '宠物领养',

@@ -281,7 +281,7 @@
             },
             nextStep(){
                 console.log('submitData', this.submitData);
-                this.$router.push('/applyStep/stepThree');
+                this.$router.push('/newApply/stepThree');
             }
         }
     }

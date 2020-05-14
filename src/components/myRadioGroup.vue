@@ -57,5 +57,10 @@
         .van-radio{
             flex:1
         }
+        .van-radio__label{
+            font-family: PingFang-SC-Medium;
+            font-size: 30px;
+            color: #4d4d4d;
+        }
     }
 </style>

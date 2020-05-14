@@ -69,7 +69,8 @@
 
             },
             nextStep(){
-
+                console.log('submitData', this.submitData);
+                this.$router.push('/newApply/stepFour');
             }
         }
     }

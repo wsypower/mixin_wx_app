@@ -1,5 +1,5 @@
 <template>
-    <van-nav-bar :title="title" :left-arrow="leftArrow" fixed @click-left="onClickLeft">
+    <van-nav-bar :title="title" :left-arrow="leftArrow" fixed @click-left="onClickLeft" @click-right="onClickRight">
         <template #right>
             <slot name="right"></slot>
         </template>
@@ -38,7 +38,9 @@
                 else{
                     console.log('nothing!!!');
                 }
-
+            },
+            onClickRight(){
+                this.$emit('clickRight')
             }
         }
     }

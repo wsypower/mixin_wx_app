@@ -61,11 +61,15 @@
                 console.log(this.yqType, this.bzType);
                 //代表个人的新办
                 if(this.bzType==='1'&&this.yqType==='1'){
-                    this.$router.push('/applyStep/stepOneForPerson');
+                    this.$router.push('/newApply/stepOneForPerson');
                 }
                 //代表单位的新办
                 else if(this.bzType==='1'&&this.yqType==='2'){
-                    this.$router.push('/applyStep/stepOneForCompany');
+                    this.$router.push('/newApply/stepOneForCompany');
+                }
+                //代表个人或者单位的续办
+                else if(this.bzType==='2'){
+                    this.$router.push('/continuedApply');
                 }
 
             }
