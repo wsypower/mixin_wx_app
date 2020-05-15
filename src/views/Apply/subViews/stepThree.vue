@@ -66,10 +66,10 @@
                 });
             },
             preStep(){
-
+                //如果在history里面有，则使用缓存数据，没有则去获取数据
+                this.$router.push('/newApply/stepTwo');
             },
             nextStep(){
-                console.log('submitData', this.submitData);
                 this.$router.push('/newApply/stepFour');
             }
         }

@@ -25,7 +25,7 @@ export default new Vuex.Store({
   state: {
       isWX: true, //是否是微信，
       token: '', //用户原始登入有效期的唯一标识
-      userId: '', //养犬管理的用户UserId
+      userId: 'xxx', //养犬管理的用户UserId
   },
   getters: {
       isWX: state => {

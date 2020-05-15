@@ -30,6 +30,7 @@
 </template>
 <script type="text/ecmascript-6">
     import { Toast } from 'vant'
+    //const userId = this.$store.getters['updateUserId'];
     export default {
         name: 'historyApplyList',
         components:{},

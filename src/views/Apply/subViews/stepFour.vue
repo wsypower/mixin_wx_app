@@ -6,7 +6,7 @@
         <van-form>
             <van-field name="radio" label="社区是否盖章：" class="label-width-200">
                 <template #input>
-                    <my-radio-group :initValue="submitData.isSeal" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isSeal', name)}"></my-radio-group>
+                    <my-radio-group :initValue="submitData.isStamp" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isStamp', name)}"></my-radio-group>
                 </template>
             </van-field>
             <div class="warn-note">（若未盖章，请在“添加其他材料项”中，上传“房产证/租房合同/居住证（三者任选一项）”信息。）</div>
@@ -31,7 +31,7 @@
             <div class="form-item-label">备注：</div>
             <van-field
                     type="textarea"
-                    v-model="submitData.message"
+                    v-model="submitData.remark"
                     rows="4"
                     autosize
                     :border="true"
@@ -42,12 +42,20 @@
             <van-button type="info" class="btn pre-btn" @click="preStep">上一步</van-button>
             <van-button type="info" class="btn next-btn" @click="submit">提交</van-button>
         </div>
+        <van-popup v-model="showDialog" class="dialog-warp">
+            <div class="dialog" flex="dir:top cross:center">
+                <div class="dialog-header">温馨提示</div>
+                <div class="dialog-main">提交成功，请等待管理员审核。</div>
+                <div class="dialog-footer"><van-button type="info" size="mini" @click="toHome">确定</van-button></div>
+            </div>
+        </van-popup>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import { Divider, Form, Field, Button, Popup, Picker } from 'vant';
     import MyRadioGroup from '@/components/myRadioGroup.vue';
     const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
+    import { bidDogCard } from '@/api/apply.js'
     export default{
         name: 'stepFour',
         components:{
@@ -62,22 +70,42 @@
         data(){
             return {
                 ynArray,
+                showDialog: false,
                 submitData:{
-                    isSeal: '1',
-                    message: ''
+                    dogOrderId: '',
+                    userId: '',
+                    isStamp: '1',
+                    //信息登记表
+                    informationPic: '',
+                    //养犬承诺书
+                    commitmentPic: '',
+                    //其他材料
+                    otherFilePic: '',
+                    remark: ''
                 }
             }
+        },
+        mounted(){
+            this.submitData.dogOrderId = this.$store.getters['apply/dogOrderId'];
+            this.submitData.userId = this.$store.getters['userId'];
         },
         methods:{
             getRealValue(attrName,value){
                 this.submitData[attrName] = value;
             },
             preStep(){
-
+                //如果在history里面有，则使用缓存数据，没有则去获取数据
+                this.$router.push('/newApply/stepThree');
             },
             submit(){
                 console.log('submitData', this.submitData);
-                // this.$router.push('/applyStep/stepThree');
+                // bidDogCard(this.submitData).then( res => {
+                //     console.log(res, res);
+                // });
+                this.showDialog = true;
+            },
+            toHome(){
+                this.$router.push('/');
             }
         }
     }
@@ -154,7 +182,36 @@
                 background-color: #6392f4;
             }
         }
-
+        .dialog-warp{
+            border-radius: 20px;
+        }
+        .dialog{
+            width: 500px;
+            height: 300px;
+            .dialog-header{
+                width: 500px;
+                height: 80px;
+                line-height: 80px;
+                text-align: center;
+                background-color: #306ce7;
+                color: #ffffff;
+                font-family: PingFang-SC-Medium;
+                font-size: 32px;
+            }
+            .dialog-main{
+                width: 100%;
+                padding: 20px 40px;
+                flex: 1;
+                color: #333333;
+                font-family: PingFang-SC-Medium;
+                font-size: 32px;
+            }
+            .dialog-footer{
+                width: 100%;
+                height: 120px;
+                text-align: center;
+            }
+        }
     }
 </style>
 <style lang="scss">

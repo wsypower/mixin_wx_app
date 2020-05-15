@@ -7,9 +7,9 @@
             </div>
         </page-header>
         <div class="main" flex="dir:top cross:center">
-            <top></top>
+            <top :dogCards="dogCards"></top>
             <operate></operate>
-            <service-place></service-place>
+            <service-place :servePlaces="servePlaceList"></service-place>
         </div>
     </div>
 
@@ -19,6 +19,9 @@
     import Top from './components/top.vue'
     import Operate from './components/operate.vue'
     import ServicePlace from './components/serviceplace.vue'
+    import { getURLParameters } from '@/utils/index';
+    import { AccountLogin } from '@/api/account/login.js';
+    import { queryDogCard, queryDogServicePoint } from '@/api/home.js'
     export default {
         name: 'index',
         components:{
@@ -28,13 +31,36 @@
             ServicePlace
         },
         data(){
-            return {}
+            return {
+                dogCards: [],
+                servePlaceList: []
+            }
         },
         mounted(){
-            // console.log('userId',this.$store.getters['userId']);
-            // setTimeout( ()=>{
-            //     console.log('userId again',this.$store.getters['userId']);
-            // });
+            this.getData();
+        },
+        methods: {
+            async getUserId(){
+                let userId = this.$store.getters['userId'];
+                if( userId === 'xxx'){
+                    let token = getURLParameters('userid');
+                    const p = await AccountLogin({token: token});
+                    console.log('pppp',p,p.data.userId);
+                    this.$store.commit('updateUserId', p.data.userId);
+                    userId = p.data.userId;
+                }
+                return userId
+            },
+            async getData(){
+                const userId = await this.getUserId();
+                console.log(111111111, userId);
+                queryDogCard({userId: userId}).then( res => {
+                    this.dogCards = res.data;
+                });
+                queryDogServicePoint({userId: userId}).then( res => {
+                    this.servePlaceList = res.data;
+                });
+            }
         }
     }
 </script>

@@ -40,41 +40,24 @@ Vue.use(vuescroll, {
     },
     name: 'myScroll' // 在这里自定义组件名字，默认是vueScroll
 });
-import { getURLParameters } from '@/utils/index';
-import { AccountLogin } from '@/api/account/login.js';
+
 // Vue.config.productionTip = false;
 new Vue({
   router,
   store,
   render: (h) => h(App),
-  mounted(){
+  created(){
     this.$store.commit('updateSystem', navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1)
-    let token = getURLParameters('userid');
-    console.log('token', token);
-    console.log(this);
-    const data =  this.getToken(token)
-    console.log(data)
 
-    console.log(3)
-  },
-    method:{
-         getToken(token){
-            console.log(token)
-            return 123
-        }
-    }
+    // await AccountLogin({token: token})
+    //     .then(async res => {
+    //         console.log('res', res);
+    //         await this.$store.commit('updateUserId', '6');
+    //         resolve(res)
+    //     })
+    //     .catch(err => {
+    //         console.log(err)
+    //         reject(err)
+    //     })
+  }
 }).$mount("#app");
-// new Promise(async (resolve, reject) => {
-//     const data = await AccountLogin({token: token});
-//     console.log(2)
-//     // await AccountLogin({token: token})
-//     //     .then(async res => {
-//     //         console.log('res', res);
-//     //         await this.$store.commit('updateUserId', '6');
-//     //         resolve(res)
-//     //     })
-//     //     .catch(err => {
-//     //         console.log(err)
-//     //         reject(err)
-//     //     })
-// })

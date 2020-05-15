@@ -35,54 +35,62 @@
             [SwipeItem.name]: SwipeItem,
             [Toast.name]: Toast
         },
+        props:{
+            dogCards: {
+                type: Array,
+                default() {
+                    return []
+                }
+            }
+        },
         data(){
             return {
                 dogList:[]
             }
         },
         mounted(){
-            this.getDogListData();
+            this.dogList = JSON.parse(JSON.stringify(this.dogCards));
         },
         methods:{
-            getDogListData(){
-                console.log('home top userId',this.$store.getters['userId']);
-                let dogTemp = {
-                    id: 'sh52673836389293hsol',
-                    dogUrl: require('./testImg/1.png'),
-                    name: '嘻嘻',
-                    code: '23148784656898914783',
-                    startDay: '2020-05-06',
-                    endDay: '2020-11-05',
-                    statusId: 0,
-                    statusName: '有效',
-                    QRCodeUrl: require('./testImg/qr.png')
-                }
-                let dogTemp2 = {
-                    id: 'ax12573836389293hsol',
-                    dogUrl:  require('./testImg/2.png'),
-                    name: '菲菲',
-                    code: '51478784656898914783',
-                    startDay: '2020-01-01',
-                    endDay: '2020-04-05',
-                    statusId: 2,
-                    statusName: '过期',
-                    QRCodeUrl: require('./testImg/qr.png')
-                }
-                let dogTemp3 = {
-                    id: 'zaa12573836389293hsol',
-                    dogUrl:  require('./testImg/3.png'),
-                    name: '飞利浦',
-                    code: '51478784656898914783',
-                    startDay: '2020-04-01',
-                    endDay: '2020-06-05',
-                    statusId: 1,
-                    statusName: '即将过期',
-                    QRCodeUrl: require('./testImg/qr.png')
-                }
-                this.dogList.push(dogTemp);
-                this.dogList.push(dogTemp2);
-                this.dogList.push(dogTemp3);
-            },
+            // getDogListData(){
+            //
+            //     let dogTemp = {
+            //         id: 'sh52673836389293hsol',
+            //         dogUrl: require('./testImg/1.png'),
+            //         name: '嘻嘻',
+            //         code: '23148784656898914783',
+            //         startDay: '2020-05-06',
+            //         endDay: '2020-11-05',
+            //         statusId: 0,
+            //         statusName: '有效',
+            //         QRCodeUrl: require('./testImg/qr.png')
+            //     }
+            //     let dogTemp2 = {
+            //         id: 'ax12573836389293hsol',
+            //         dogUrl:  require('./testImg/2.png'),
+            //         name: '菲菲',
+            //         code: '51478784656898914783',
+            //         startDay: '2020-01-01',
+            //         endDay: '2020-04-05',
+            //         statusId: 2,
+            //         statusName: '过期',
+            //         QRCodeUrl: require('./testImg/qr.png')
+            //     }
+            //     let dogTemp3 = {
+            //         id: 'zaa12573836389293hsol',
+            //         dogUrl:  require('./testImg/3.png'),
+            //         name: '飞利浦',
+            //         code: '51478784656898914783',
+            //         startDay: '2020-04-01',
+            //         endDay: '2020-06-05',
+            //         statusId: 1,
+            //         statusName: '即将过期',
+            //         QRCodeUrl: require('./testImg/qr.png')
+            //     }
+            //     this.dogList.push(dogTemp);
+            //     this.dogList.push(dogTemp2);
+            //     this.dogList.push(dogTemp3);
+            // },
             gotoDogDetailPage(dogId){
                 console.log(`dogId: ${dogId}`);
                 Toast('还没开发');

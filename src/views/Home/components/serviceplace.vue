@@ -22,8 +22,14 @@
     import { Toast } from 'vant'
     export default {
         name: 'servicePlace',
-        components: {
-
+        components: {},
+        props: {
+            servePlaces:{
+                type: Array,
+                default(){
+                    return []
+                }
+            }
         },
         data(){
             return {
@@ -31,27 +37,9 @@
             }
         },
         mounted(){
-            this.getPlaceListData();
+            this.placeList = JSON.parse(JSON.stringify(this.servePlaces));
         },
         methods:{
-            getPlaceListData(){
-                let placeTemp1 = {
-                    id: 'ax126789007866xx',
-                    name: '八公宠物医院',
-                    distance: '1.7km',
-                    address: '绍兴市越城区xx路xx号',
-                    time: '周一至周五   8:30-11:00 ；13:30-17:00'
-                }
-                let placeTemp2 = {
-                    id: 'bx126789007866xx',
-                    name: '八公宠物医院',
-                    distance: '3.2km',
-                    address: '绍兴市越城区xx路xx号',
-                    time: '周一至周五   8:30-11:00 ；13:30-17:00'
-                }
-                this.placeList.push(placeTemp1);
-                this.placeList.push(placeTemp2);
-            },
             gotoMorePointPage(){
                 Toast('还没开发');
             },

@@ -58,9 +58,9 @@
             nextPage(){
                 console.log(this.userType, this.cardType);
 
-                if(this.cardType==='1'){
+                if(this.cardType==='0'){
                     //代表个人的新办
-                    if(this.userType==='1'){
+                    if(this.userType==='0'){
                         this.$router.push('/newApply/stepOneForPerson');
                     }
                     else{

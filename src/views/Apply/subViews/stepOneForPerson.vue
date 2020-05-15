@@ -12,18 +12,18 @@
             <van-divider></van-divider>
             <van-field name="radio" label="是否备案犬证：" class="label-width-200">
                 <template #input>
-                    <my-radio-group :initValue="submitData.isBeiAn" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isBeiAn', name)}"></my-radio-group>
+                    <my-radio-group :initValue="submitData.isRecord" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isRecord', name)}"></my-radio-group>
                 </template>
             </van-field>
             <div class="warn-note">（备案犬证后，后续您也可以对犬证进行管理）</div>
             <van-divider></van-divider>
             <van-field name="radio" label="证件类型：">
                 <template #input>
-                    <my-radio-group :initValue="submitData.fileType" :radioGroup="fileTypeArray" @getRealValue="(name)=>{getRealValue('fileType', name)}"></my-radio-group>
+                    <my-radio-group :initValue="submitData.idType" :radioGroup="fileTypeArray" @getRealValue="(name)=>{getRealValue('idType', name)}"></my-radio-group>
                 </template>
             </van-field>
             <van-divider class="mini-line"></van-divider>
-            <template v-if="submitData.fileType === '1'">
+            <template v-if="submitData.idType === '1'">
                 <div class="upload-img sfz-file" flex="dir:left cross:center main:justify">
                     <div class="upload-item">
                         <div class="file-zm_icon"></div>
@@ -37,9 +37,9 @@
                 <van-divider></van-divider>
                 <van-field v-model="submitData.ownerName" label="犬主姓名：" placeholder="请输入" input-align="right"/>
                 <van-divider></van-divider>
-                <van-field v-model="submitData.cardCode" label="身份证号：" placeholder="请输入" input-align="right"/>
+                <van-field v-model="submitData.idCard" label="身份证号：" placeholder="请输入" input-align="right"/>
             </template>
-            <template v-if="submitData.fileType === '2'">
+            <template v-if="submitData.idType === '2'">
                 <div class="upload-img" flex="dir:left cross:center main:justify">
                     <div class="upload-item">
                         <div class="file-zm_icon"></div>
@@ -49,7 +49,7 @@
                 <van-divider></van-divider>
                 <van-field v-model="submitData.ownerName" label="犬主姓名：" placeholder="请输入" input-align="right"/>
             </template>
-            <template v-if="submitData.fileType === '3'">
+            <template v-if="submitData.idType === '3'">
                 <div class="upload-img" flex="dir:left cross:center main:justify">
                     <div class="upload-item">
                         <div class="file-zm_icon"></div>
@@ -63,7 +63,7 @@
                 <van-divider></van-divider>
                 <van-field v-model="submitData.country" label="国家：" placeholder="请输入国家" input-align="right"/>
                 <van-divider></van-divider>
-                <van-field v-model="submitData.hzcode" label="护照号：" placeholder="请输入护照号" input-align="right"/>
+                <van-field v-model="submitData.passport" label="护照号：" placeholder="请输入护照号" input-align="right"/>
                 <van-divider></van-divider>
                 <!--<van-field v-model="submitData.phone" label="：" placeholder="请输入" input-align="right"/>-->
                 <van-field name="radio" label="性别：" input-align="right">
@@ -89,19 +89,20 @@
                 readonly
                 clickable
                 name="picker"
-                :value="submitData.cityValue"
+                :value="submitData.region"
                 label="现居住区县"
                 placeholder="请选择区县"
-                @click="showCityPicker = true"
+                @click="showRegionPicker = true"
                 input-align="right"
                 right-icon="arrow"
             />
-            <van-popup v-model="showCityPicker" position="bottom">
+            <van-popup v-model="showRegionPicker" position="bottom">
                 <van-picker
                         show-toolbar
-                        :columns="cityColumns"
-                        @confirm="onCityConfirm"
-                        @cancel="showCityPicker = false"
+                        :columns="regionColumns"
+                        @confirm="onRegionConfirm"
+                        :loading="adLoading"
+                        @cancel="showRegionPicker = false"
                 />
             </van-popup>
             <van-divider></van-divider>
@@ -109,7 +110,7 @@
                     readonly
                     clickable
                     name="picker"
-                    :value="submitData.streetValue"
+                    :value="submitData.street"
                     label="街道"
                     placeholder="请选择街道"
                     @click="showStreetPicker = true"
@@ -121,6 +122,7 @@
                         show-toolbar
                         :columns="streetColumns"
                         @confirm="onStreetConfirm"
+                        :loading="adLoading"
                         @cancel="showStreetPicker = false"
                 />
             </van-popup>
@@ -129,7 +131,7 @@
                     readonly
                     clickable
                     name="picker"
-                    :value="submitData.communityValue"
+                    :value="submitData.community"
                     label="社区"
                     placeholder="请选择社区"
                     @click="showCommunityPicker = true"
@@ -141,11 +143,12 @@
                         show-toolbar
                         :columns="communityColumns"
                         @confirm="onCommunityConfirm"
+                        :loading="adLoading"
                         @cancel="showCommunityPicker = false"
                 />
             </van-popup>
             <van-divider></van-divider>
-            <van-field v-model="submitData.ownerName" label="详细地址：" placeholder="请填写详细地址" input-align="right"/>
+            <van-field v-model="submitData.address" label="详细地址：" placeholder="请填写详细地址" input-align="right"/>
             <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
                 <div class="upload-item">
@@ -169,8 +172,9 @@
     const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
     const fileTypeArray = [{labelName: '身份证',value: '1'},{labelName: '驾驶证',value: '2'},{labelName: '护照',value: '3'}];
     const sexArray = [{labelName: '男',value: '1'},{labelName: '女',value: '0'}];
-    // import axios from "axios";
-    // import Qs from "qs";
+    import { queryAddressByParentId } from '@/api/common.js';
+    import { bidDogCard } from '@/api/apply.js'
+    import qs from 'qs'
     export default{
         name: 'stepOneForPerson',
         components:{
@@ -187,101 +191,155 @@
                 ynArray,
                 fileTypeArray,
                 sexArray,
-                showCityPicker: false,
-                cityColumns:[
-                {
-                    text: '浙江',
-                    children: [
-                        {
-                            text: '杭州',
-                            children: [{ text: '西湖区' }, { text: '余杭区' }],
-                        },
-                        {
-                            text: '温州',
-                            children: [{ text: '鹿城区' }, { text: '瓯海区' }],
-                        },
-                    ],
-                },
-                {
-                    text: '福建',
-                    children: [
-                        {
-                            text: '福州',
-                            children: [{ text: '鼓楼区' }, { text: '台江区' }],
-                        },
-                        {
-                            text: '厦门',
-                            children: [{ text: '思明区' }, { text: '海沧区' }],
-                        },
-                    ],
-                },
-            ],
+                showRegionPicker: false,
+                regionColumns:[],
                 showStreetPicker: false,
-                streetColumns: ['aaa街道', 'bbb街道', 'ccc街道', 'ddd街道', 'eee街道'],
+                streetColumns: [],
                 showCommunityPicker: false,
-                communityColumns: ['xxx','yyy'],
+                communityColumns: [],
+                adLoading: false,
                 submitData:{
+                    userId: 6,
+                    //个人
+                    userType: '0',
+                    //新办
+                    cardType: '0',
+                    //当前步骤
+                    currentStep: '1',
+                    //是否犬主本人
                     isOwner: '1',
-                    isBeiAn: '0',
-                    fileType: '1',
+                    //是否备案
+                    isRecord: '0',
+                    //什么类型证件：1身份证2驾驶证3护照
+                    idType: '1',
+                    //身份证正面图片路径
+                    idCardFront: '',
+                    //身份证反面图片路径
+                    idCardBack: '',
+                    //驾驶证照片
+                    //护照照片
+
+                    //犬主名称
                     ownerName: '',
-                    cardCode: '',
+                    //身份证号
+                    idCard: '',
+                    //护照firstName
                     firstName: '',
+                    //护照lastName
                     lastName: '',
+                    //国家
                     country: '',
-                    hzcode: '',
+                    //护照号
+                    passport: '',
+                    //性别
                     sex: '1',
+                    //联系电话
                     phone: '',
+                    //验证码
                     qrCode: '',
-                    cityValue: '',
-                    streetValue: '',
-                    communityValue: ''
+                    //现居住区县名称
+                    region: '',
+                    //现居住区县ID
+                    regionId: '',
+                    //现居住街道名称
+                    street: '',
+                    //现居住街道ID
+                    streetId: '',
+                    //现居住社区名称
+                    community: '',
+                    //现居住社区ID
+                    communityId: '',
+                    //详细地址
+                    address: '',
+                    //居住证照片正面
+                    residencyProofFront: '',
+                    //居住证照片反面
+                    residencyProofBack: ''
                 }
             }
         },
         mounted(){
-            // this.$axios.defaults.headers.post["Access-Control-Allow-Origin"] = '*';
-            //this.$axios.defaults.headers.post["Content-Type"] = 'text/plain';
-
-            // this.$axios.defaults.headers.post["Access-Control-Allow-Headers"] = "X-Requested-With,Content-Type";
-            // this.$axios.defaults.headers.post["Access-Control-Allow-Methods"] = "PUT,POST,GET,DELETE,OPTIONS";
-
-            // this.$jsonp(
-            //     "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=Q563k9KcQ8kUYhDGBGP5ur1z&client_secret=G2UqUkRp9fkB8dHTbsk0miCA3AcqPxfC",
-            // ).then(function (response) {
-            //     console.log(response);
-            // })
-
-            // this.$axios.post(
-            //     "https://aip.baidubce.com/rest/2.0/image-classify/v2/advanced_general",
-            //     Qs.stringify({
-            //         access_token:
-            //             "获取到的access_token",
-            //         image: arr[1]
-            //     })
-            // )
+            this.getAddressData('3306','1');
         },
         methods:{
-            onCityConfirm(value,index){
-                console.log(`当前选中值：${value}，它的索引：${index}`);
-                this.submitData.cityValue = value.join('-');
-                this.showCityPicker = false;
-            },
-            onStreetConfirm(value,index){
-                console.log(`当前选中值：${value}，它的索引：${index}`);
-                this.submitData.streetValue = value;
-                this.showStreetPicker = false;
-            },
-            onCommunityConfirm(value,index){
-                console.log(`当前选中值：${value}，它的索引：${index}`);
-                this.submitData.communityValue = value;
-                this.showCommunityPicker = false;
-            },
             getRealValue(attrName,value){
                 this.submitData[attrName] = value;
             },
+            getAddressData(parentId, type){
+                let params = {
+                    userId: 6,
+                    parentId,
+                    type
+                }
+                this.adLoading = true;
+                queryAddressByParentId(params)
+                    .then( res => {
+                        console.log('res',res)
+                        let resultArr = res.data.reduce((acc, cur)=>{
+                            let temp = {
+                                text: cur.name,
+                                id: cur.id
+                            }
+                            acc.push(temp)
+                            return acc
+                        },[]);
+                        if(type==='1'){
+                            this.regionColumns = resultArr;
+                            console.log('this.regionColumns',this.regionColumns);
+                        }
+                        if(type==='2'){
+                            this.streetColumns = resultArr;
+                            console.log('this.streetColumns',this.streetColumns);
+                        }
+                        if(type==='3'){
+                            this.communityColumns = resultArr;
+                            console.log('this.communityColumns',this.communityColumns);
+                        }
+                        this.adLoading = false;
+                    }
+                 );
+            },
+            onRegionConfirm(value){
+                console.log(`当前选中值:`,value);
+                if(value.id!==this.submitData.regionId) {
+                    this.streetColumns = [];
+                    this.submitData.street = '';
+                    this.communityColumns = [];
+                    this.submitData.community = '';
+                    this.getAddressData(value.id, '2');
+                }
+                this.submitData.region = value.text;
+                this.submitData.regionId = value.id;
+                this.showRegionPicker = false;
+            },
+            onStreetConfirm(value){
+                console.log(`当前选中值：`, value);
+                if(value.id!==this.submitData.streetId){
+                    this.communityColumns = [];
+                    this.submitData.community = '';
+                    this.getAddressData(value.id, '3');
+                }
+                this.submitData.street = value.text;
+                this.submitData.streetId = value.id;
+                this.showStreetPicker = false;
+            },
+            onCommunityConfirm(value){
+                console.log(`当前选中值：`,value);
+                this.submitData.community = value.text;
+                this.submitData.communityId = value.id;
+                this.showCommunityPicker = false;
+            },
+
             nextStep(){
                 console.log('submitData', this.submitData);
+                this.submitData.idCardFront = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589368147966&di=6a4bbaf6d6966c45e26f6791fb470471&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20171025%2Fe7f95b3b97bf4770b2ac06f22819803c.jpeg';
+                this.submitData.idCardBack = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589368126527&di=830749a463a0acc209fc2d51974005ab&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200409%2F94880ee7acde45abb2f13b9d05024279.jpeg';
+                this.submitData.residencyProofBack = 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1793680595,3911934779&fm=26&gp=0.jpg';
+                this.submitData.residencyProofFront = 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1793680595,3911934779&fm=26&gp=0.jpg';
+                this.$store.commit('apply/updateDogOrderId', '32');
+                // bidDogCard(this.submitData).then( res => {
+                //     console.log(res, res);
+                // });
                 this.$router.push('/newApply/stepTwo');
             }
         }

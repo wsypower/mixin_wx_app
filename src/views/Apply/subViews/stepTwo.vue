@@ -8,79 +8,77 @@
             <van-divider></van-divider>
             <van-field name="radio" label="宠物性别：" input-align="right">
                 <template #input>
-                    <my-radio-group :initValue="submitData.sex" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isOwner', name)}" style="width:unset"></my-radio-group>
+                    <my-radio-group :initValue="submitData.dogSex" :radioGroup="sexArray" @getRealValue="(name)=>{getRealValue('dogSex', name)}" style="width:unset"></my-radio-group>
                 </template>
             </van-field>
             <van-divider></van-divider>
-            <van-field v-model="submitData.dogType" label="宠物品种：" placeholder="请输入" input-align="right"/>
+            <van-field v-model="submitData.breed" label="宠物品种：" placeholder="请输入" input-align="right"/>
             <van-divider></van-divider>
             <van-field
                     readonly
                     clickable
-                    name="picker"
-                    :value="submitData.cityValue"
+                    name="datetimePicker"
+                    :value="submitData.birthdate"
                     label="出生日期："
                     placeholder="请选择出生日期"
-                    @click="showCityPicker = true"
+                    @click="showBirthdatePicker = true"
                     input-align="right"
                     right-icon="arrow"
             />
-            <van-popup v-model="showCityPicker" position="bottom">
-                <van-picker
-                        show-toolbar
-                        :columns="cityColumns"
-                        @confirm="onCityConfirm"
-                        @cancel="showCityPicker = false"
+            <van-popup v-model="showBirthdatePicker" position="bottom">
+                <van-datetime-picker
+                        type="date"
+                        @confirm="onBirthdateConfirm"
+                        @cancel="showBirthdatePicker = false"
                 />
             </van-popup>
             <van-divider></van-divider>
             <van-field
                     readonly
                     clickable
-                    name="picker"
-                    :value="submitData.cityValue"
+                    name="datetimePicker"
+                    :value="submitData.adoptTime"
                     label="领养日期："
                     placeholder="请选择领养日期"
-                    @click="showCityPicker = true"
+                    @click="showAdoptTimePicker = true"
                     input-align="right"
                     right-icon="arrow"
             />
-            <van-popup v-model="showCityPicker" position="bottom">
-                <van-picker
-                        show-toolbar
-                        :columns="cityColumns"
-                        @confirm="onCityConfirm"
-                        @cancel="showCityPicker = false"
+            <van-popup v-model="showAdoptTimePicker" position="bottom">
+                <van-datetime-picker
+                        type="date"
+                        @confirm="onAdoptTimeConfirm"
+                        @cancel="showAdoptTimePicker = false"
                 />
             </van-popup>
             <van-divider></van-divider>
             <van-field name="radio" label="绝育状态：" input-align="right">
                 <template #input>
-                    <my-radio-group :initValue="submitData.sex" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isOwner', name)}" style="width:unset"></my-radio-group>
+                    <my-radio-group :initValue="submitData.isSterilization" :radioGroup="jyArray" @getRealValue="(name)=>{getRealValue('isSterilization', name)}" style="width:unset"></my-radio-group>
                 </template>
             </van-field>
             <van-divider></van-divider>
-            <van-field v-model="submitData.dogType" label="宠物体重：" placeholder="请输入(kg)" input-align="right"/>
+            <van-field v-model="submitData.weight" label="宠物体重：" placeholder="请输入(kg)" input-align="right"/>
             <van-divider></van-divider>
-            <van-field v-model="submitData.dogType" label="毛色：" placeholder="请输入颜色" input-align="right"/>
+            <van-field v-model="submitData.hairColor" label="毛色：" placeholder="请输入颜色" input-align="right"/>
             <van-divider></van-divider>
             <van-field
                     readonly
                     clickable
                     name="picker"
-                    :value="submitData.cityValue"
+                    :value="submitData.purposeName"
                     label="犬用途："
                     placeholder="请选择用途"
-                    @click="showCityPicker = true"
+                    @click="showPurposePicker = true"
                     input-align="right"
                     right-icon="arrow"
             />
-            <van-popup v-model="showCityPicker" position="bottom">
+            <van-popup v-model="showPurposePicker" position="bottom">
                 <van-picker
                         show-toolbar
-                        :columns="cityColumns"
-                        @confirm="onCityConfirm"
-                        @cancel="showCityPicker = false"
+                        :columns="purposeColumns"
+                        @confirm="onPurposeConfirm"
+                        @cancel="showPurposePicker = false"
                 />
             </van-popup>
             <van-divider></van-divider>
@@ -104,45 +102,43 @@
                     readonly
                     clickable
                     name="picker"
-                    :value="submitData.cityValue"
+                    :value="submitData.immuneAddress"
                     label="免疫地点："
                     placeholder="请选择地点"
-                    @click="showCityPicker = true"
+                    @click="showImmuneAddressPicker = true"
                     input-align="right"
                     right-icon="arrow"
             />
-            <van-popup v-model="showCityPicker" position="bottom">
+            <van-popup v-model="showImmuneAddressPicker" position="bottom">
                 <van-picker
                         show-toolbar
-                        :columns="cityColumns"
-                        @confirm="onCityConfirm"
-                        @cancel="showCityPicker = false"
+                        :columns="immuneAddressColumns"
+                        @confirm="onImmuneAddressConfirm"
+                        @cancel="showImmuneAddressPicker = false"
                 />
             </van-popup>
             <van-divider></van-divider>
-            <van-field v-model="submitData.dogType" label="免疫证编号：" placeholder="请输入编号" input-align="right"/>
+            <van-field v-model="submitData.immuneNumber" label="免疫证编号：" placeholder="请输入编号" input-align="right"/>
             <van-divider></van-divider>
             <van-field
                     readonly
                     clickable
-                    name="picker"
-                    :value="submitData.communityValue"
-                    label="免疫登记日期"
+                    name="datetimePicker"
+                    :value="submitData.immuneTime"
+                    label="免疫登记日期："
                     placeholder="请选择日期"
-                    @click="showCommunityPicker = true"
+                    @click="showImmuneTimePicker = true"
                     input-align="right"
                     right-icon="arrow"
+                    class="label-width-200"
             />
-            <van-popup v-model="showCommunityPicker" position="bottom">
-                <van-picker
-                        show-toolbar
-                        :columns="communityColumns"
-                        @confirm="onCommunityConfirm"
-                        @cancel="showCommunityPicker = false"
+            <van-popup v-model="showImmuneTimePicker" position="bottom">
+                <van-datetime-picker
+                        type="date"
+                        @confirm="onImmuneTimeConfirm"
+                        @cancel="showImmuneTimePicker = false"
                 />
             </van-popup>
-            <van-divider></van-divider>
-            <van-field v-model="submitData.ownerName" label="详细地址：" placeholder="请填写详细地址" input-align="right"/>
             <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
                 <div class="upload-item">
@@ -162,19 +158,19 @@
                 readonly
                 clickable
                 name="picker"
-                :value="submitData.communityValue"
+                :value="submitData.intentionRegistrationSite"
                 label="办证地点："
                 placeholder="请选择意向办证地点"
-                @click="showCommunityPicker = true"
+                @click="showSitePicker = true"
                 input-align="right"
                 right-icon="arrow"
         />
-        <van-popup v-model="showCommunityPicker" position="bottom">
+        <van-popup v-model="showSitePicker" position="bottom">
             <van-picker
                     show-toolbar
-                    :columns="communityColumns"
-                    @confirm="onCommunityConfirm"
-                    @cancel="showCommunityPicker = false"
+                    :columns="siteColumns"
+                    @confirm="onSiteConfirm"
+                    @cancel="showSitePicker = false"
             />
         </van-popup>
         <div class="btn-panel" flex="dir:left cross:center main:justify">
@@ -184,11 +180,13 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Divider, Form, Field, Button, Popup, Picker } from 'vant';
+    import { Divider, Form, Field, Button, Popup, Picker, DatetimePicker } from 'vant';
     import MyRadioGroup from '@/components/myRadioGroup.vue';
-    const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
-    const fileTypeArray = [{labelName: '身份证',value: '1'},{labelName: '驾驶证',value: '2'},{labelName: '护照',value: '3'}];
-    const sexArray = [{labelName: '男',value: '1'},{labelName: '女',value: '0'}];
+    const sexArray = [{labelName: '公',value: '1'},{labelName: '母',value: '0'}];
+    const jyArray = [{labelName: '已绝育',value: '1'},{labelName: '未绝育',value: '0'}];
+    const purposeColumns = [{text:'观赏犬',id:'0'},{text:'导盲犬',id:'1'},{text:'看守犬',id:'2'}];
+    import { formatDate } from '@/utils/index';
+    import { bidDogCard } from '@/api/apply.js'
     export default{
         name: 'stepTwo',
         components:{
@@ -198,89 +196,115 @@
             [Button.name]: Button,
             [Picker.name]: Picker,
             [Popup.name]: Popup,
+            [DatetimePicker.name]: DatetimePicker,
             MyRadioGroup
         },
         data(){
             return {
-                ynArray,
-                fileTypeArray,
                 sexArray,
-                showCityPicker: false,
-                cityColumns:[
-                    {
-                        text: '浙江',
-                        children: [
-                            {
-                                text: '杭州',
-                                children: [{ text: '西湖区' }, { text: '余杭区' }],
-                            },
-                            {
-                                text: '温州',
-                                children: [{ text: '鹿城区' }, { text: '瓯海区' }],
-                            },
-                        ],
-                    },
-                    {
-                        text: '福建',
-                        children: [
-                            {
-                                text: '福州',
-                                children: [{ text: '鼓楼区' }, { text: '台江区' }],
-                            },
-                            {
-                                text: '厦门',
-                                children: [{ text: '思明区' }, { text: '海沧区' }],
-                            },
-                        ],
-                    },
-                ],
-                showStreetPicker: false,
-                streetColumns: ['aaa街道', 'bbb街道', 'ccc街道', 'ddd街道', 'eee街道'],
-                showCommunityPicker: false,
-                communityColumns: ['xxx','yyy'],
+                jyArray,
+                showBirthdatePicker: false,
+                showAdoptTimePicker: false,
+
+                showPurposePicker: false,
+                purposeColumns,
+
+                showImmuneAddressPicker: false,
+                immuneAddressColumns: ['xxx','yyy'],
+
+                showImmuneTimePicker: false,
+
+                showSitePicker: false,
+                siteColumns: ['xxx','yyy'],
+
                 submitData:{
-                    isOwner: '1',
-                    isBeiAn: '0',
-                    fileType: '1',
-                    ownerName: '',
-                    cardCode: '',
-                    firstName: '',
-                    lastName: '',
-                    country: '',
-                    hzcode: '',
-                    sex: '1',
-                    phone: '',
-                    qrCode: '',
-                    cityValue: '',
-                    streetValue: '',
-                    communityValue: ''
+                    dogOrderId: '',
+                    userId: '',
+                    //当前步骤
+                    currentStep: '2',
+                    //昵称
+                    dogName: '',
+                    //性别
+                    dogSex: '1',
+                    //犬品种
+                    breed: '',
+                    //出生日期
+                    birthdate: '',
+                    //领养日期
+                    adoptTime: '',
+                    //是否绝育
+                    isSterilization: '0',
+                    //体重
+                    weight: '',
+                    //毛色
+                    hairColor: '',
+                    //犬用途
+                    purposeName: '',
+                    purpose: '',
+                    //犬正面照
+                    dogPhotoFront: '',
+                    //犬侧面照
+                    dogPhotoBack: '',
+                    //免疫地点
+                    immuneAddress: '',
+                    //免疫证编号
+                    immuneNumber: '',
+                    //免疫登记日期
+                    immuneTime:'',
+                    //意向地点
+                    intentionRegistrationSite: '',
+                    //免疫证照片
+                    immunePhotos: '',
+                    //免疫记录照片
+                    immuneRecord: ''
                 }
             }
         },
+        mounted(){
+            this.submitData.dogOrderId = this.$store.getters['apply/dogOrderId'];
+            this.submitData.userId = this.$store.getters['userId'];
+        },
         methods:{
-            onCityConfirm(value,index){
-                console.log(`当前选中值：${value}，它的索引：${index}`);
-                this.submitData.cityValue = value.join('-');
-                this.showCityPicker = false;
+            onBirthdateConfirm(value){
+                console.log(`当前选中值：`,value);
+                this.submitData.birthdate = formatDate(value, 'yyyy-MM-dd');
+                this.showBirthdatePicker = false;
             },
-            onStreetConfirm(value,index){
-                console.log(`当前选中值：${value}，它的索引：${index}`);
-                this.submitData.streetValue = value;
-                this.showStreetPicker = false;
+            onAdoptTimeConfirm(value){
+                console.log(`当前选中值：`, value);
+                this.submitData.adoptTime = formatDate(value, 'yyyy-MM-dd');
+                this.showAdoptTimePicker = false;
             },
-            onCommunityConfirm(value,index){
-                console.log(`当前选中值：${value}，它的索引：${index}`);
-                this.submitData.communityValue = value;
-                this.showCommunityPicker = false;
+            onPurposeConfirm(value){
+                console.log(`当前选中值：`, value);
+                this.submitData.purposeName = value.text;
+                this.submitData.purpose = value.id;
+                this.showPurposePicker = false;
+            },
+            onImmuneAddressConfirm(value){
+                this.submitData.immuneAddress = value;
+                this.showImmuneAddressPicker = false;
+            },
+            onImmuneTimeConfirm(value){
+                this.submitData.immuneTime = formatDate(value, 'yyyy-MM-dd');
+                this.showImmuneTimePicker = false;
+            },
+            onSiteConfirm(value){
+                this.submitData.intentionRegistrationSite = value;
+                this.showSitePicker = false;
             },
             getRealValue(attrName,value){
                 this.submitData[attrName] = value;
             },
             preStep(){
-
+                //如果在history里面有，则使用缓存数据，没有则去获取数据
+                this.$router.push('/newApply/stepOneForPerson');
             },
             nextStep(){
                 console.log('submitData', this.submitData);
+                // bidDogCard(this.submitData).then( res => {
+                //     console.log(res, res);
+                // });
                 this.$router.push('/newApply/stepThree');
             }
         }
@@ -361,6 +385,11 @@
         }
         .mini-line::after, .mini-line::before{
             height: 1px;
+        }
+        .label-width-200{
+            .van-field__label{
+                width: 260px;
+            }
         }
     }
 </style>
