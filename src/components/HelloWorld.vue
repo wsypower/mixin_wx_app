@@ -4,7 +4,10 @@
       type="primary"
       @click="routerLink"
     >默认按钮</van-button>
-    <van-button type="danger">危险按钮</van-button>
+    <van-button
+      type="danger"
+      @click='linkIndex'
+    >危险按钮</van-button>
     <div
       class="ceshi"
       flex="main:center cross:center"
@@ -107,6 +110,9 @@ export default {
   methods: {
     routerLink() {
       this.$router.push("/router");
+    },
+    linkIndex() {
+      this.$router.push("/");
     }
   }
 };

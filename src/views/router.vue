@@ -1,6 +1,7 @@
 <template>
   <div class="router">
     <header @click="routerGo"> 测试页面 </header>
+    <header @click="routerGoIndex"> 回到首页 </header>
     <main>
       <ul>
         <li
@@ -27,6 +28,9 @@ export default {
     },
     routerGo() {
       this.$router.go(-1);
+    },
+    routerGoIndex() {
+      this.$router.push("/");
     }
   }
 };

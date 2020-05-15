@@ -15,6 +15,9 @@ export default {
   },
   mounted() {
     console.log("新页面");
+  },
+  activated() {
+    console.log("复用的页面");
   }
 };
 </script>
