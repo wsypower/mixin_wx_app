@@ -13,7 +13,7 @@ export default {
   components: {
     HelloWorld
   },
-  mounted() {
+  created() {
     console.log("新页面");
   },
   activated() {

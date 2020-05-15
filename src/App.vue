@@ -1,10 +1,4 @@
-<!--
- * @Description: 
- * @Author: huacong
- * @Date: 2020-05-15 18:25:54
- * @LastEditTime: 2020-05-15 19:23:34
- * @LastEditors: huacong
---> 
+
 <template>
   <div id="app">
     <transition :name="transitionName">
