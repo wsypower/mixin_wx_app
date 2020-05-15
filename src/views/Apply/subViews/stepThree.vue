@@ -47,7 +47,7 @@
         },
         computed:{
             isWX: function(){
-                return this.$store.getters['global/isWX']
+                return this.$store.getters['isWX']
             }
         },
         mounted(){

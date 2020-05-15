@@ -30,7 +30,12 @@
         data(){
             return {}
         },
-        mounted(){}
+        mounted(){
+            // console.log('userId',this.$store.getters['userId']);
+            // setTimeout( ()=>{
+            //     console.log('userId again',this.$store.getters['userId']);
+            // });
+        }
     }
 </script>
 <style lang="scss" scoped>

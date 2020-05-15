@@ -169,6 +169,8 @@
     const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
     const fileTypeArray = [{labelName: '身份证',value: '1'},{labelName: '驾驶证',value: '2'},{labelName: '护照',value: '3'}];
     const sexArray = [{labelName: '男',value: '1'},{labelName: '女',value: '0'}];
+    // import axios from "axios";
+    // import Qs from "qs";
     export default{
         name: 'stepOneForPerson',
         components:{
@@ -236,6 +238,28 @@
                     communityValue: ''
                 }
             }
+        },
+        mounted(){
+            // this.$axios.defaults.headers.post["Access-Control-Allow-Origin"] = '*';
+            //this.$axios.defaults.headers.post["Content-Type"] = 'text/plain';
+
+            // this.$axios.defaults.headers.post["Access-Control-Allow-Headers"] = "X-Requested-With,Content-Type";
+            // this.$axios.defaults.headers.post["Access-Control-Allow-Methods"] = "PUT,POST,GET,DELETE,OPTIONS";
+
+            // this.$jsonp(
+            //     "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=Q563k9KcQ8kUYhDGBGP5ur1z&client_secret=G2UqUkRp9fkB8dHTbsk0miCA3AcqPxfC",
+            // ).then(function (response) {
+            //     console.log(response);
+            // })
+
+            // this.$axios.post(
+            //     "https://aip.baidubce.com/rest/2.0/image-classify/v2/advanced_general",
+            //     Qs.stringify({
+            //         access_token:
+            //             "获取到的access_token",
+            //         image: arr[1]
+            //     })
+            // )
         },
         methods:{
             onCityConfirm(value,index){

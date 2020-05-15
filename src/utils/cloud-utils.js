@@ -678,6 +678,7 @@ export function isEmptyObject(o) {
  * // => {broker: "aaaa1111ccc", tenant: "asdfasdf", view_tag: "2"}
  */
 export function getUrlNames(name) {
+  console.log('111111111111111111111111111');
   var urlParam = getLocationHrefParam(name);
   var o = {};
 

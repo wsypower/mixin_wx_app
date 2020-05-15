@@ -19,9 +19,7 @@ export default {
       return defaultSetting.needPageTrans ? this.direction : "";
     }
   },
-   mounted(){
-       this.$store.commit('global/updateSystem', navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1)
-   }
+   mounted(){}
 };
 </script>
 <style lang="scss">

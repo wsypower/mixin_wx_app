@@ -45,6 +45,7 @@
         },
         methods:{
             getDogListData(){
+                console.log('home top userId',this.$store.getters['userId']);
                 let dogTemp = {
                     id: 'sh52673836389293hsol',
                     dogUrl: require('./testImg/1.png'),

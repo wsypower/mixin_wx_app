@@ -13,8 +13,8 @@
 </template>
 <script type="text/ecmascript-6">
     import defaultSetting from "@/settings";
-    import { createNamespacedHelpers } from "vuex";
-    const { mapState } = createNamespacedHelpers("pagesAnimation");
+    // import { createNamespacedHelpers } from "vuex";
+    // const { mapState } = createNamespacedHelpers("pagesAnimation");
     import PageHeader from '@/components/pageHeader.vue'
     import ApplyStepHeader from './components/applyStepHeader.vue'
     export default {
@@ -25,26 +25,30 @@
         },
         data(){
             return {
-                //activeStep: 0
+                preStep: 0,
             }
         },
+        mounted(){
+            this.preStep = this.$route.meta.index;
+        },
         watch:{
-            '$route': function(newValue){
-                // console.log(`route:`,newValue,this.direction);
-                // this.activeStep = newValue.meta.index;
+            activeStep: function(){
                 this.$refs.myScroll.scrollTo({y:0},0);
             }
         },
         computed: {
-            ...mapState({
-                direction: state => state.direction
-            }),
-            transitionName() {
-                return defaultSetting.needPageTrans ? this.direction : "";
-            },
             activeStep(){
                 return this.$route.meta.index;
+            },
+            direction() {
+                let flag = this.activeStep > this.preStep ? 'forward': 'back';
+                this.preStep = this.activeStep;
+                return flag
+            },
+            transitionName() {
+                return defaultSetting.needPageTrans ? this.direction : "";
             }
+
         }
     }
 </script>
