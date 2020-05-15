@@ -23,8 +23,8 @@ let routes = [
     name: "home",
     component: Home,
     meta: {
-      title:'犬类测试title'
-    }
+      title: "犬类测试title",
+    },
   },
 ];
 // ##################################################################### //

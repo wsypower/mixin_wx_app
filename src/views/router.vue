@@ -1,21 +1,13 @@
 <template>
   <div class="router">
-    <header> 测试页面 </header>
+    <header @click="routerGo"> 测试页面 </header>
     <main>
       <ul>
-        <li>1111</li>
-        <li>1111</li>
-        <li>1111</li>
-        <li>1111</li>
-        <li>1111</li>
-        <li>1111</li>
-        <li>1111</li>
-        <li>1111</li>
-        <li>1111</li>
-        <li>1111</li>
-        <li>1111</li>
-        <li>1111</li>
-        <li>1111</li>
+        <li
+          v-for="(item, index) in list"
+          :key="index"
+          @click="linkGo"
+        >{{item}}</li>
       </ul>
     </main>
   </div>
@@ -23,7 +15,20 @@
 
 <script>
 export default {
-  name: "ceshi"
+  name: "ceshi",
+  data() {
+    return {
+      list: [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14]
+    };
+  },
+  methods: {
+    linkGo() {
+      this.$router.push("/detail");
+    },
+    routerGo() {
+      this.$router.go(-1);
+    }
+  }
 };
 </script>
 
