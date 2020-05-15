@@ -22,6 +22,15 @@ export default {
       list: [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14]
     };
   },
+  mounted() {
+    console.log("新页面1111111");
+  },
+  activated() {
+    console.log("复用的页面11111111");
+  },
+  deactivated() {
+    console.log("复用组件停用111111111");
+  },
   methods: {
     linkGo() {
       this.$router.push("/detail");

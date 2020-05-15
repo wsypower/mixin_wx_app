@@ -18,6 +18,9 @@ export default {
   },
   activated() {
     console.log("复用的页面");
+  },
+  deactivated() {
+    console.log("复用组件停用");
   }
 };
 </script>

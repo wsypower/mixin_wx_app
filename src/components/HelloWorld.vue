@@ -107,6 +107,9 @@ export default {
   mounted() {
     console.log(123);
   },
+  activated() {
+    console.log(456456);
+  },
   methods: {
     routerLink() {
       this.$router.push("/router");
