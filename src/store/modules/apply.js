@@ -1,7 +1,7 @@
 export default {
     namespaced: true,
     state: {
-        dogOrderId: "0", // 页面切换方向
+        dogOrderId: "0", // 订单ID
     },
     getters: {
         dogOrderId: state => {

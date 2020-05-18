@@ -8,11 +8,11 @@
             <my-scroll>
                 <div class="place-item" v-for="item in placeList" :key="item.id" @click="gotoPointDetail(item.id)">
                     <div class="first" flex="dir:left cross:center main:justify">
-                        <span class="place-item-name">{{item.name}}</span>
+                        <span class="place-item-name">{{item.servicePointName}}</span>
                         <span class="place-item-point"><span class="icon iconfont point">&#xe63e;</span>{{item.distance}}</span>
                     </div>
                     <div class="text-panel"><span>地址：</span><span>{{item.address}}</span></div>
-                    <div class="text-panel"><span>服务时间：</span><span>{{item.time}}</span></div>
+                    <div class="text-panel"><span>服务时间：</span><span>{{item.serviceTime}}</span></div>
                 </div>
             </my-scroll>
         </div>
@@ -32,12 +32,12 @@
             }
         },
         data(){
-            return {
-                placeList:[]
-            }
+            return {}
         },
-        mounted(){
-            this.placeList = JSON.parse(JSON.stringify(this.servePlaces));
+        computed:{
+            placeList: function(){
+                return JSON.parse(JSON.stringify(this.servePlaces))
+            }
         },
         methods:{
             gotoMorePointPage(){

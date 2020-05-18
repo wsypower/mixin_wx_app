@@ -12,7 +12,7 @@
             <van-divider></van-divider>
             <van-field name="radio" label="是否备案犬证：" class="label-width-200">
                 <template #input>
-                    <my-radio-group :initValue="submitData.isRecord" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isBeiAn', name)}"></my-radio-group>
+                    <my-radio-group :initValue="submitData.isRecord" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isRecord', name)}"></my-radio-group>
                 </template>
             </van-field>
             <div class="warn-note">（备案犬证后，后续您也可以对犬证进行管理）</div>
@@ -34,9 +34,10 @@
             <van-divider></van-divider>
             <van-field v-model="submitData.phone" label="联系电话：" placeholder="请输入" input-align="right"/>
             <van-divider></van-divider>
-            <van-field v-model="submitData.qrCode" label="验证码：" placeholder="请输入短信验证码" >
+            <van-field v-model="submitData.verificationCode" label="验证码：" placeholder="请输入短信验证码" >
                 <template #button>
-                    <van-button plain type="info" size="small">获取验证码</van-button>
+                    <van-button v-show="sendAuthCode" plain type="info" size="small" @click="getAuthCode">获取验证码</van-button>
+                    <van-button v-show="!sendAuthCode" plain type="info" size="small" >{{auth_time}} 秒后重发</van-button>
                 </template>
             </van-field>
         </van-form>
@@ -107,7 +108,7 @@
                 />
             </van-popup>
             <van-divider></van-divider>
-            <van-field v-model="submitData.adress" label="详细地址：" placeholder="请填写详细地址" input-align="right"/>
+            <van-field v-model="submitData.address" label="详细地址：" placeholder="请填写详细地址" input-align="right"/>
             <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
                 <div class="upload-item">
@@ -141,6 +142,10 @@
         data(){
             return {
                 ynArray,
+                //获取验证码的两个参数
+                sendAuthCode:true,/*布尔值，通过v-show控制显示‘按钮’还是‘倒计时’ */
+                auth_time: 0, /*倒计时 计数器*/
+
                 showRegionPicker: false,
                 regionColumns:[],
                 showStreetPicker: false,
@@ -173,7 +178,7 @@
                     //联系电话
                     phone: '',
                     //验证码
-                    qrCode: '',
+                    verificationCode: '',
 
                     //现居住区县名称
                     region: '',
@@ -188,9 +193,9 @@
                     //现居住社区ID
                     communityId: '',
                     //详细地址
-                    adress: '',
+                    address: '',
                     //单位营业执照照片
-                    yyzz: ''
+                    businessLicense: ''
                 }
             }
         },
@@ -201,6 +206,17 @@
         methods:{
             getRealValue(attrName,value){
                 this.submitData[attrName] = value;
+            },
+            getAuthCode:function () {
+                this.sendAuthCode = false;
+                this.auth_time = 60;
+                var auth_timetimer =  setInterval(()=>{
+                    this.auth_time--;
+                    if(this.auth_time<=0){
+                        this.sendAuthCode = true;
+                        clearInterval(auth_timetimer);
+                    }
+                }, 1000);
             },
             getAddressData(parentId, type){
                 let params = {
@@ -270,7 +286,7 @@
                 console.log('submitData', this.submitData);
                 this.submitData.idCardFront = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589368147966&di=6a4bbaf6d6966c45e26f6791fb470471&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20171025%2Fe7f95b3b97bf4770b2ac06f22819803c.jpeg';
                 this.submitData.idCardBack = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589368126527&di=830749a463a0acc209fc2d51974005ab&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200409%2F94880ee7acde45abb2f13b9d05024279.jpeg';
-
+                this.submitData.businessLicense = 'http://5b0988e595225.cdn.sohucs.com/images/20190222/0f462d915b3f470a86037782f2880b36.jpeg';
                 bidDogCard(this.submitData).then( res => {
                     console.log(res, res);
                     if(res.errno === 0){

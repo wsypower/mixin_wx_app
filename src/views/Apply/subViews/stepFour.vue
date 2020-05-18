@@ -72,8 +72,12 @@
                 ynArray,
                 showDialog: false,
                 submitData:{
-                    dogOrderId: '',
                     userId: '',
+                    //订单ID
+                    dogOrderId: '',
+                    //当前步骤
+                    currentStep: '4',
+                    //是否盖章
                     isStamp: '1',
                     //信息登记表
                     informationPic: '',
@@ -81,6 +85,7 @@
                     commitmentPic: '',
                     //其他材料
                     otherFilePic: '',
+                    //备注
                     remark: ''
                 }
             }
@@ -98,11 +103,16 @@
                 this.$router.push('/newApply/stepThree');
             },
             submit(){
+                this.submitData.informationPic = 'http://p8.itc.cn/images03/20200514/7ff57354e0324e86a776b3d7f3bf79e1.jpeg';
+                this.submitData.commitmentPic = 'http://cs.wenming.cn/2/fr/201903/W020190314630706200502.jpg';
                 console.log('submitData', this.submitData);
-                // bidDogCard(this.submitData).then( res => {
-                //     console.log(res, res);
-                // });
-                this.showDialog = true;
+                bidDogCard(this.submitData).then( res => {
+                    console.log(res, res);
+                    if(res.errno === 0){
+                        this.showDialog = true;
+                    }
+                });
+
             },
             toHome(){
                 this.$router.push('/');

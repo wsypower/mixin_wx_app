@@ -57,7 +57,15 @@
                 queryDogCard({userId: userId}).then( res => {
                     this.dogCards = res.data;
                 });
-                queryDogServicePoint({userId: userId}).then( res => {
+                let originLon = this.$store.getters['originLon'];
+                let originLat = this.$store.getters['originLat'];
+                let params = {
+                    userId,
+                    originLon,
+                    originLat
+                }
+                queryDogServicePoint(params).then( res => {
+                    console.log('queryDogServicePoint',res.data);
                     this.servePlaceList = res.data;
                 });
             }

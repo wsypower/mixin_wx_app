@@ -31,7 +31,7 @@
 <script type="text/ecmascript-6">
     import { Toast } from 'vant'
     import { formatDate, getDay } from '@/utils/index.js'
-    import { querybidDogCardRecord } from '@/api/process.js'
+    import { querybidDogCardRecord, queryPidDogCard } from '@/api/process.js'
     const statusObj = {
         '-0-':{
             statusId: '0',
@@ -54,7 +54,6 @@
             statusName: '已登记',
         }
     }
-    //const userId = this.$store.getters['updateUserId'];
     export default {
         name: 'historyApplyList',
         components:{},
@@ -84,8 +83,9 @@
                         let statusKey = Object.keys(statusObj).find(key=>key.indexOf('-' + item.status + '-')>=0);
                         let temp = {
                             id: item.id,
-                            name: item.dogName,
-                            dogType: item.breed,
+                            currentStep: item.currentStep,
+                            name: item.dogName ? item.dogName : '--',
+                            dogType: item.breed ?item.breed : '--',
                             submitDay: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'',
                             statusId: statusObj[statusKey].statusId,
                             statusName: statusObj[statusKey].statusName
@@ -97,7 +97,14 @@
             },
             gotoDetail(item){
                 console.log('item:', item);
-                Toast('还没开发');
+                this.$router.push({
+                    path:'/newApply',
+                    query:{
+                        currentStep: item.currentStep,
+                        orderId: item.id,
+                        userType: '0'
+                    }
+                });
             }
         }
     }

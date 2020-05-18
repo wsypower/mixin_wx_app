@@ -23,9 +23,11 @@ files.keys().forEach((key) => {
 
 export default new Vuex.Store({
   state: {
-      isWX: true, //是否是微信，
-      token: '', //用户原始登入有效期的唯一标识
-      userId: 'xxx', //养犬管理的用户UserId
+      isWX: true, // 是否是微信，
+      token: '', // 用户原始登入有效期的唯一标识
+      userId: 'xxx', // 养犬管理的用户UserId
+      originLon: '120.57', // 经度
+      originLat: '30.00', // 纬度
   },
   getters: {
       isWX: state => {
@@ -33,6 +35,12 @@ export default new Vuex.Store({
       },
       userId: state => {
           return state.userId
+      },
+      originLon: state => {
+          return state.originLon
+      },
+      originLat: state => {
+          return state.originLat
       }
   },
   mutations: {
@@ -47,6 +55,14 @@ export default new Vuex.Store({
       // 设置目前是否处于微信内打开
       updateUserId(state, userId) {
           state.userId = userId;
+      },
+      // 设置经度
+      updateOriginLon(state, originLon) {
+          state.originLon = originLon;
+      },
+      // 设置纬度
+      updateOriginLat(state, originLat) {
+          state.originLat = originLat;
       },
   },
   actions: {},

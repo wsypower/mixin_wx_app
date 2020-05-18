@@ -2,49 +2,49 @@
     <div class="continued-step-page">
         <page-header title="犬证续办"></page-header>
         <van-form>
-            <van-field v-model="submitData.firstName" label="犬证编号：" placeholder="请输入犬证编号" input-align="right"/>
+            <van-field v-model="submitData.dogCardNumber" label="犬证编号：" placeholder="请输入犬证编号" input-align="right"/>
             <van-divider></van-divider>
-            <van-field v-model="submitData.firstName" label="犬证芯片号：" placeholder="请输入芯片号（非必填）" input-align="right"/>
+            <van-field v-model="submitData.chipNumber" label="犬证芯片号：" placeholder="请输入芯片号（非必填）" input-align="right"/>
             <van-divider></van-divider>
             <van-field
                     readonly
                     clickable
                     name="picker"
-                    :value="submitData.cityValue"
+                    :value="submitData.immuneAddress"
                     label="免疫地点："
                     placeholder="请选择地点"
-                    @click="showCityPicker = true"
+                    @click="showImmuneAddressPicker = true"
                     input-align="right"
                     right-icon="arrow"
             />
-            <van-popup v-model="showCityPicker" position="bottom">
+            <van-popup v-model="showImmuneAddressPicker" position="bottom">
                 <van-picker
                         show-toolbar
-                        :columns="cityColumns"
-                        @confirm="onCityConfirm"
-                        @cancel="showCityPicker = false"
+                        :columns="immuneAddressColumns"
+                        @confirm="onImmuneAddressConfirm"
+                        @cancel="showImmuneAddressPicker = false"
                 />
             </van-popup>
             <van-divider></van-divider>
-            <van-field v-model="submitData.dogType" label="免疫证编号：" placeholder="请输入编号" input-align="right"/>
+            <van-field v-model="submitData.immuneNumber" label="免疫证编号：" placeholder="请输入编号" input-align="right"/>
             <van-divider></van-divider>
             <van-field
                     readonly
                     clickable
-                    name="picker"
-                    :value="submitData.communityValue"
-                    label="免疫登记日期"
+                    name="datetimePicker"
+                    :value="immuneTime"
+                    label="免疫登记日期："
                     placeholder="请选择日期"
-                    @click="showCommunityPicker = true"
+                    @click="showImmuneTimePicker = true"
                     input-align="right"
                     right-icon="arrow"
+                    class="label-width-200"
             />
-            <van-popup v-model="showCommunityPicker" position="bottom">
-                <van-picker
-                        show-toolbar
-                        :columns="communityColumns"
-                        @confirm="onCommunityConfirm"
-                        @cancel="showCommunityPicker = false"
+            <van-popup v-model="showImmuneTimePicker" position="bottom">
+                <van-datetime-picker
+                        type="date"
+                        @confirm="onImmuneTimeConfirm"
+                        @cancel="showImmuneTimePicker = false"
                 />
             </van-popup>
             <van-divider></van-divider>
@@ -69,7 +69,7 @@
             <van-field
                     class="remark"
                     type="textarea"
-                    v-model="submitData.message"
+                    v-model="submitData.remark"
                     rows="4"
                     autosize
                     :border="true"
@@ -79,12 +79,19 @@
         <div class="btn-panel" flex="dir:left cross:center main:center">
             <van-button type="info" class="btn next-btn" @click="submit">提交</van-button>
         </div>
+        <van-popup v-model="showDialog" class="dialog-warp">
+            <div class="dialog" flex="dir:top cross:center">
+                <div class="dialog-header">温馨提示</div>
+                <div class="dialog-main">提交成功，请等待管理员审核。</div>
+                <div class="dialog-footer"><van-button type="info" size="mini" @click="toHome">确定</van-button></div>
+            </div>
+        </van-popup>
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Divider, Form, Field, Button, Popup, Picker } from 'vant';
+    import { Divider, Form, Field, Button, Popup, Picker, DatetimePicker } from 'vant';
     import PageHeader from '@/components/pageHeader.vue';
-    const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
+    import { formatDate } from '@/utils/index.js'
     export default{
         name: 'stepFour',
         components:{
@@ -95,27 +102,69 @@
             [Button.name]: Button,
             [Picker.name]: Picker,
             [Popup.name]: Popup,
+            [DatetimePicker.name]: DatetimePicker
 
         },
         data(){
             return {
-                ynArray,
+                showImmuneAddressPicker: false,
+                immuneAddressColumns: ['xxx','yyy'],
+                immuneTime: '',
+                showImmuneTimePicker: false,
                 submitData:{
-                    isSeal: '1',
-                    message: ''
-                }
+                    userId: '',
+                    //续办
+                    currentStep: '5',
+                    //犬证编号
+                    dogCardNumber: '',
+                    //犬证芯片号
+                    chipNumber: '',
+                    //免疫地点
+                    immuneAddress: '',
+                    //免疫证编号
+                    immuneNumber: '',
+                    //免疫登记日期
+                    immuneTime: null,
+                    //信息登记表
+                    informationPic: '',
+                    //养犬承诺书
+                    commitmentPic: '',
+                    //其他材料
+                    otherFilePic: '',
+                    // 备注
+                    remark: ''
+                },
+                showDialog: false
             }
         },
+        mounted(){
+            this.submitData.userId = this.$store.getters['userId'];
+        },
         methods:{
-            getRealValue(attrName,value){
-                this.submitData[attrName] = value;
+            onImmuneAddressConfirm(value){
+                this.submitData.immuneAddress = value;
+                this.showImmuneAddressPicker = false;
             },
-            preStep(){
-
+            onImmuneTimeConfirm(value){
+                this.immuneTime = formatDate(value, 'yyyy-MM-dd');
+                this.submitData.immuneTime = value.getTime();
+                this.showImmuneTimePicker = false;
             },
             submit(){
+                this.submitData.informationPic = 'http://p8.itc.cn/images03/20200514/7ff57354e0324e86a776b3d7f3bf79e1.jpeg';
+                this.submitData.commitmentPic = 'http://cs.wenming.cn/2/fr/201903/W020190314630706200502.jpg';
                 console.log('submitData', this.submitData);
+                this.showDialog = true;
                 // this.$router.push('/applyStep/stepThree');
+                // bidDogCard(this.submitData).then( res => {
+                //     console.log(res, res);
+                //     if(res.errno === 0){
+                //         this.showDialog = true;
+                //     }
+                // });
+            },
+            toHome(){
+                this.$router.push('/');
             }
         }
     }
@@ -166,6 +215,36 @@
             .next-btn{
                 width: 702px;
                 height: 80px;
+            }
+        }
+        .dialog-warp{
+            border-radius: 20px;
+        }
+        .dialog{
+            width: 500px;
+            height: 300px;
+            .dialog-header{
+                width: 500px;
+                height: 80px;
+                line-height: 80px;
+                text-align: center;
+                background-color: #306ce7;
+                color: #ffffff;
+                font-family: PingFang-SC-Medium;
+                font-size: 32px;
+            }
+            .dialog-main{
+                width: 100%;
+                padding: 20px 40px;
+                flex: 1;
+                color: #333333;
+                font-family: PingFang-SC-Medium;
+                font-size: 32px;
+            }
+            .dialog-footer{
+                width: 100%;
+                height: 120px;
+                text-align: center;
             }
         }
     }

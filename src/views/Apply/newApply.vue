@@ -1,7 +1,7 @@
 <template>
     <div class="step-page">
         <page-header title="犬证新办"></page-header>
-        <apply-step-header :activeStep=activeStep></apply-step-header>
+        <apply-step-header :activeStep="activeStep"></apply-step-header>
         <div class="page-body">
             <my-scroll ref="myScroll">
                 <transition :name="transitionName">
@@ -17,6 +17,7 @@
     // const { mapState } = createNamespacedHelpers("pagesAnimation");
     import PageHeader from '@/components/pageHeader.vue'
     import ApplyStepHeader from './components/applyStepHeader.vue'
+    const routerArr = ['/newApply/stepOne','/newApply/stepTwo','/newApply/stepThree','/newApply/stepFour']
     export default {
         name: 'newApply',
         components: {
@@ -30,6 +31,35 @@
         },
         mounted(){
             this.preStep = this.$route.meta.index;
+        },
+        beforeRouteEnter(to,from,next){
+            console.log('beforeRouteEnter', to, from);
+            next(vm => {
+                if(to.query.currentStep){
+                    vm.preStep = to.query.currentStep;
+                    let isUser = to.query.userType;
+                    let _link = '';
+                    if(vm.preStep===0){
+                        if(isUser==='0'){
+                            _link = routerArr[0]+ 'ForPerson'
+                        }
+                        else{
+                            _link = routerArr[0]+ 'ForCompany'
+                        }
+                    }
+                    else{
+                        _link = routerArr[vm.preStep];
+                    }
+                    vm.$store.commit('apply/updateDogOrderId', to.query.orderId);
+                    vm.$router.replace({
+                        path: _link,
+                        query:{
+                            operateType: 'edit'
+                        }
+                    });
+                }
+            })
+
         },
         watch:{
             activeStep: function(){

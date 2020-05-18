@@ -18,7 +18,7 @@
                     readonly
                     clickable
                     name="datetimePicker"
-                    :value="submitData.birthdate"
+                    :value="timeObj.birthdate"
                     label="出生日期："
                     placeholder="请选择出生日期"
                     @click="showBirthdatePicker = true"
@@ -37,7 +37,7 @@
                     readonly
                     clickable
                     name="datetimePicker"
-                    :value="submitData.adoptTime"
+                    :value="timeObj.adoptTime"
                     label="领养日期："
                     placeholder="请选择领养日期"
                     @click="showAdoptTimePicker = true"
@@ -124,7 +124,7 @@
                     readonly
                     clickable
                     name="datetimePicker"
-                    :value="submitData.immuneTime"
+                    :value="timeObj.immuneTime"
                     label="免疫登记日期："
                     placeholder="请选择日期"
                     @click="showImmuneTimePicker = true"
@@ -217,6 +217,14 @@
                 showSitePicker: false,
                 siteColumns: ['xxx','yyy'],
 
+                timeObj:{
+                    //出生日期
+                    birthdate: '',
+                    //领养日期
+                    adoptTime: '',
+                    //免疫登记日期
+                    immuneTime:'',
+                },
                 submitData:{
                     dogOrderId: '',
                     userId: '',
@@ -229,9 +237,9 @@
                     //犬品种
                     breed: '',
                     //出生日期
-                    birthdate: '',
+                    birthdate: null,
                     //领养日期
-                    adoptTime: '',
+                    adoptTime: null,
                     //是否绝育
                     isSterilization: '0',
                     //体重
@@ -250,7 +258,7 @@
                     //免疫证编号
                     immuneNumber: '',
                     //免疫登记日期
-                    immuneTime:'',
+                    immuneTime: null,
                     //意向地点
                     intentionRegistrationSite: '',
                     //免疫证照片
@@ -267,12 +275,14 @@
         methods:{
             onBirthdateConfirm(value){
                 console.log(`当前选中值：`,value);
-                this.submitData.birthdate = formatDate(value, 'yyyy-MM-dd');
+                this.timeObj.birthdate  = formatDate(value, 'yyyy-MM-dd');
+                this.submitData.birthdate = value.getTime();
                 this.showBirthdatePicker = false;
             },
             onAdoptTimeConfirm(value){
                 console.log(`当前选中值：`, value);
-                this.submitData.adoptTime = formatDate(value, 'yyyy-MM-dd');
+                this.timeObj.adoptTime = formatDate(value, 'yyyy-MM-dd');
+                this.submitData.adoptTime = value.getTime();
                 this.showAdoptTimePicker = false;
             },
             onPurposeConfirm(value){
@@ -286,7 +296,8 @@
                 this.showImmuneAddressPicker = false;
             },
             onImmuneTimeConfirm(value){
-                this.submitData.immuneTime = formatDate(value, 'yyyy-MM-dd');
+                this.timeObj.immuneTime = formatDate(value, 'yyyy-MM-dd');
+                this.submitData.immuneTime = value.getTime();
                 this.showImmuneTimePicker = false;
             },
             onSiteConfirm(value){
@@ -301,11 +312,26 @@
                 this.$router.push('/newApply/stepOneForPerson');
             },
             nextStep(){
+                //犬正面照
+                //http://image.biaobaiju.com/uploads/20180211/02/1518286061-jwfJBQVhoH.jpg
+                //http://image.biaobaiju.com/uploads/20180211/02/1518286061-ezPIBniowG.jpg
+                this.submitData.dogPhotoFront = 'http://image.biaobaiju.com/uploads/20180211/02/1518286057-fLgvpPnYqi.jpg';
+                //犬侧面照
+                //http://image.biaobaiju.com/uploads/20180211/02/1518286064-yiUWeLgaBn.jpg
+                //http://image.biaobaiju.com/uploads/20180211/02/1518286067-RojChAkneO.jpg
+                this.submitData.dogPhotoBack  = 'http://image.biaobaiju.com/uploads/20180211/02/1518286059-xuorBvWsPz.jpg';
+                //免疫证照片
+                this.submitData.immunePhotos = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589809235179&di=1ac27907772ce4ffb5a4868b6a1ce5ad&imgtype=0&src=http%3A%2F%2Fimg.beihai365.com%2Fbbs%2FMon_1405%2F60_203525_93335af59f453f7.jpg';
+                //免疫记录照片
+                this.submitData.immuneRecord = 'https://qcloud.dpfile.com/pc/W6i9-BY2RwUbd3gcbvLj1vdqhkOK47sK3grG9MuMaFl2Z2NWo8mGzuxwarQuIULZjoJrvItByyS4HHaWdXyO_I7F0UeCRQYMHlogzbt7GHgNNiIYVnHvzugZCuBITtvjski7YaLlHpkrQUr5euoQrg.jpg';
+
                 console.log('submitData', this.submitData);
-                // bidDogCard(this.submitData).then( res => {
-                //     console.log(res, res);
-                // });
-                this.$router.push('/newApply/stepThree');
+                bidDogCard(this.submitData).then( res => {
+                    console.log(res, res);
+                    if(res.errno === 0){
+                        this.$router.push('/newApply/stepThree');
+                    }
+                });
             }
         }
     }

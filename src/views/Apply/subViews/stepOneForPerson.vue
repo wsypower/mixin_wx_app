@@ -74,7 +74,7 @@
             <van-divider></van-divider>
             <van-field v-model="submitData.phone" label="联系电话：" placeholder="请输入" input-align="right"/>
             <van-divider></van-divider>
-            <van-field v-model="submitData.qrCode" label="验证码：" placeholder="请输入短信验证码" >
+            <van-field v-model="submitData.verificationCode" label="验证码：" placeholder="请输入短信验证码" >
                 <template #button>
                     <van-button v-show="sendAuthCode" plain type="info" size="small" @click="getAuthCode">获取验证码</van-button>
                     <van-button v-show="!sendAuthCode" plain type="info" size="small" >{{auth_time}} 秒后重发</van-button>
@@ -240,7 +240,7 @@
                     //联系电话
                     phone: '',
                     //验证码
-                    qrCode: '',
+                    verificationCode: '',
                     //现居住区县名称
                     region: '',
                     //现居住区县ID
@@ -266,6 +266,14 @@
             this.submitData.userId = this.$store.getters['userId'];
             this.getAddressData('3306','1');
         },
+        beforeRouteEnter(to,from,next) {
+            console.log('beforeRouteEnter', to, from);
+            next(vm=>{
+                if(to.query.operateType==='edit'){
+                    //获取数据刷新页面
+                }
+            })
+        },
         methods:{
             getRealValue(attrName,value){
                 this.submitData[attrName] = value;
@@ -283,7 +291,7 @@
             },
             getAddressData(parentId, type){
                 let params = {
-                    userId: 60,
+                    userId: this.submitData.userId,
                     parentId,
                     type
                 }

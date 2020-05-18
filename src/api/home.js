@@ -30,7 +30,7 @@ export const queryDogServicePoint = data => {
     return request({
         url: `/dogServicePoint/queryDogServicePoint/${data.userId}`,
         method: 'post',
-        data
+        params: data
     })
 }
 
