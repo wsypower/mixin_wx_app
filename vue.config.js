@@ -16,7 +16,6 @@ const defaultSettings = require("./src/settings.js");
 // 使用uglify-js进行js文件的压缩。
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const resolve = (dir) => path.join(__dirname, dir);
-
 const name = defaultSettings.title || "vue模板"; // page title
 
 // ====================================================== //
