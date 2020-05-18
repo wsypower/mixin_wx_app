@@ -11,7 +11,7 @@
 /* ********************************************************************************************************* */
 import router from "@/router";
 import vueWechatTitle from "vue-wechat-title";
-import Navigation from "./navigation/index";
+import navigation from "./navigation/index";
 import service from "./request/index";
 export default {
   install(Vue) {
@@ -19,7 +19,7 @@ export default {
     // https://cn.vuejs.org/v2/api/#productionTip
     Vue.config.productionTip = false;
     Vue.use(service);
-    Vue.use(Navigation, { router });
+    Vue.use(navigation, { router });
     Vue.use(vueWechatTitle);
   },
 };

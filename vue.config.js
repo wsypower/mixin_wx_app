@@ -53,7 +53,15 @@ module.exports = {
       warnings: false,
       errors: true,
     },
-    // before: require("./mock/mock-server.js"),
+    proxy: {
+      "/api": {
+        target: "http://192.168.71.33:50000", // 这个是你要代理的地址(开发阶段接口地址)
+        changeOrigin: true, //跨域需要加上这个
+        pathRewrite: {
+          "^/api": "/",
+        },
+      },
+    },
   },
   // ====================================================== //
   // ========================= 重命名 ======================== //

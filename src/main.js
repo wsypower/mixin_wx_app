@@ -20,9 +20,6 @@ import router from "./router";
 import store from "./store/index";
 import "amfe-flexible";
 import "assets/iconfont/iconfont.css";
-import vueg from "vueg";
-
-Vue.use(vueg, router);
 //
 // ─── PLUGINS ────────────────────────────────────────────────────────────────────
 //
