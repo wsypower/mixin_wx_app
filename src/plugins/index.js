@@ -19,7 +19,7 @@ export default {
     // https://cn.vuejs.org/v2/api/#productionTip
     Vue.config.productionTip = false;
     Vue.use(service);
-    Vue.use(navigation, { router });
+    // Vue.use(navigation, { router });
     Vue.use(vueWechatTitle);
   },
 };

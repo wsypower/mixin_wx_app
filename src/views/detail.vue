@@ -12,9 +12,11 @@
     <div
       class="button"
       @click="ceshi2"
-    >ceshi1</div>
+    >ceshi2</div>
     <div class="main">
-      <router-view></router-view>
+      <transition name="van-slide-left">
+        <router-view></router-view>
+      </transition>
     </div>
   </div>
 </template>

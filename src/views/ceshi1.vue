@@ -6,7 +6,13 @@
 
 <script>
 export default {
-  name: "ceshi1"
+  name: "ceshi1",
+  created() {
+    console.log(123);
+  },
+  activated() {
+    console.log("复用的页面");
+  }
 };
 </script>
 
