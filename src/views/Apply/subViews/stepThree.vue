@@ -4,32 +4,40 @@
         <div class="step-module-header" flex="dir:left cross:center main:justify">
             <span class="header-left">信息登记表</span>
             <div class="header-right" flex="dir:left cross:center">
-                <van-button type="info" size="mini">复制链接</van-button>
+                <van-button type="info" size="mini" class="copyDJFileUrl" :data-clipboard-text="djFileUrl" @click="copyDJFileUrl">复制链接</van-button>
                 <van-button type="info" size="mini" v-if="isWX">分享</van-button>
             </div>
         </div>
         <div class="file-one">
-            <img src="http://zhcg.jhk.gov.cn:85//upload/file/2020/05/12/20200512154426798109.jpeg" @click="previewImage(0)"/>
+            <img :src="djFileUrl" @click="previewImage(0)"/>
         </div>
         <div class="step-module-header" flex="dir:left cross:center main:justify">
             <span class="header-left">个人养犬承诺书</span>
             <div class="header-right" flex="dir:left cross:center">
-                <van-button type="info" size="mini">复制链接</van-button>
+                <van-button type="info" size="mini"  class="copyCNFileUrl" :data-clipboard-text="cnFileUrl" @click="copyCNFileUrl">复制链接</van-button>
                 <van-button type="info" size="mini" v-if="isWX">分享</van-button>
             </div>
         </div>
         <div class="file-two">
-            <img src="http://zhcg.jhk.gov.cn:85//upload/file/2020/05/12/20200512144215651871.jpeg" @click="previewImage(1)"/>
+            <img :src="cnFileUrl" @click="previewImage(1)"/>
         </div>
         <div class="btn-panel" flex="dir:left cross:center main:justify">
             <van-button type="info" class="btn pre-btn" @click="preStep">上一步</van-button>
             <van-button type="info" class="btn next-btn" @click="nextStep">下一步</van-button>
         </div>
+        <van-popup v-model="showDialog" class="dialog-warp">
+            <div class="dialog" flex="dir:top cross:center">
+                <div class="dialog-header">温馨提示</div>
+                <div class="dialog-main">表格链接已复制，请用浏览器打开链接并下载，然后打印出来盖章。</div>
+                <div class="dialog-footer"><van-button type="info" size="mini" @click="showDialog=false">关闭</van-button></div>
+            </div>
+        </van-popup>
         <!--<van-image-preview v-model="showPreviewImage" :images="image"></van-image-preview>-->
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Button, ImagePreview } from 'vant';
+    import { Button, ImagePreview, Popup, Toast } from 'vant';
+    import Clipboard from 'clipboard';
     //http://zhcg.jhk.gov.cn:85//upload/file/2020/05/12/20200512154426798109.jpeg
     //http://zhcg.jhk.gov.cn:85//upload/file/2020/05/12/20200512144215651871.jpeg
     //http://zhcg.jhk.gov.cn:85//upload/file/2020/05/12/20200512150855204691.jpeg
@@ -37,12 +45,16 @@
         name: 'stepThree',
         components:{
             [Button.name]: Button ,
+            [Popup.name]: Popup,
             // [ImagePreview.name]: ImagePreview
         },
         data(){
            return {
+               djFileUrl: 'http://zhcg.jhk.gov.cn:85//upload/file/2020/05/12/20200512154426798109.jpeg',
+               cnFileUrl: 'http://zhcg.jhk.gov.cn:85//upload/file/2020/05/12/20200512144215651871.jpeg',
                showPreviewImage: false,
-               image: []
+               image: [],
+               showDialog: false,
            }
         },
         computed:{
@@ -53,6 +65,32 @@
         mounted(){
         },
         methods:{
+            copyDJFileUrl(){
+                const clipboard = new Clipboard('.copyDJFileUrl');
+                clipboard.on('success', () => {
+                    console.log(1111111111111);
+                    this.showDialog = true;
+                })
+                clipboard.on('error', () => {
+                    Toast({
+                        message: '复制失败',
+                        duration: 1000
+                    });
+                })
+            },
+            copyCNFileUrl(){
+                const clipboard = new Clipboard('.copyCNFileUrl');
+                clipboard.on('success', () => {
+                    console.log(1111111111111);
+                    this.showDialog = true;
+                })
+                clipboard.on('error', () => {
+                    Toast({
+                        message: '复制失败',
+                        duration: 1000
+                    });
+                })
+            },
             previewImage(index){
                 ImagePreview({
                     images: [
@@ -99,6 +137,11 @@
                 border-left: 6px solid #306ce7;
                 padding-left: 10px;
             }
+            .header-right {
+                button{
+                    width: 110px;
+                }
+            }
         }
         .file-one{
             width: 100%;
@@ -130,6 +173,36 @@
             }
             .pre-btn{
                 background-color: #6392f4;
+            }
+        }
+        .dialog-warp{
+            border-radius: 20px;
+        }
+        .dialog{
+            width: 500px;
+            height: 350px;
+            .dialog-header{
+                width: 500px;
+                height: 80px;
+                line-height: 80px;
+                text-align: center;
+                background-color: #306ce7;
+                color: #ffffff;
+                font-family: PingFang-SC-Medium;
+                font-size: 32px;
+            }
+            .dialog-main{
+                width: 100%;
+                padding: 20px 40px;
+                flex: 1;
+                color: #333333;
+                font-family: PingFang-SC-Medium;
+                font-size: 32px;
+            }
+            .dialog-footer{
+                width: 100%;
+                height: 120px;
+                text-align: center;
             }
         }
     }

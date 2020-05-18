@@ -134,7 +134,7 @@
                 }
                 .type-content{
                     .form-item{
-                        margin-bottom: 50px;
+                        margin-bottom: 34px;
                         .from-item-label{
                             width: 200px;
                             font-family: PingFang-SC-Medium;

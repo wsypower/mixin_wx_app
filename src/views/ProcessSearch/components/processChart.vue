@@ -46,12 +46,6 @@
                 type: Number,
                 default: 0
             }
-            // processData:{
-            //     type:Array,
-            //     default(){
-            //         return []
-            //     }
-            // }
         },
         data(){
             return {

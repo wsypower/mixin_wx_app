@@ -13,10 +13,11 @@ import qs from 'qs'
  * @param {String} userId 请求参数 :用户唯一标识符默认参数）
  */
 export const bidDogCard = data => {
+    console.log('bidDogCard',data);
     return request({
         url: `/dogOrder/bidDogCard/${data.userId}`,
         method: 'post',
-        data
+        data: data
     })
 }
 

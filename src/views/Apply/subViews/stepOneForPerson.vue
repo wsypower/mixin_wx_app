@@ -65,7 +65,6 @@
                 <van-divider></van-divider>
                 <van-field v-model="submitData.passport" label="护照号：" placeholder="请输入护照号" input-align="right"/>
                 <van-divider></van-divider>
-                <!--<van-field v-model="submitData.phone" label="：" placeholder="请输入" input-align="right"/>-->
                 <van-field name="radio" label="性别：" input-align="right">
                     <template #input>
                         <my-radio-group :initValue="submitData.sex" :radioGroup="sexArray" @getRealValue="(name)=>{getRealValue('sex', name)}" style="width:unset"></my-radio-group>
@@ -77,7 +76,8 @@
             <van-divider></van-divider>
             <van-field v-model="submitData.qrCode" label="验证码：" placeholder="请输入短信验证码" >
                 <template #button>
-                    <van-button plain type="info" size="small">获取验证码</van-button>
+                    <van-button v-show="sendAuthCode" plain type="info" size="small" @click="getAuthCode">获取验证码</van-button>
+                    <van-button v-show="!sendAuthCode" plain type="info" size="small" >{{auth_time}} 秒后重发</van-button>
                 </template>
             </van-field>
         </van-form>
@@ -191,6 +191,10 @@
                 ynArray,
                 fileTypeArray,
                 sexArray,
+                //获取验证码的两个参数
+                sendAuthCode:true,/*布尔值，通过v-show控制显示‘按钮’还是‘倒计时’ */
+                auth_time: 0, /*倒计时 计数器*/
+
                 showRegionPicker: false,
                 regionColumns:[],
                 showStreetPicker: false,
@@ -199,7 +203,7 @@
                 communityColumns: [],
                 adLoading: false,
                 submitData:{
-                    userId: 6,
+                    userId: null,
                     //个人
                     userType: '0',
                     //新办
@@ -232,7 +236,7 @@
                     //护照号
                     passport: '',
                     //性别
-                    sex: '1',
+                    sex: '',
                     //联系电话
                     phone: '',
                     //验证码
@@ -259,15 +263,27 @@
             }
         },
         mounted(){
+            this.submitData.userId = this.$store.getters['userId'];
             this.getAddressData('3306','1');
         },
         methods:{
             getRealValue(attrName,value){
                 this.submitData[attrName] = value;
             },
+            getAuthCode:function () {
+                this.sendAuthCode = false;
+                this.auth_time = 60;
+                var auth_timetimer =  setInterval(()=>{
+                    this.auth_time--;
+                    if(this.auth_time<=0){
+                        this.sendAuthCode = true;
+                        clearInterval(auth_timetimer);
+                    }
+                }, 1000);
+            },
             getAddressData(parentId, type){
                 let params = {
-                    userId: 6,
+                    userId: 60,
                     parentId,
                     type
                 }
@@ -336,11 +352,15 @@
                 this.submitData.idCardBack = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589368126527&di=830749a463a0acc209fc2d51974005ab&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200409%2F94880ee7acde45abb2f13b9d05024279.jpeg';
                 this.submitData.residencyProofBack = 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1793680595,3911934779&fm=26&gp=0.jpg';
                 this.submitData.residencyProofFront = 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1793680595,3911934779&fm=26&gp=0.jpg';
-                this.$store.commit('apply/updateDogOrderId', '32');
-                // bidDogCard(this.submitData).then( res => {
-                //     console.log(res, res);
-                // });
-                this.$router.push('/newApply/stepTwo');
+
+                bidDogCard(this.submitData).then( res => {
+                    console.log(res, res);
+                    if(res.errno === 0){
+                        this.$store.commit('apply/updateDogOrderId', res.data.orderId);
+                        this.$router.push('/newApply/stepTwo');
+                    }
+                });
+
             }
         }
     }

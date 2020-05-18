@@ -49,10 +49,34 @@ module.exports = {
   devServer: {
     port: port,
     open: true,
-    overlay: {
-      warnings: false,
-      errors: true,
-    },
+      proxy: {
+          '/api': {
+              target: 'http://192.168.71.33:8999/api',
+              changeOrigin: true,
+              secure: false,
+              pathRewrite: {
+                  '^/api': ''   //需要rewrite的,
+              }
+          }
+      }
+    // overlay: {
+    //   warnings: false,
+    //   errors: true,
+    // },
+      // proxy: {
+      //     '/api': {
+      //         target: 'http://192.168.71.33:8999',
+      //         changeOrigin: true,
+      //         pathRewrite: { }
+      //     }
+      // }
+      // proxy: [{
+      //     context: '/*',
+      //     target: 'http://192.168.71.33:8999',  // 代理跨域目标接口
+      //     changeOrigin: true,
+      //     secure: false,  // 当代理某些https服务报错时用
+      //     cookieDomainRewrite: false  // 可以为false，表示不修改
+      // }],
     // before: require("./mock/mock-server.js"),
   },
   // ====================================================== //

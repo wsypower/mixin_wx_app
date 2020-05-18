@@ -12,32 +12,31 @@
 "use strict";
 import Vue from "vue";
 import axios from "axios";
-import Qs from "qs";
 
 // ##################################################################### //
 // ############################ axios默认请求头配置 ########################### //
 // ##################################################################### //
-axios.defaults.headers.post["Content-Type"] =
-  "application/x-www-form-urlencoded";
-
+axios.defaults.headers.post["Content-Type"] = "application/json;charset=UTF-8";
+axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
+//
 // ##################################################################### //
 // ########################### axios config配置 ########################## //
 // ##################################################################### //
 let config = {
-  baseURL: URL_CONFIG.baseURL,
+  baseURL: '/api', // URL_CONFIG.baseURL
   timeout: 60 * 100, // 请求超时时间
   //TODO:只能用在 'PUT', 'POST' 和 'PATCH' 这几个请求方法
   //修改请求数据添加必填项 userId
-  transformRequest: [
-    function(data = {}) {
-      //对 data 进行任意转换处理 => 转为fromData(按照实际后台约定修改转换)
-      return Qs.stringify(data, { arrayFormat: "repeat" });
-    },
-  ],
-  //TODO:必须是一个无格式对象(plain object)或 URLSearchParams 对象(GET)
-  paramsSerializer: function(params) {
-    return Qs.stringify(params, { arrayFormat: "brackets" });
-  },
+  // transformRequest: [
+  //   function(data = {}) {
+  //     //对 data 进行任意转换处理 => 转为fromData(按照实际后台约定修改转换)
+  //     return Qs.stringify(data, { arrayFormat: "repeat" });
+  //   },
+  // ],
+  // //TODO:必须是一个无格式对象(plain object)或 URLSearchParams 对象(GET)
+  // paramsSerializer: function(params) {
+  //   return Qs.stringify(params, { arrayFormat: "brackets" });
+  // },
 };
 
 // ##################################################################### //

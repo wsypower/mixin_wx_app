@@ -21,6 +21,10 @@ import store from "./store/index";
 import "amfe-flexible";
 import "assets/iconfont/iconfont.css";
 
+import animated from 'animate.css' //
+
+Vue.use(animated)
+
 //
 // ─── PLUGINS ────────────────────────────────────────────────────────────────────
 //

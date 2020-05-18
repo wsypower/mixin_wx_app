@@ -12,9 +12,9 @@ import Qs from "qs";
  * @date 2020-05-15 12:04
  * @param {String} userId 请求参数 :用户唯一标识符默认参数）
  */
-export const queryAddressByParentId = data => {
+export const querybidDogCardRecord = data => {
     return request({
-        url: `/dogOrder/queryAddressByParentId/${data.userId}`,
+        url: `/dogOrder/querybidDogCardRecord/${data.userId}`,
         method: 'post',
         params: data
     })

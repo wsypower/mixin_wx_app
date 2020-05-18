@@ -30,74 +30,70 @@
 </template>
 <script type="text/ecmascript-6">
     import { Toast } from 'vant'
+    import { formatDate, getDay } from '@/utils/index.js'
+    import { querybidDogCardRecord } from '@/api/process.js'
+    const statusObj = {
+        '-0-':{
+            statusId: '0',
+            statusName: '未提交',
+        },
+        '-10-60-':{
+            statusId: '1',
+            statusName: '审核中',
+        },
+        '-20-':{
+            statusId: '2',
+            statusName: '审核通过',
+        },
+        '-25-45-85-':{
+            statusId: '3',
+            statusName: '审核未通过',
+        },
+        '-40-80-':{
+            statusId: '4',
+            statusName: '已登记',
+        }
+    }
     //const userId = this.$store.getters['updateUserId'];
     export default {
         name: 'historyApplyList',
         components:{},
         data(){
             return {
+                params:{
+                    userId: '',
+                    beginTime: '',
+                    endTime: '',
+                    cardType: ''
+                },
                 listData:[]
             }
         },
         mounted(){
+            this.params.userId = this.$store.getters['userId'];
+            //let end = formatDate(new Date(), 'yyyy-MM-dd');
+            this.params.endTime = new Date().getTime();
+            this.params.beginTime = new Date(getDay(-30)).getTime();
             this.getListData();
         },
         methods:{
             getListData(){
-                let temp1 = {
-                    id: '2567190kshdgc',
-                    name: '平平',
-                    dogType: '柴犬',
-                    submitDay: '2020-05-11',
-                    statusId: 0,
-                    statusName: '未提交'
-                }
-                let temp2 = {
-                    id: 'a2567190kshdgc',
-                    name: '欢欢',
-                    dogType: '柯基',
-                    submitDay: '2020-05-11',
-                    statusId: 1,
-                    statusName: '审核中'
-                }
-                let temp3 = {
-                    id: 'c2567190kshdgc',
-                    name: '乐乐',
-                    dogType: '柴犬',
-                    submitDay: '2020-05-11',
-                    statusId: 2,
-                    statusName: '初审通过'
-                }
-                let temp4 = {
-                    id: 'zz2567190kshdgc',
-                    name: '三毛',
-                    dogType: '金毛',
-                    submitDay: '2020-05-11',
-                    statusId: 3,
-                    statusName: '审核未通过'
-                }
-                let temp5 = {
-                    id: 'saw2567190kshdgc',
-                    name: '平平',
-                    dogType: '柴犬',
-                    submitDay: '2020-05-11',
-                    statusId: 4,
-                    statusName: '已登记'
-                }
-                let temp6 = {
-                    id: 'sassw2567190kshdgc',
-                    name: '平平',
-                    dogType: '柴犬',
-                    submitDay: '2020-05-11',
-                    statusId: 4,
-                    statusName: '已登记'
-                }
-                this.listData.push(temp1);
-                this.listData.push(temp2);
-                this.listData.push(temp3);
-                this.listData.push(temp4);
-                this.listData.push(temp5);
-                this.listData.push(temp6);
+                querybidDogCardRecord(this.params).then(res=>{
+                    console.log('histoeyApplyList', res.data);
+                    this.listData = res.data.reduce((acc,item) => {
+                        let statusKey = Object.keys(statusObj).find(key=>key.indexOf('-' + item.status + '-')>=0);
+                        let temp = {
+                            id: item.id,
+                            name: item.dogName,
+                            dogType: item.breed,
+                            submitDay: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'',
+                            statusId: statusObj[statusKey].statusId,
+                            statusName: statusObj[statusKey].statusName
+                        }
+                        acc.push(temp);
+                        return acc
+                    },[]);
+                });
             },
             gotoDetail(item){
                 console.log('item:', item);
