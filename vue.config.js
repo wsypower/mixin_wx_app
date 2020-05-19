@@ -14,9 +14,11 @@
 const path = require("path");
 const defaultSettings = require("./src/settings.js");
 // 使用uglify-js进行js文件的压缩。
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+// const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+// 使用terser-webpack-plugin 替换uglify-js 进行js文件的压缩
+// TODO:uglify - js不能识别es6代码，如果外部依赖中存在es6代码，将很难捕获到问题
+const TerserPlugin = require("terser-webpack-plugin");
 const resolve = (dir) => path.join(__dirname, dir);
-
 const name = defaultSettings.title || "vue模板"; // page title
 
 // ====================================================== //
@@ -46,6 +48,7 @@ module.exports = {
   assetsDir: "static",
   lintOnSave: process.env.NODE_ENV === "development",
   productionSourceMap: false,
+  transpileDependencies: ["glob"],
   devServer: {
     port: port,
     open: true,
@@ -111,15 +114,40 @@ module.exports = {
         args[0].minify.minifyCSS = true;
         return args;
       });
-      // 移除 console
+      // FIXME: UglifyJs 无法解压ES6文件，node-modules中文件dist有es6导致文件压缩失败
+      // config.optimization.minimizer([
+      //   new UglifyJsPlugin({
+      //     uglifyOptions: {
+      //       compress: {
+      //         drop_console: true,
+      //         drop_debugger: true,
+      //         pure_funcs: ["console.log"],
+      //       },
+      //     },
+      //   }),
+      // ]);
+      // 启用多线程打包压缩，并移除console
       config.optimization.minimizer([
-        new UglifyJsPlugin({
-          uglifyOptions: {
+        new TerserPlugin({
+          parallel: 4, // 并行打包
+          terserOptions: {
+            ecma: undefined,
+            warnings: false,
+            parse: {},
             compress: {
+              drop_debugger: false,
               drop_console: true,
-              drop_debugger: true,
               pure_funcs: ["console.log"],
             },
+            mangle: true, // 注意`mangle.properties`默认为`false`。
+            module: false,
+            output: null,
+            toplevel: false,
+            nameCache: null,
+            ie8: false,
+            keep_classnames: undefined,
+            keep_fnames: false,
+            safari10: false,
           },
         }),
       ]);
