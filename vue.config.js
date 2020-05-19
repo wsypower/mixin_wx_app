@@ -58,6 +58,17 @@ module.exports = {
       warnings: false,
       errors: true,
     },
+    // 配置多个代理
+    proxy: {
+      "/proxy": {
+        target: "https://www.mock.com",
+        ws: true, // 代理的WebSockets
+        changeOrigin: true, // 允许websockets跨域
+        pathRewrite: {
+          "^/proxy": "",
+        },
+      },
+    },
     // before: require("./mock/mock-server.js"),
   },
   // ====================================================== //
@@ -110,7 +121,9 @@ module.exports = {
       });
       // 启动 webpack 打包分析
       config.plugin("webpack-bundle-analyzer").use(BundleAnalyzerPlugin);
+
       // FIXME: UglifyJs 无法解压ES6文件，node-modules中文件dist有es6导致文件压缩失败
+
       // config.optimization.minimizer([
       //   new UglifyJsPlugin({
       //     uglifyOptions: {
