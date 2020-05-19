@@ -329,6 +329,7 @@
                 bidDogCard(this.submitData).then( res => {
                     console.log(res, res);
                     if(res.errno === 0){
+                        this.$store.commit('apply/pdfUrl', res.data.url);
                         this.$router.push('/newApply/stepThree');
                     }
                 });

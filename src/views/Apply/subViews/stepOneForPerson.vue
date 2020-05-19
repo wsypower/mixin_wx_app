@@ -269,9 +269,9 @@
         beforeRouteEnter(to,from,next) {
             console.log('beforeRouteEnter', to, from);
             next(vm=>{
-                if(to.query.operateType==='edit'){
-                    //获取数据刷新页面
-                }
+                // if(to.query.operateType==='edit'){
+                //     //获取数据刷新页面
+                // }
             })
         },
         methods:{

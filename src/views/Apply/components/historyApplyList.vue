@@ -84,9 +84,9 @@
                         let temp = {
                             id: item.id,
                             currentStep: item.currentStep,
-                            name: item.dogName ? item.dogName : '--',
-                            dogType: item.breed ?item.breed : '--',
-                            submitDay: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'',
+                            name: item.dogName ? item.dogName : '----',
+                            dogType: item.breed ?item.breed : '----',
+                            submitDay: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'----',
                             statusId: statusObj[statusKey].statusId,
                             statusName: statusObj[statusKey].statusName
                         }

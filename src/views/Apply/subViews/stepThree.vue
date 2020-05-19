@@ -2,24 +2,20 @@
     <div class="step-three-page">
         <div class="warn-note">（提示：请将以下两张表格，打印出来，并至“社区居（村）委会”盖章。若未盖章，请在“下一步”的“添加其他材料”项中，上传“房产证/租房合同/居住证（三者任选一项）”信息，谢谢。</div>
         <div class="step-module-header" flex="dir:left cross:center main:justify">
-            <span class="header-left">信息登记表</span>
+            <span class="header-left">信息登记表及个人养犬承诺书</span>
             <div class="header-right" flex="dir:left cross:center">
-                <van-button type="info" size="mini" class="copyDJFileUrl" :data-clipboard-text="djFileUrl" @click="copyDJFileUrl">复制链接</van-button>
+                <van-button type="info" size="mini" class="copyDJFileUrl" :data-clipboard-text="pdfUrl" @click="copyDJFileUrl">复制链接</van-button>
                 <van-button type="info" size="mini" v-if="isWX">分享</van-button>
             </div>
         </div>
-        <div class="file-one">
-            <img :src="djFileUrl" @click="previewImage(0)"/>
-        </div>
-        <div class="step-module-header" flex="dir:left cross:center main:justify">
-            <span class="header-left">个人养犬承诺书</span>
-            <div class="header-right" flex="dir:left cross:center">
-                <van-button type="info" size="mini"  class="copyCNFileUrl" :data-clipboard-text="cnFileUrl" @click="copyCNFileUrl">复制链接</van-button>
-                <van-button type="info" size="mini" v-if="isWX">分享</van-button>
-            </div>
-        </div>
-        <div class="file-two">
-            <img :src="cnFileUrl" @click="previewImage(1)"/>
+        <div class="file-one" @click="openBigger">
+            <pdf
+                class="pdf-c"
+                v-for="i in numPages"
+                :key="i"
+                :src="src"
+                :page="i"
+            ></pdf>
         </div>
         <div class="btn-panel" flex="dir:left cross:center main:justify">
             <van-button type="info" class="btn pre-btn" @click="preStep">上一步</van-button>
@@ -32,37 +28,58 @@
                 <div class="dialog-footer"><van-button type="info" size="mini" @click="showDialog=false">关闭</van-button></div>
             </div>
         </van-popup>
-        <!--<van-image-preview v-model="showPreviewImage" :images="image"></van-image-preview>-->
+        <div class="mask" @click="closeBigger" v-show="showBigger">
+            <pdf style="width:100%"
+                v-for="i in numPages"
+                :key="i"
+                :src="src"
+                :page="i"
+            ></pdf>
+        </div>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import { Button, ImagePreview, Popup, Toast } from 'vant';
     import Clipboard from 'clipboard';
-    //http://zhcg.jhk.gov.cn:85//upload/file/2020/05/12/20200512154426798109.jpeg
-    //http://zhcg.jhk.gov.cn:85//upload/file/2020/05/12/20200512144215651871.jpeg
-    //http://zhcg.jhk.gov.cn:85//upload/file/2020/05/12/20200512150855204691.jpeg
+    import pdf from 'vue-pdf'
+    import { bidDogCard } from '@/api/apply.js'
     export default{
         name: 'stepThree',
         components:{
             [Button.name]: Button ,
             [Popup.name]: Popup,
-            // [ImagePreview.name]: ImagePreview
+            pdf
         },
         data(){
            return {
-               djFileUrl: 'http://zhcg.jhk.gov.cn:85//upload/file/2020/05/12/20200512154426798109.jpeg',
-               cnFileUrl: 'http://zhcg.jhk.gov.cn:85//upload/file/2020/05/12/20200512144215651871.jpeg',
-               showPreviewImage: false,
-               image: [],
+               submitData:{
+                   dogOrderId: '',
+                   userId: '',
+                   //当前步骤
+                   currentStep: '3',
+               },
+               src: '',
                showDialog: false,
+               numPages: undefined,
+               showBigger: false,
            }
         },
         computed:{
             isWX: function(){
-                return this.$store.getters['isWX']
+                return this.$store.getters['isWX'];
+            },
+            pdfUrl: function(){
+                return this.$store.getters['apply/pdfUrl'];
             }
         },
+        created(){
+            const pdfUrlArr = this.pdfUrl.split('//');
+            this.src = pdf.createLoadingTask('/pdf/' + pdfUrlArr[pdfUrlArr.length-1]);// upload/file/2020/05/18/20200518195301513703.pdf
+        },
         mounted(){
+            this.src.then(pdf => {
+                this.numPages = pdf.numPages;
+            });
         },
         methods:{
             copyDJFileUrl(){
@@ -78,37 +95,23 @@
                     });
                 })
             },
-            copyCNFileUrl(){
-                const clipboard = new Clipboard('.copyCNFileUrl');
-                clipboard.on('success', () => {
-                    console.log(1111111111111);
-                    this.showDialog = true;
-                })
-                clipboard.on('error', () => {
-                    Toast({
-                        message: '复制失败',
-                        duration: 1000
-                    });
-                })
+            openBigger(){
+                this.showBigger = true;
             },
-            previewImage(index){
-                ImagePreview({
-                    images: [
-                        'http://zhcg.jhk.gov.cn:85//upload/file/2020/05/12/20200512154426798109.jpeg',
-                        'http://zhcg.jhk.gov.cn:85//upload/file/2020/05/12/20200512144215651871.jpeg'
-                    ],
-                    startPosition: index,
-                    onClose() {
-                        // do something
-                    }
-                });
+            closeBigger(){
+                this.showBigger = false;
             },
             preStep(){
-                //如果在history里面有，则使用缓存数据，没有则去获取数据
                 this.$router.push('/newApply/stepTwo');
             },
             nextStep(){
-                this.$router.push('/newApply/stepFour');
+                console.log('submitData', this.submitData);
+                bidDogCard(this.submitData).then( res => {
+                    console.log(res, res);
+                    if(res.errno === 0){
+                        this.$router.push('/newApply/stepFour');
+                    }
+                });
             }
         }
     }
@@ -145,22 +148,11 @@
         }
         .file-one{
             width: 100%;
-            height: 874px;
-            padding: 24px;
             background-color: #ffffff;
-            img{
+            .pdf-c{
                 width: 100%;
-                height:100%;
-            }
-        }
-        .file-two{
-            width: 100%;
-            height: 432px;
-            padding: 24px;
-            background-color: #ffffff;
-            img{
-                width: 100%;
-                height:100%;
+                height: 800px;
+                overflow: hidden;
             }
         }
         .btn-panel{
@@ -204,6 +196,17 @@
                 height: 120px;
                 text-align: center;
             }
+        }
+        .mask{
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            background-color: rgba(0,0,0,0.5);
+            width: 100%;
+            padding:20px;
+            height: 100%;
+            overflow-y: auto;
         }
     }
 </style>
