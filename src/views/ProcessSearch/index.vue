@@ -10,12 +10,12 @@
                 <div class="form-item-label">日期选择：</div>
                 <div class="form-item-inline" flex="dir:left cross:center main:justify">
                     <div class="daytime" @click="showBeginTimePicker=true">
-                        <span>{{params.beginTime}}</span>
+                        <span>{{beginTimeString}}</span>
                         <span class="icon iconfont icon-arrowBottom-fill"></span>
                     </div>
                     <span class="step">至</span>
                     <div class="daytime" @click="showEndTimePicker=true">
-                        <span>{{params.endTime}}</span>
+                        <span>{{endTimeString}}</span>
                         <span class="icon iconfont icon-arrowBottom-fill"></span>
                     </div>
                 </div>
@@ -41,7 +41,6 @@
         <van-popup v-model="showBeginTimePicker" position="bottom">
             <van-datetime-picker
                     type="date"
-                    v-model="beginTime"
                     @confirm="onBeginTimeConfirm"
                     @cancel="showBeginTimePicker = false"
             />
@@ -49,7 +48,6 @@
         <van-popup v-model="showEndTimePicker" position="bottom">
             <van-datetime-picker
                     type="date"
-                    v-model="endTime"
                     @confirm="onEndTimeConfirm"
                     @cancel="showEndTimePicker = false"
             />
@@ -61,10 +59,9 @@
     import MyRadioGroup from '@/components/myRadioGroup.vue';
     import { Popup, DatetimePicker, Button } from 'vant';
     import OrderItem from './components/orderItem.vue';
-
-    const typeArray = [{labelName: '全部', value: ''},{labelName: '新办', value: '0'},{labelName: '续办', value: '1'}];
     import { formatDate } from '@/utils/index';
     import { querybidDogCardRecord } from '@/api/process.js'
+    const typeArray = [{labelName: '全部', value: ''},{labelName: '新办', value: '0'},{labelName: '续办', value: '1'}];
     const statusObj = {
         '-0-':{
             statusId: '0',
@@ -103,14 +100,14 @@
                 typeArray,
                 showBeginTimePicker: false,
                 showEndTimePicker: false,
+                beginTimeString: '',
+                endTimeString: '',
                 params:{
                     userId: '',
                     beginTime: '',
                     endTime: '',
                     cardType: ''
                 },
-                beginTime: new Date(),
-                endTime: new Date(),
                 cardInfoList: []
             }
         },
@@ -127,12 +124,14 @@
                 this.params[attrName] = value;
             },
             onBeginTimeConfirm(value){
-                this.params.beginTime = formatDate(value, 'yyyy-MM-dd');
+                this.beginTimeString = formatDate(value, 'yyyy-MM-dd');
+                this.params.beginTime = new Date(value).getTime();
                 console.log(this.params.beginTime);
                 this.showBeginTimePicker = false;
             },
             onEndTimeConfirm(value){
-                this.params.endTime = formatDate(value, 'yyyy-MM-dd');
+                this.endTimeString = formatDate(value, 'yyyy-MM-dd');
+                this.params.endTime = new Date(value).getTime();
                 console.log(this.params.endTime);
                 this.showEndTimePicker = false;
             },
@@ -153,14 +152,6 @@
                         return acc
                     },[]);
                 });
-                // let temp1 = {
-                //     orderCode: '1111111',
-                //     statusId: '0',
-                //     statusName: '未提交',
-                //     dogName: '菲菲',
-                //     submitTime: '',
-                //     cardType: '新办'
-                // };
             },
             search(){
                 this.getProcessList();

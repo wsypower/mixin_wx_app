@@ -22,7 +22,7 @@
                 },{
                     iconClass: 'jdcx',
                     name: '进度查询',
-                    path: ''
+                    path: '/process'
                 },{
                     iconClass: 'qzgl',
                     name: '犬证管理',
