@@ -62,7 +62,8 @@
                 let params = {
                     userId,
                     originLon,
-                    originLat
+                    originLat,
+                    areaCode: '3306'
                 }
                 queryDogServicePoint(params).then( res => {
                     console.log('queryDogServicePoint',res.data);

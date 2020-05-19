@@ -23,6 +23,7 @@ files.keys().forEach((key) => {
 
 export default new Vuex.Store({
   state: {
+      isLoading: false, // 是否显示加载中
       isWX: true, // 是否是微信，
       token: '', // 用户原始登入有效期的唯一标识
       userId: 'xxx', // 养犬管理的用户UserId
@@ -41,9 +42,16 @@ export default new Vuex.Store({
       },
       originLat: state => {
           return state.originLat
+      },
+      isLoading: state =>{
+          return state.isLoading
       }
   },
   mutations: {
+      // 设置加载状态
+      updateIsLoading(state, isLoading) {
+          state.isLoading = isLoading;
+      },
       // 设置目前是否处于微信内打开
       updateSystem(state, isWX) {
           state.isWX = isWX;

@@ -31,26 +31,26 @@
 <script type="text/ecmascript-6">
     import { Toast } from 'vant'
     import { formatDate, getDay } from '@/utils/index.js'
-    import { querybidDogCardRecord, queryPidDogCard } from '@/api/process.js'
+    import { querybidDogCardRecord } from '@/api/process.js'
     const statusObj = {
         '-0-':{
-            statusId: '0',
+            statusId: 0,
             statusName: '未提交',
         },
         '-10-60-':{
-            statusId: '1',
+            statusId: 1,
             statusName: '审核中',
         },
         '-20-':{
-            statusId: '2',
+            statusId: 2,
             statusName: '审核通过',
         },
         '-25-45-85-':{
-            statusId: '3',
+            statusId: 3,
             statusName: '审核未通过',
         },
         '-40-80-':{
-            statusId: '4',
+            statusId: 4,
             statusName: '已登记',
         }
     }

@@ -8,7 +8,7 @@
             <van-divider></van-divider>
             <van-field name="radio" label="宠物性别：" input-align="right">
                 <template #input>
-                    <my-radio-group :initValue="submitData.dogSex" :radioGroup="sexArray" @getRealValue="(name)=>{getRealValue('dogSex', name)}" style="width:unset"></my-radio-group>
+                    <my-radio-group :initValue="submitData.dogSex.toString()" :radioGroup="sexArray" @getRealValue="(name)=>{getRealValue('dogSex', name)}" style="width:unset"></my-radio-group>
                 </template>
             </van-field>
             <van-divider></van-divider>
@@ -54,7 +54,7 @@
             <van-divider></van-divider>
             <van-field name="radio" label="绝育状态：" input-align="right">
                 <template #input>
-                    <my-radio-group :initValue="submitData.isSterilization" :radioGroup="jyArray" @getRealValue="(name)=>{getRealValue('isSterilization', name)}" style="width:unset"></my-radio-group>
+                    <my-radio-group :initValue="submitData.isSterilization.toString()" :radioGroup="jyArray" @getRealValue="(name)=>{getRealValue('isSterilization', name)}" style="width:unset"></my-radio-group>
                 </template>
             </van-field>
             <van-divider></van-divider>
@@ -180,11 +180,13 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Divider, Form, Field, Button, Popup, Picker, DatetimePicker } from 'vant';
+    import { Divider, Form, Field, Button, Popup, Picker, DatetimePicker, Toast } from 'vant';
     import MyRadioGroup from '@/components/myRadioGroup.vue';
+    import { queryImmuneSite } from '@/api/common.js'
+    import { queryDogServicePoint } from '@/api/home.js'
     const sexArray = [{labelName: '公',value: '1'},{labelName: '母',value: '0'}];
     const jyArray = [{labelName: '已绝育',value: '1'},{labelName: '未绝育',value: '0'}];
-    const purposeColumns = [{text:'观赏犬',id:'0'},{text:'导盲犬',id:'1'},{text:'看守犬',id:'2'}];
+    const purposeColumns = ['观赏犬','导盲犬','看守犬'];
     import { formatDate } from '@/utils/index';
     import { bidDogCard } from '@/api/apply.js'
     export default{
@@ -227,13 +229,16 @@
                 },
                 submitData:{
                     dogOrderId: '',
+                    userType: 0,
                     userId: '',
                     //当前步骤
-                    currentStep: '2',
+                    currentStep: 2,
+                    //手机号码
+                    phone: '',
                     //昵称
                     dogName: '',
                     //性别
-                    dogSex: '1',
+                    dogSex: 1,
                     //犬品种
                     breed: '',
                     //出生日期
@@ -241,14 +246,14 @@
                     //领养日期
                     adoptTime: null,
                     //是否绝育
-                    isSterilization: '0',
+                    isSterilization: 0,
                     //体重
                     weight: '',
                     //毛色
                     hairColor: '',
                     //犬用途
                     purposeName: '',
-                    purpose: '',
+                    purpose: undefined,
                     //犬正面照
                     dogPhotoFront: '',
                     //犬侧面照
@@ -269,8 +274,46 @@
             }
         },
         mounted(){
-            this.submitData.dogOrderId = this.$store.getters['apply/dogOrderId'];
-            this.submitData.userId = this.$store.getters['userId'];
+            let userId = this.$store.getters['userId'];
+            let originLon = this.$store.getters['originLon'];
+            let originLat = this.$store.getters['originLat'];
+            let params = {
+                userId,
+                originLon,
+                originLat,
+                areaCode: '3306'
+            }
+            queryImmuneSite(params).then( res => {
+                this.immuneAddressColumns = res.data;
+            })
+            queryDogServicePoint(params).then( res => {
+                this.siteColumns = res.data.reduce((acc, item) => {
+                    acc.push(item.servicePointName);
+                    return acc
+                }, []);
+            })
+        },
+        beforeRouteEnter(to,from,next) {
+            console.log('beforeRouteEnter', to, from);
+            next(vm=>{
+                const orderInfo = vm.$store.getters['order/orderInfo'];
+                Object.keys(vm.submitData).forEach(key=>{
+                    vm.submitData[key] = orderInfo[key]
+                })
+                vm.submitData.userId = vm.$store.getters['userId'];
+                vm.submitData.currentStep = 2;
+                console.log('currentStep 2:', vm.submitData)
+                if( vm.submitData.birthdate){
+                    vm.timeObj.birthdate = formatDate(new Date(vm.submitData.birthdate), 'yyyy-MM-dd');
+                }
+                if( vm.submitData.adoptTime){
+                    vm.timeObj.adoptTime = formatDate(new Date(vm.submitData.adoptTime), 'yyyy-MM-dd');
+                }
+                if( vm.submitData.immuneTime){
+                    vm.timeObj.immuneTime = formatDate(new Date(vm.submitData.immuneTime), 'yyyy-MM-dd');
+                }
+                vm.submitData.purposeName = purposeColumns[vm.submitData.purpose];
+            })
         },
         methods:{
             onBirthdateConfirm(value){
@@ -287,8 +330,8 @@
             },
             onPurposeConfirm(value){
                 console.log(`当前选中值：`, value);
-                this.submitData.purposeName = value.text;
-                this.submitData.purpose = value.id;
+                this.submitData.purposeName = value;
+                this.submitData.purpose = purposeColumns.findIndex(e => e === value);
                 this.showPurposePicker = false;
             },
             onImmuneAddressConfirm(value){
@@ -305,11 +348,17 @@
                 this.showSitePicker = false;
             },
             getRealValue(attrName,value){
-                this.submitData[attrName] = value;
+                this.submitData[attrName] = parseInt(value);
             },
             preStep(){
                 //如果在history里面有，则使用缓存数据，没有则去获取数据
-                this.$router.push('/newApply/stepOneForPerson');
+                if(this.submitData.userType===0){
+                    this.$router.push('/newApply/stepOneForPerson');
+                }
+                else{
+                    this.$router.push('/newApply/stepOneForCompany');
+                }
+
             },
             nextStep(){
                 //犬正面照
@@ -326,11 +375,17 @@
                 this.submitData.immuneRecord = 'https://qcloud.dpfile.com/pc/W6i9-BY2RwUbd3gcbvLj1vdqhkOK47sK3grG9MuMaFl2Z2NWo8mGzuxwarQuIULZjoJrvItByyS4HHaWdXyO_I7F0UeCRQYMHlogzbt7GHgNNiIYVnHvzugZCuBITtvjski7YaLlHpkrQUr5euoQrg.jpg';
 
                 console.log('submitData', this.submitData);
+                this.$store.commit('updateIsLoading', true);
                 bidDogCard(this.submitData).then( res => {
+                    this.$store.commit('updateIsLoading', false);
                     console.log(res, res);
                     if(res.errno === 0){
-                        this.$store.commit('apply/pdfUrl', res.data.url);
+                        let sData = Object.assign({},this.submitData, { picPath: res.data.picPath});
+                        this.$store.commit('order/updateOrderInfo', sData);
                         this.$router.push('/newApply/stepThree');
+                    }
+                    else{
+                        Toast.fail({message: res.errmsg,duration: 3000});
                     }
                 });
             }

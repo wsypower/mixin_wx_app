@@ -6,7 +6,7 @@
         <van-form>
             <van-field name="radio" label="社区是否盖章：" class="label-width-200">
                 <template #input>
-                    <my-radio-group :initValue="submitData.isStamp" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isStamp', name)}"></my-radio-group>
+                    <my-radio-group :initValue="submitData.isStamp.toString()" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isStamp', name)}"></my-radio-group>
                 </template>
             </van-field>
             <div class="warn-note">（若未盖章，请在“添加其他材料项”中，上传“房产证/租房合同/居住证（三者任选一项）”信息。）</div>
@@ -52,7 +52,7 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Divider, Form, Field, Button, Popup, Picker } from 'vant';
+    import { Divider, Form, Field, Button, Popup, Picker, Toast } from 'vant';
     import MyRadioGroup from '@/components/myRadioGroup.vue';
     const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
     import { bidDogCard } from '@/api/apply.js'
@@ -77,6 +77,8 @@
                     dogOrderId: '',
                     //当前步骤
                     currentStep: '4',
+                    //手机号码
+                    phone: '',
                     //是否盖章
                     isStamp: '1',
                     //信息登记表
@@ -94,9 +96,19 @@
             this.submitData.dogOrderId = this.$store.getters['apply/dogOrderId'];
             this.submitData.userId = this.$store.getters['userId'];
         },
+        beforeRouteEnter(to,from,next) {
+            console.log('beforeRouteEnter', to, from);
+            next(vm=>{
+                const orderInfo = vm.$store.getters['order/orderInfo'];
+                Object.keys(vm.submitData).forEach(key=>{
+                    vm.submitData[key] = orderInfo[key]
+                })
+                vm.submitData.currentStep = 4;
+            })
+        },
         methods:{
             getRealValue(attrName,value){
-                this.submitData[attrName] = value;
+                this.submitData[attrName] = parseInt(value);
             },
             preStep(){
                 //如果在history里面有，则使用缓存数据，没有则去获取数据
@@ -109,10 +121,13 @@
                 bidDogCard(this.submitData).then( res => {
                     console.log(res, res);
                     if(res.errno === 0){
+                        this.$store.commit('order/updateOrderInfo', this.submitData);
                         this.showDialog = true;
                     }
+                    else{
+                        Toast.fail({message: res.errmsg,duration: 3000});
+                    }
                 });
-
             },
             toHome(){
                 this.$router.push('/');

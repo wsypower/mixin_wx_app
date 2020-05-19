@@ -89,9 +89,11 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Divider, Form, Field, Button, Popup, Picker, DatetimePicker } from 'vant';
+    import { Divider, Form, Field, Button, Popup, Picker, DatetimePicker, Toast } from 'vant';
     import PageHeader from '@/components/pageHeader.vue';
     import { formatDate } from '@/utils/index.js'
+    import { queryImmuneSite } from '@/api/common.js'
+    import { bidDogCard } from '@/api/apply.js'
     export default{
         name: 'stepFour',
         components:{
@@ -114,7 +116,7 @@
                 submitData:{
                     userId: '',
                     //续办
-                    currentStep: '5',
+                    currentStep: 5,
                     //犬证编号
                     dogCardNumber: '',
                     //犬证芯片号
@@ -139,6 +141,18 @@
         },
         mounted(){
             this.submitData.userId = this.$store.getters['userId'];
+
+            let originLon = this.$store.getters['originLon'];
+            let originLat = this.$store.getters['originLat'];
+            let params = {
+                userId: this.submitData.userId,
+                originLon,
+                originLat,
+                areaCode: '3306'
+            }
+            queryImmuneSite(params).then( res => {
+                this.immuneAddressColumns = res.data;
+            })
         },
         methods:{
             onImmuneAddressConfirm(value){
@@ -155,13 +169,15 @@
                 this.submitData.commitmentPic = 'http://cs.wenming.cn/2/fr/201903/W020190314630706200502.jpg';
                 console.log('submitData', this.submitData);
                 this.showDialog = true;
-                // this.$router.push('/applyStep/stepThree');
-                // bidDogCard(this.submitData).then( res => {
-                //     console.log(res, res);
-                //     if(res.errno === 0){
-                //         this.showDialog = true;
-                //     }
-                // });
+                bidDogCard(this.submitData).then( res => {
+                    console.log(res, res);
+                    if(res.errno === 0){
+                        this.showDialog = true;
+                    }
+                    else{
+                        Toast.fail({message: res.errmsg,duration: 3000});
+                    }
+                });
             },
             toHome(){
                 this.$router.push('/');

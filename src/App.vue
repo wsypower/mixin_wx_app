@@ -3,20 +3,36 @@
     <transition :name="transitionName">
       <router-view v-wechat-title="$route.meta.title" />
     </transition>
+    <van-overlay :show="show" @click="show = false" class-name=bcolor>
+      <div class="wrapper">
+        <van-loading color="#1989fa" size="40px"/>
+      </div>
+    </van-overlay>
   </div>
 </template>
-<script>
+<script type="text/ecmascript-6">
+import { Overlay, Loading } from 'vant';
 import defaultSetting from "./settings";
 import { createNamespacedHelpers } from "vuex";
 const { mapState } = createNamespacedHelpers("pagesAnimation");
 export default {
   name: "app",
+    components:{
+      [Overlay.name]: Overlay,
+      [Loading.name]: Loading
+    },
+    data(){
+      return {}
+    },
   computed: {
     ...mapState({
       direction: state => state.direction
     }),
     transitionName() {
       return defaultSetting.needPageTrans ? this.direction : "";
+    },
+    show(){
+      return this.$store.getters['isLoading'];
     }
   },
    mounted(){}
@@ -35,6 +51,15 @@ export default {
 #app {
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma, Simsun, sans-serif;
   width: 100%;
+  height: 100%;
+}
+  .bcolor{
+    background-color: rgba(255,255,255,0.5)
+  }
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100%;
 }
 </style>

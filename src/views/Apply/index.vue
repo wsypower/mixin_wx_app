@@ -29,6 +29,7 @@
     import CardLayout from './components/cardLayout.vue'
     import HistoryApplyList from './components/historyApplyList.vue'
     import MyRadioGroup from '@/components/myRadioGroup.vue';
+    import orderInitInfo from '@/utils/orderInit.js'
     const typeArray = [{labelName: '个人',value:'0'},{labelName: '单位',value:'1'}];
     const methodArray = [{labelName: '新办',value:'0'},{labelName: '续办',value:'1'}];
     export default {
@@ -57,7 +58,8 @@
             },
             nextPage(){
                 console.log(this.userType, this.cardType);
-
+                this.$store.commit('apply/updateDogOrderId', '');
+                this.$store.commit('order/updateOrderInfo', orderInitInfo);
                 if(this.cardType==='0'){
                     //代表个人的新办
                     if(this.userType==='0'){

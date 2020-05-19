@@ -13,11 +13,11 @@
 </template>
 <script type="text/ecmascript-6">
     import defaultSetting from "@/settings";
-    // import { createNamespacedHelpers } from "vuex";
-    // const { mapState } = createNamespacedHelpers("pagesAnimation");
     import PageHeader from '@/components/pageHeader.vue'
     import ApplyStepHeader from './components/applyStepHeader.vue'
-    const routerArr = ['/newApply/stepOne','/newApply/stepTwo','/newApply/stepThree','/newApply/stepFour']
+    import { Toast } from 'vant';
+    import { queryPidDogCard } from '@/api/process.js'
+    const routerArr = ['/newApply/stepOne','/newApply/stepTwo','/newApply/stepThree','/newApply/stepFour'];
     export default {
         name: 'newApply',
         components: {
@@ -36,7 +36,7 @@
             console.log('beforeRouteEnter', to, from);
             next(vm => {
                 if(to.query.currentStep){
-                    vm.preStep = to.query.currentStep;
+                    vm.preStep = to.query.currentStep-1;
                     let isUser = to.query.userType;
                     let _link = '';
                     if(vm.preStep===0){
@@ -52,9 +52,21 @@
                     }
                     vm.$store.commit('apply/updateDogOrderId', to.query.orderId);
                     vm.$router.replace({
-                        path: _link,
-                        query:{
-                            operateType: 'edit'
+                        path: _link
+                    });
+                    let params = {
+                        userId : vm.$store.getters['userId'],
+                        orderId: to.query.orderId
+                    }
+                    vm.$store.commit('updateIsLoading', true);
+                    queryPidDogCard(params).then( res => {
+                        vm.$store.commit('updateIsLoading', false);
+                        if(res.errno===0){
+                            console.log('zt');
+                            vm.$store.commit('order/updateOrderInfo', res.data);
+                        }
+                        else{
+                            Toast('数据获取失败');
                         }
                     });
                 }

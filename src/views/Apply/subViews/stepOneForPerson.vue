@@ -6,24 +6,24 @@
         <van-form>
             <van-field name="radio" label="犬主是否本人：" class="label-width-200">
                 <template #input>
-                    <my-radio-group :initValue="submitData.isOwner" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isOwner', name)}"></my-radio-group>
+                    <my-radio-group :initValue="submitData.isOwner.toString()" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isOwner', name)}"></my-radio-group>
                 </template>
             </van-field>
             <van-divider></van-divider>
             <van-field name="radio" label="是否备案犬证：" class="label-width-200">
                 <template #input>
-                    <my-radio-group :initValue="submitData.isRecord" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isRecord', name)}"></my-radio-group>
+                    <my-radio-group :initValue="submitData.isRecord.toString()" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isRecord', name)}"></my-radio-group>
                 </template>
             </van-field>
             <div class="warn-note">（备案犬证后，后续您也可以对犬证进行管理）</div>
             <van-divider></van-divider>
             <van-field name="radio" label="证件类型：">
                 <template #input>
-                    <my-radio-group :initValue="submitData.idType" :radioGroup="fileTypeArray" @getRealValue="(name)=>{getRealValue('idType', name)}"></my-radio-group>
+                    <my-radio-group :initValue="submitData.idType.toString()" :radioGroup="fileTypeArray" @getRealValue="(name)=>{getRealValue('idType', name)}"></my-radio-group>
                 </template>
             </van-field>
             <van-divider class="mini-line"></van-divider>
-            <template v-if="submitData.idType === '1'">
+            <template v-if="submitData.idType === 1">
                 <div class="upload-img sfz-file" flex="dir:left cross:center main:justify">
                     <div class="upload-item">
                         <div class="file-zm_icon"></div>
@@ -39,7 +39,7 @@
                 <van-divider></van-divider>
                 <van-field v-model="submitData.idCard" label="身份证号：" placeholder="请输入" input-align="right"/>
             </template>
-            <template v-if="submitData.idType === '2'">
+            <template v-if="submitData.idType === 2">
                 <div class="upload-img" flex="dir:left cross:center main:justify">
                     <div class="upload-item">
                         <div class="file-zm_icon"></div>
@@ -49,7 +49,7 @@
                 <van-divider></van-divider>
                 <van-field v-model="submitData.ownerName" label="犬主姓名：" placeholder="请输入" input-align="right"/>
             </template>
-            <template v-if="submitData.idType === '3'">
+            <template v-if="submitData.idType === 3">
                 <div class="upload-img" flex="dir:left cross:center main:justify">
                     <div class="upload-item">
                         <div class="file-zm_icon"></div>
@@ -67,7 +67,7 @@
                 <van-divider></van-divider>
                 <van-field name="radio" label="性别：" input-align="right">
                     <template #input>
-                        <my-radio-group :initValue="submitData.sex" :radioGroup="sexArray" @getRealValue="(name)=>{getRealValue('sex', name)}" style="width:unset"></my-radio-group>
+                        <my-radio-group :initValue="submitData.sex.toString()" :radioGroup="sexArray" @getRealValue="(name)=>{getRealValue('sex', name)}" style="width:unset"></my-radio-group>
                     </template>
                 </van-field>
             </template>
@@ -167,7 +167,7 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Divider, Form, Field, Button, Popup, Picker } from 'vant';
+    import { Divider, Form, Field, Button, Popup, Picker, Toast } from 'vant';
     import MyRadioGroup from '@/components/myRadioGroup.vue';
     const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
     const fileTypeArray = [{labelName: '身份证',value: '1'},{labelName: '驾驶证',value: '2'},{labelName: '护照',value: '3'}];
@@ -184,6 +184,7 @@
             [Button.name]: Button,
             [Picker.name]: Picker,
             [Popup.name]: Popup,
+            [Toast.name]: Toast,
             MyRadioGroup
         },
         data(){
@@ -205,23 +206,21 @@
                 submitData:{
                     userId: null,
                     //个人
-                    userType: '0',
+                    userType: 0,
                     //新办
-                    cardType: '0',
+                    cardType: 0,
                     //当前步骤
-                    currentStep: '1',
+                    currentStep: 1,
                     //是否犬主本人
-                    isOwner: '1',
+                    isOwner: 1,
                     //是否备案
-                    isRecord: '0',
+                    isRecord: 0,
                     //什么类型证件：1身份证2驾驶证3护照
-                    idType: '1',
-                    //身份证正面图片路径
+                    idType: 1,
+                    //身份证正面图片路径/驾驶证照片/护照照片
                     idCardFront: '',
                     //身份证反面图片路径
                     idCardBack: '',
-                    //驾驶证照片
-                    //护照照片
 
                     //犬主名称
                     ownerName: '',
@@ -236,7 +235,7 @@
                     //护照号
                     passport: '',
                     //性别
-                    sex: '',
+                    sex: 0,
                     //联系电话
                     phone: '',
                     //验证码
@@ -262,21 +261,27 @@
                 }
             }
         },
-        mounted(){
-            this.submitData.userId = this.$store.getters['userId'];
-            this.getAddressData('3306','1');
-        },
+        mounted(){},
         beforeRouteEnter(to,from,next) {
-            console.log('beforeRouteEnter', to, from);
+            console.log('one beforeRouteEnter', to, from);
             next(vm=>{
-                // if(to.query.operateType==='edit'){
-                //     //获取数据刷新页面
-                // }
+                const orderInfo = vm.$store.getters['order/orderInfo'];
+                Object.keys(vm.submitData).forEach(key=>{
+                    vm.submitData[key] = orderInfo[key]
+                })
+                vm.submitData.userId = vm.$store.getters['userId'];
+                vm.getAddressData('3306','1');
+                if(vm.submitData.regionId){
+                    vm.getAddressData(vm.submitData.regionId, '2');
+                }
+                if(vm.submitData.streetId){
+                    vm.getAddressData(vm.submitData.streetId, '3');
+                }
             })
         },
         methods:{
             getRealValue(attrName,value){
-                this.submitData[attrName] = value;
+                this.submitData[attrName] = parseInt(value);
             },
             getAuthCode:function () {
                 this.sendAuthCode = false;
@@ -364,8 +369,12 @@
                 bidDogCard(this.submitData).then( res => {
                     console.log(res, res);
                     if(res.errno === 0){
-                        this.$store.commit('apply/updateDogOrderId', res.data.orderId);
+                        this.$store.commit('order/updateOrderInfo', this.submitData);
+                        this.$store.commit('order/updateOrderInfo', {dogOrderId: res.data.orderId});
                         this.$router.push('/newApply/stepTwo');
+                    }
+                    else{
+                        Toast.fail({message: res.errmsg,duration: 3000});
                     }
                 });
 

@@ -36,6 +36,11 @@
         mounted(){
             this.value = this.initValue;
         },
+        watch:{
+            initValue:function(){
+                this.value = this.initValue;
+            }
+        },
         methods:{
             onChangeHandle(name){
                 this.$emit('getRealValue',name);

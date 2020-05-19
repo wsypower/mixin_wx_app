@@ -6,13 +6,13 @@
         <van-form>
             <van-field name="radio" label="犬主是否本人：" class="label-width-200">
                 <template #input>
-                    <my-radio-group :initValue="submitData.isOwner" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isOwner', name)}"></my-radio-group>
+                    <my-radio-group :initValue="submitData.isOwner.toString()" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isOwner', name)}"></my-radio-group>
                 </template>
             </van-field>
             <van-divider></van-divider>
             <van-field name="radio" label="是否备案犬证：" class="label-width-200">
                 <template #input>
-                    <my-radio-group :initValue="submitData.isRecord" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isRecord', name)}"></my-radio-group>
+                    <my-radio-group :initValue="submitData.isRecord.toString()" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isRecord', name)}"></my-radio-group>
                 </template>
             </van-field>
             <div class="warn-note">（备案犬证后，后续您也可以对犬证进行管理）</div>
@@ -123,7 +123,7 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Divider, Form, Field, Button, Popup, Picker } from 'vant';
+    import { Divider, Form, Field, Button, Popup, Picker, Toast } from 'vant';
     import MyRadioGroup from '@/components/myRadioGroup.vue';
     const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
     import { queryAddressByParentId } from '@/api/common.js';
@@ -154,19 +154,20 @@
                 communityColumns: [],
                 adLoading: false,
                 submitData:{
+
                     userId: null,
                     //单位
-                    userType: '1',
+                    userType: 1,
                     //新办
-                    cardType: '0',
+                    cardType: 0,
                     //当前步骤
-                    currentStep: '1',
+                    currentStep: 1,
                     //是否犬主本人
-                    isOwner: '1',
+                    isOwner: 1,
                     //是否备案
-                    isRecord: '0',
+                    isRecord: 0,
                     //什么类型证件：1身份证2驾驶证3护照
-                    idType: '1',
+                    idType: 1,
                     //身份证正面图片路径
                     idCardFront: '',
                     //身份证反面图片路径
@@ -200,12 +201,30 @@
             }
         },
         mounted(){
-            this.submitData.userId = this.$store.getters['userId'];
-            this.getAddressData('3306','1');
+
+        },
+        beforeRouteEnter(to,from,next) {
+            console.log('beforeRouteEnter', to, from);
+            next(vm=>{
+                const orderInfo = vm.$store.getters['order/orderInfo'];
+                Object.keys(vm.submitData).forEach(key=>{
+                    vm.submitData[key] = orderInfo[key]
+                })
+                vm.submitData.userType = 1;
+                vm.submitData.currentStep = 1;
+                vm.submitData.userId = vm.$store.getters['userId'];
+                vm.getAddressData('3306','1');
+                if(vm.submitData.regionId){
+                    vm.getAddressData(vm.submitData.regionId, '2');
+                }
+                if(vm.submitData.streetId){
+                    vm.getAddressData(vm.submitData.streetId, '3');
+                }
+            })
         },
         methods:{
             getRealValue(attrName,value){
-                this.submitData[attrName] = value;
+                this.submitData[attrName] = parseInt(value);
             },
             getAuthCode:function () {
                 this.sendAuthCode = false;
@@ -220,37 +239,37 @@
             },
             getAddressData(parentId, type){
                 let params = {
-                    userId: 6,
+                    userId: this.submitData.userId,
                     parentId,
                     type
                 }
                 this.adLoading = true;
                 queryAddressByParentId(params)
                     .then( res => {
-                            console.log('res',res)
-                            let resultArr = res.data.reduce((acc, cur)=>{
-                                let temp = {
-                                    text: cur.name,
-                                    id: cur.id
-                                }
-                                acc.push(temp)
-                                return acc
-                            },[]);
-                            if(type==='1'){
-                                this.regionColumns = resultArr;
-                                console.log('this.regionColumns',this.regionColumns);
+                        console.log('res',res)
+                        let resultArr = res.data.reduce((acc, cur)=>{
+                            let temp = {
+                                text: cur.name,
+                                id: cur.id
                             }
-                            if(type==='2'){
-                                this.streetColumns = resultArr;
-                                console.log('this.streetColumns',this.streetColumns);
-                            }
-                            if(type==='3'){
-                                this.communityColumns = resultArr;
-                                console.log('this.communityColumns',this.communityColumns);
-                            }
-                            this.adLoading = false;
+                            acc.push(temp)
+                            return acc
+                        },[]);
+                        if(type==='1'){
+                            this.regionColumns = resultArr;
+                            console.log('this.regionColumns',this.regionColumns);
                         }
-                    );
+                        if(type==='2'){
+                            this.streetColumns = resultArr;
+                            console.log('this.streetColumns',this.streetColumns);
+                        }
+                        if(type==='3'){
+                            this.communityColumns = resultArr;
+                            console.log('this.communityColumns',this.communityColumns);
+                        }
+                        this.adLoading = false;
+                    }
+                );
             },
             onRegionConfirm(value){
                 console.log(`当前选中值:`,value);
@@ -290,8 +309,12 @@
                 bidDogCard(this.submitData).then( res => {
                     console.log(res, res);
                     if(res.errno === 0){
-                        this.$store.commit('apply/updateDogOrderId', res.data.orderId);
+                        this.$store.commit('order/updateOrderInfo', {dogOrderId: res.data.orderId});
+                        this.$store.commit('order/updateOrderInfo', this.submitData);
                         this.$router.push('/newApply/stepTwo');
+                    }
+                    else{
+                        Toast.fail({message: res.errmsg,duration: 3000});
                     }
                 });
             }

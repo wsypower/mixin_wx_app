@@ -57,8 +57,11 @@
                    userId: '',
                    //当前步骤
                    currentStep: '3',
+                   //手机号码
+                   phone: ''
                },
                src: '',
+               pdfUrl: '',
                showDialog: false,
                numPages: undefined,
                showBigger: false,
@@ -67,19 +70,30 @@
         computed:{
             isWX: function(){
                 return this.$store.getters['isWX'];
-            },
-            pdfUrl: function(){
-                return this.$store.getters['apply/pdfUrl'];
             }
         },
         created(){
-            const pdfUrlArr = this.pdfUrl.split('//');
-            this.src = pdf.createLoadingTask('/pdf/' + pdfUrlArr[pdfUrlArr.length-1]);// upload/file/2020/05/18/20200518195301513703.pdf
+
         },
         mounted(){
-            this.src.then(pdf => {
-                this.numPages = pdf.numPages;
-            });
+            console.log(222222);
+        },
+        beforeRouteEnter(to,from,next) {
+            console.log('beforeRouteEnter', to, from);
+            next(vm=>{
+                const orderInfo = vm.$store.getters['order/orderInfo'];
+                vm.pdfUrl = orderInfo.picPath;
+                console.log('three beforeRouteEnter', orderInfo, vm.pdfUrl);
+                const pdfUrlArr = vm.pdfUrl.split('//');
+                vm.src = pdf.createLoadingTask('/pdf/' + pdfUrlArr[pdfUrlArr.length-1]);// upload/file/2020/05/18/20200518195301513703.pdf
+                vm.src.then(pdf => {
+                    vm.numPages = pdf.numPages;
+                });
+                Object.keys(vm.submitData).forEach(key=>{
+                    vm.submitData[key] = orderInfo[key]
+                })
+                vm.submitData.currentStep = 3;
+            })
         },
         methods:{
             copyDJFileUrl(){
@@ -109,7 +123,11 @@
                 bidDogCard(this.submitData).then( res => {
                     console.log(res, res);
                     if(res.errno === 0){
+                        this.$store.commit('order/updateOrderInfo', { currentStep : '3'});
                         this.$router.push('/newApply/stepFour');
+                    }
+                    else{
+                        Toast.fail({message: res.errmsg,duration: 3000});
                     }
                 });
             }
