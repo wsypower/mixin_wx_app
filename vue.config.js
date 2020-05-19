@@ -103,17 +103,17 @@ module.exports = {
         return args;
       });
       // 移除 console
-      config.optimization.minimizer([
-        new UglifyJsPlugin({
-          uglifyOptions: {
-            compress: {
-              drop_console: true,
-              drop_debugger: true,
-              pure_funcs: ["console.log"],
-            },
-          },
-        }),
-      ]);
+      // config.optimization.minimizer([
+      //   new UglifyJsPlugin({
+      //     uglifyOptions: {
+      //       compress: {
+      //         drop_console: true,
+      //         drop_debugger: true,
+      //         pure_funcs: ["console.log"],
+      //       },
+      //     },
+      //   }),
+      // ]);
       config
         .plugin("ScriptExtHtmlWebpackPlugin")
         .after("html")
