@@ -18,6 +18,8 @@ const defaultSettings = require("./src/settings.js");
 // 使用terser-webpack-plugin 替换uglify-js 进行js文件的压缩
 // TODO:uglify - js不能识别es6代码，如果外部依赖中存在es6代码，将很难捕获到问题
 const TerserPlugin = require("terser-webpack-plugin");
+// webpack 可视化分析
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const resolve = (dir) => path.join(__dirname, dir);
 const name = defaultSettings.title || "vue模板"; // page title
 
@@ -106,6 +108,8 @@ module.exports = {
         args[0].minify.minifyCSS = true;
         return args;
       });
+      // 启动 webpack 打包分析
+      config.plugin("webpack-bundle-analyzer").use(BundleAnalyzerPlugin);
       // FIXME: UglifyJs 无法解压ES6文件，node-modules中文件dist有es6导致文件压缩失败
       // config.optimization.minimizer([
       //   new UglifyJsPlugin({
