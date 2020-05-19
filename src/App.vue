@@ -2,9 +2,9 @@
 <template>
   <div id="app">
     <transition :name="transitionName">
-      <Navigation>
-        <router-view v-wechat-title="$route.meta.title" />
-      </Navigation>
+      <!-- <Navigation> -->
+      <router-view v-wechat-title="$route.meta.title" />
+      <!-- </Navigation> -->
     </transition>
   </div>
 </template>
