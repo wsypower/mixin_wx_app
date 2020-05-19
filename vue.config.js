@@ -20,6 +20,8 @@ const defaultSettings = require("./src/settings.js");
 const TerserPlugin = require("terser-webpack-plugin");
 // webpack 可视化分析
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+// PWD骨架屏
+const SkeletonWebpackPlugin = require("vue-skeleton-webpack-plugin");
 const resolve = (dir) => path.join(__dirname, dir);
 const name = defaultSettings.title || "vue模板"; // page title
 
@@ -74,6 +76,7 @@ module.exports = {
   // ====================================================== //
   // ========================= 重命名 ======================== //
   // ====================================================== //
+
   configureWebpack: {
     // 在webpack的名称字段中提供应用程序的标题，以便
     // 可以在index.html中对其进行访问以注入正确的标题。
@@ -89,6 +92,32 @@ module.exports = {
         style: resolve("src/style"), // 通用样式
       },
     },
+    // 加入PWD骨架屏
+    plugins: [
+      new SkeletonWebpackPlugin({
+        webpackConfig: {
+          entry: {
+            app: path.join(__dirname, "./src/skeleton/entry-skeleton.js"), //这里为上面的entry-skeleton.js
+          },
+        },
+        minimize: true,
+        quiet: true,
+        // 对应需要router的路径会为当前路径生成骨架屏
+        router: {
+          mode: "hash",
+          routes: [
+            {
+              path: "/", //和router.js中的路径一样就行
+              skeletonId: "skeleton1", //之前的id
+            },
+            {
+              path: "/router",
+              skeletonId: "skeleton2",
+            },
+          ],
+        },
+      }),
+    ],
   },
   // 去除vue元素之间的空格
   chainWebpack(config) {
@@ -205,6 +234,8 @@ module.exports = {
   // ====================== CSS 相关选项 ====================== //
   // ====================================================== //
   css: {
+    // 是否使用css分离插件 ExtractTextPlugin
+    extract: true,
     loaderOptions: {
       // 设置 scss 公用文件
       sass: {
