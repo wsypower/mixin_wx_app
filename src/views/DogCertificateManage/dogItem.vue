@@ -1,18 +1,18 @@
 <template>
     <div class="dog-item" flex="dir:top" @click="gotToDogDetailPage(dogData.id)">
         <div flex="dir:left cross:center">
-            <img class="dog-item-img" :src="dogData.dogUrl">
+            <img class="dog-item-img" :src="dogData.dogPhotoFront">
             <div flex="dir:top" class="dog-item_mes">
-                <span class="dog-item_name">{{dogData.name}}</span>
+                <span class="dog-item_name">{{dogData.dogName}}</span>
                 <span class="dog-item_status" :class="{warning: dogData.statusId===1,wrong: dogData.statusId===2}">{{dogData.statusName}}</span>
             </div>
         </div>
         <div flex="dir:left main:justify cross:bottom">
             <div class="dog-item-des">
-                <div>有效期：{{dogData.startDay}}至{{dogData.endDay}}</div>
-                <div>登记证号：{{dogData.code}}</div>
+                <div>有效期：{{item.validityStart|timeFormatter('YYYY-MM-DD')}}至{{item.validityEnd|timeFormatter('YYYY-MM-DD')}}</div>
+                <div>登记证号：{{dogData.dogCardNumber}}</div>
             </div>
-            <img class="dog-item-qr" :src="dogData.QRCodeUrl">
+            <img class="dog-item-qr" :src="dogData.qRCodePath">
         </div>
     </div>
 </template>

@@ -423,7 +423,7 @@
                 .file-fm_icon{
                     width: 298px;
                     height: 222px;
-                    @include bg-image("~assets/images/jzz-fm");
+                    @include bg-image("~assets/images/myjl");
                     background-size: 100% 100%;
                 }
                 .file-zm_text{

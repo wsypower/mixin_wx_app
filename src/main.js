@@ -21,10 +21,8 @@ import store from "./store/index";
 import "amfe-flexible";
 import "assets/iconfont/iconfont.css";
 
-import animated from 'animate.css' //
-
-Vue.use(animated)
-
+import vueFiltersDate from '@/filters/moment/main'
+Vue.use(vueFiltersDate)
 //
 // ─── PLUGINS ────────────────────────────────────────────────────────────────────
 //

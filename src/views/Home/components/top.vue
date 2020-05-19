@@ -8,18 +8,18 @@
             <van-swipe-item v-for="item in dogList" :key="item.id">
                 <div class="dog-item" flex="dir:top" @click="gotoDogDetailPage(item.id)">
                     <div flex="dir:left cross:center">
-                        <img class="dog-item-img" :src="item.dogUrl">
+                        <img class="dog-item-img" :src="item.dogPhotoFront">
                         <div flex="dir:top" class="dog-item_mes">
-                            <span class="dog-item_name">{{item.name}}</span>
-                            <span class="dog-item_status" :class="{warning: item.statusId===1,wrong: item.statusId===2}">{{item.statusName}}</span>
+                            <span class="dog-item_name">{{item.dogName}}</span>
+                            <span class="dog-item_status" :class="{warning: item.dogCarStatus===1,wrong: item.dogCarStatus===2}">{{item.statusName}}</span>
                         </div>
                     </div>
                     <div flex="dir:left main:justify cross:bottom">
                         <div class="dog-item-des">
-                            <div>有效期：{{item.startDay}}至{{item.endDay}}</div>
-                            <div>登记证号：{{item.code}}</div>
+                            <div>有效期：{{item.validityStart|timeFormatter('YYYY-MM-DD')}}至{{item.validityEnd|timeFormatter('YYYY-MM-DD')}}</div>
+                            <div>登记证号：{{item.dogCardNumber}}</div>
                         </div>
-                        <img class="dog-item-qr" :src="item.QRCodeUrl">
+                        <img class="dog-item-qr" :src="item.qRCodePath">
                     </div>
                 </div>
             </van-swipe-item>
@@ -28,6 +28,7 @@
 </template>
 <script type="text/ecmascript-6">
     import { Swipe, SwipeItem, Toast } from 'vant';
+    const statusArr = ["有效","即将到期","已到期"];
     export default {
         name: 'top',
         components: {
@@ -50,47 +51,11 @@
         },
         mounted(){
             this.dogList = JSON.parse(JSON.stringify(this.dogCards));
+            this.dogList.forEach(item => {
+                item.statusName = statusArr[item.dogCarStatus];
+            })
         },
         methods:{
-            // getDogListData(){
-            //
-            //     let dogTemp = {
-            //         id: 'sh52673836389293hsol',
-            //         dogUrl: require('./testImg/1.png'),
-            //         name: '嘻嘻',
-            //         code: '23148784656898914783',
-            //         startDay: '2020-05-06',
-            //         endDay: '2020-11-05',
-            //         statusId: 0,
-            //         statusName: '有效',
-            //         QRCodeUrl: require('./testImg/qr.png')
-            //     }
-            //     let dogTemp2 = {
-            //         id: 'ax12573836389293hsol',
-            //         dogUrl:  require('./testImg/2.png'),
-            //         name: '菲菲',
-            //         code: '51478784656898914783',
-            //         startDay: '2020-01-01',
-            //         endDay: '2020-04-05',
-            //         statusId: 2,
-            //         statusName: '过期',
-            //         QRCodeUrl: require('./testImg/qr.png')
-            //     }
-            //     let dogTemp3 = {
-            //         id: 'zaa12573836389293hsol',
-            //         dogUrl:  require('./testImg/3.png'),
-            //         name: '飞利浦',
-            //         code: '51478784656898914783',
-            //         startDay: '2020-04-01',
-            //         endDay: '2020-06-05',
-            //         statusId: 1,
-            //         statusName: '即将过期',
-            //         QRCodeUrl: require('./testImg/qr.png')
-            //     }
-            //     this.dogList.push(dogTemp);
-            //     this.dogList.push(dogTemp2);
-            //     this.dogList.push(dogTemp3);
-            // },
             gotoDogDetailPage(dogId){
                 console.log(`dogId: ${dogId}`);
                 Toast('还没开发');
