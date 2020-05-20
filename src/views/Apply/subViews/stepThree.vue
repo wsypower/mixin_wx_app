@@ -169,7 +169,7 @@
             background-color: #ffffff;
             .pdf-c{
                 width: 100%;
-                height: 800px;
+                /*height: 800px;*/
                 overflow: hidden;
             }
         }
