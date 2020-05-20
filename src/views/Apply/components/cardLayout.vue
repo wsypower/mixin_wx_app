@@ -16,7 +16,7 @@
 </script>
 <style lang="scss" scoped>
     .apply-main_type{
-        width: 702px;
+        width: 100%;
         height: 430px;
         position: relative;
         .top-bg{

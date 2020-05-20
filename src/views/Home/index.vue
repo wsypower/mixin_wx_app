@@ -46,6 +46,7 @@
                 this.$store.commit('updateOriginLon',res.longitude);
                 this.getData();
             });
+
         },
         methods: {
             async getUserId(){
@@ -85,6 +86,7 @@
     .home{
         height: 100%;
         width: 100%;
+        padding-top: 88px;
         .header-left{
             color: #fff;
             .point{
@@ -98,9 +100,9 @@
             }
         }
         .main{
-            padding-top: 108px;
             height: 100%;
             width: 100%;
+            padding: 20px 24px;
         }
     }
 </style>

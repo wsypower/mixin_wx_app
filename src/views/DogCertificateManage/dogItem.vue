@@ -38,7 +38,7 @@
 </script>
 <style lang="scss" scoped>
     .dog-item{
-        width: 702px;
+        width: 100%;
         height: 300px;
         margin-top: 20px;
         padding: 40px;

@@ -81,6 +81,7 @@
         background-color: #f5f5f5;
         .dog-manage-body{
             width: 100%;
+            padding: 0px 24px;
         }
         .no-data{
             width: 100%;

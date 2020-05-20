@@ -52,8 +52,8 @@
 </script>
 <style lang="scss" scoped>
 .service-place{
-    width: 702px;
-    height: calc(100% - 640px);
+    width: 100%;
+    height: calc(100% - 620px);
     .service-place-header{
         height: 90px;
         .header-left{

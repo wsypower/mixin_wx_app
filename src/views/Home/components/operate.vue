@@ -67,7 +67,7 @@
 <style lang="scss" scoped>
 .operate{
     margin-top: 20px;
-    width: 702px;
+    width: 100%;
     height: 300px;
     background-color: #ffffff;
     box-shadow: 0px 3px 7px 0px rgba(209, 209, 209, 0.35);

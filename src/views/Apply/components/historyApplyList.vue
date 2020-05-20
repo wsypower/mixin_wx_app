@@ -128,7 +128,7 @@
 </script>
 <style lang="scss" scoped>
     .history-apply-list{
-        width: 702px;
+        width: 100%;
         height: calc(100% - 430px);
         .history-apply-list-header{
             height: 90px;
@@ -171,7 +171,6 @@
                 }
             }
             .list-body-content{
-                padding-bottom: 24px;
                 height: 100%;
                 .list-item{
                     width: 702px;

@@ -65,7 +65,7 @@
 </script>
 <style lang="scss" scoped>
 .top{
-    width: 702px;
+    width: 100%;
     height: 300px;
     border-radius: 10px;
     @include bg-image("~assets/images/home_bg");
