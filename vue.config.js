@@ -101,7 +101,7 @@ module.exports = {
           },
         },
         minimize: true,
-        quiet: true,
+        // quiet: true,
         // 对应需要router的路径会为当前路径生成骨架屏
         router: {
           mode: "hash",
