@@ -1,5 +1,5 @@
 <template>
-    <div class="result-item" flex="dir:top cross:center">
+    <div class="result-item" flex="dir:top cross:center" @click="gotoDetail">
         <div class="item-row" flex="dir:left cross:center main:justify">
             <div class="item-row-left">预约单号：{{cardInfo.orderCode}}</div>
             <div class="item-row-right status"
@@ -22,12 +22,13 @@
             <div class="item-row-left">办证类型：</div>
             <div class="item-row-right">{{cardInfo.cardType}}</div>
         </div>
-        <van-button plain type="info" class="btn" v-if="cardInfo.statusId==='0'">作废</van-button>
+        <van-button plain type="info" class="btn" v-if="cardInfo.statusId === '0'" @click="deleteDogItem(cardInfo.orderId)">作废</van-button>
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Button } from 'vant';
+    import { Button, Toast } from 'vant';
     import ProcessChart from './processChart.vue';
+    import { deleteDogItem } from '@/api/process.js'
     const indexArr = {
         '0': 0,
         '1': 1,
@@ -43,6 +44,7 @@
         },
         props:{
             cardInfo: {
+                orderId: '',
                 orderCode: '',
                 statusId: '',
                 statusName: '',
@@ -61,6 +63,26 @@
 
             }
         },
+        methods:{
+            deleteDogItem(dogOrderId){
+                let params = {
+                    userId: this.$store.getters['userId'],
+                    orderId: dogOrderId
+                }
+                deleteDogItem(params).then( res => {
+                    if(res.errno === 0){
+                        Toast.success({message: '删除成功'});
+                        this.$emit('refreshList');
+                    }
+                    else{
+                        Toast.fail({message: res.errmsg});
+                    }
+                })
+            },
+            gotoDetail(){
+                this.$emit('gotoPage');
+            }
+        }
 
     }
 </script>

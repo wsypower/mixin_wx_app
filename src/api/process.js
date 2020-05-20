@@ -48,3 +48,17 @@ export const queryPidDogCard = data => {
 //     })
 // }
 
+
+/**
+ * @description 根据orderId删除订单
+ * @author moxuejuan
+ * @date 2020-05-20 10:41
+ * @param {String} userId 请求参数 :用户唯一标识符默认参数）
+ */
+export const deleteDogItem = data => {
+    return request({
+        url: `/dogOrder/deleteOrder/${data.userId}`,
+        method: 'post',
+        params: data
+    })
+}

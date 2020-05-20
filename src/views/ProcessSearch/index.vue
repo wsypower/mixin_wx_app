@@ -35,7 +35,13 @@
                 <span class="header-left">进度情况</span>
             </div>
             <div class="result-panel-body">
-                <order-item class="order-item" :cardInfo="item" v-for="item in cardInfoList" :key="item.orderCode"></order-item>
+                <order-item class="order-item"
+                            :cardInfo="item"
+                            v-for="item in cardInfoList"
+                            :key="item.orderCode"
+                            @refreshList="() => {getProcessList();}"
+                            @gotoPage="() => {gotoDetail(item);}">
+                </order-item>
             </div>
         </div>
         <van-popup v-model="showBeginTimePicker" position="bottom">
@@ -104,8 +110,8 @@
                 endTimeString: '',
                 params:{
                     userId: '',
-                    beginTime: '',
-                    endTime: '',
+                    beginTime: undefined,
+                    endTime: undefined,
                     cardType: ''
                 },
                 cardInfoList: []
@@ -141,12 +147,15 @@
                     this.cardInfoList = res.data.reduce((acc,item) => {
                         let statusKey = Object.keys(statusObj).find(key=>key.indexOf('-' + item.status + '-')>=0);
                         let temp = {
+                            orderId: item.id,
                             orderCode: item.orderNo,
                             statusId: statusObj[statusKey].statusId,
                             statusName: statusObj[statusKey].statusName,
                             dogName: item.dogName,
                             submitTime: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'----',
-                            cardType: item.cardType==='0'? '新办': '续办'
+                            cardType: item.cardType===0? '新办': '续办',
+                            currentStep: item.currentStep,
+                            userType: item.userType
                         }
                         acc.push(temp);
                         return acc
@@ -155,6 +164,33 @@
             },
             search(){
                 this.getProcessList();
+            },
+            gotoDetail(item){
+                console.log('item:', item);
+                if(item.statusId === '0'){
+                    this.$router.push({
+                        path:'/newApply',
+                        query:{
+                            currentStep: item.currentStep,
+                            orderId: item.orderId,
+                            userType: item.userType
+                        }
+                    });
+                }
+                else if(item.statusId === '3'){
+                    this.$router.push({
+                        path:'/newApply',
+                        query:{
+                            currentStep: 1,
+                            orderId: item.orderId,
+                            userType: item.userType
+                        }
+                    });
+                }
+                else{
+                    console.log('跳转至订单详情页');
+                }
+
             }
         }
     }

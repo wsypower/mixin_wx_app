@@ -12,9 +12,9 @@
                 <my-scroll>
                     <div v-for="item in listData" :key="item.id" class="list-item" flex="dir:left cross:center main:justify" @click="gotoDetail(item)">
                         <div class="list-item_left">
-                            <div flex="dir:left">
+                            <div flex="dir:left cross:center">
                                 <span class="item_name">{{item.name}}</span>
-                                <div><span class="item_label">品种：</span>{{item.dogType}}</div>
+                                <div flex="dir:left"><span class="item_label">品种：</span>{{item.dogType}}</div>
                             </div>
                             <div><span class="item_label">提交时间：</span>{{item.submitDay}}</div>
                         </div>
@@ -88,7 +88,8 @@
                             dogType: item.breed ?item.breed : '----',
                             submitDay: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'----',
                             statusId: statusObj[statusKey].statusId,
-                            statusName: statusObj[statusKey].statusName
+                            statusName: statusObj[statusKey].statusName,
+                            userType: item.userType
                         }
                         acc.push(temp);
                         return acc
@@ -97,14 +98,30 @@
             },
             gotoDetail(item){
                 console.log('item:', item);
-                this.$router.push({
-                    path:'/newApply',
-                    query:{
-                        currentStep: item.currentStep,
-                        orderId: item.id,
-                        userType: '0'
-                    }
-                });
+                if(item.statusId === 0){
+                    this.$router.push({
+                        path:'/newApply',
+                        query:{
+                            currentStep: item.currentStep,
+                            orderId: item.id,
+                            userType: item.userType
+                        }
+                    });
+                }
+                else if(item.statusId === 3){
+                    this.$router.push({
+                        path:'/newApply',
+                        query:{
+                            currentStep: 1,
+                            orderId: item.id,
+                            userType: item.userType
+                        }
+                    });
+                }
+                else{
+                    console.log('跳转至订单详情页');
+                }
+
             }
         }
     }
@@ -170,15 +187,17 @@
                         color: #4d4d4d;
                         >div{
                             .item_name{
-                                width: 133px;
+                                //width: 133px;
                                 font-family: PingFang-SC-Bold;
                                 font-size: 30px;
                                 line-height: 40px;
                                 font-weight: 600;
                                 color: #333333;
+                                margin-right: 30px;
                             }
                             .item_label{
                                 font-family: PingFang-SC-Medium;
+                                vertical-align: middle;
                             }
                             &:last-child{
                                 margin-top: 10px;

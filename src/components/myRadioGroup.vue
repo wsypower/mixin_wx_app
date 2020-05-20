@@ -62,6 +62,9 @@
         .van-radio{
             flex:1
         }
+        .van-radio--horizontal{
+            margin-right: unset;
+        }
         .van-radio__label{
             font-family: PingFang-SC-Medium;
             font-size: 30px;

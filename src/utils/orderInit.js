@@ -9,7 +9,7 @@ const orderInitInfo = {
     //是否犬主本人
     isOwner: 1,
     //是否备案
-    isRecord: 0,
+    isRecord: 1,
     //什么类型证件：1身份证2驾驶证3护照
     idType: 1,
     //身份证正面图片路径或驾驶证照片或护照照片
