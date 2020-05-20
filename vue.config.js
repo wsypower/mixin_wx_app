@@ -18,6 +18,10 @@ const defaultSettings = require("./src/settings.js");
 // 使用terser-webpack-plugin 替换uglify-js 进行js文件的压缩
 // TODO:uglify - js不能识别es6代码，如果外部依赖中存在es6代码，将很难捕获到问题
 const TerserPlugin = require("terser-webpack-plugin");
+// webpack 可视化分析
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+// PWD骨架屏
+const SkeletonWebpackPlugin = require("vue-skeleton-webpack-plugin");
 const resolve = (dir) => path.join(__dirname, dir);
 const name = defaultSettings.title || "vue模板"; // page title
 
@@ -56,19 +60,23 @@ module.exports = {
       warnings: false,
       errors: true,
     },
+    // 配置多个代理
     proxy: {
-      "/api": {
-        target: "http://192.168.71.33:50000", // 这个是你要代理的地址(开发阶段接口地址)
-        changeOrigin: true, //跨域需要加上这个
+      "/proxy": {
+        target: "https://www.mock.com",
+        ws: true, // 代理的WebSockets
+        changeOrigin: true, // 允许websockets跨域
         pathRewrite: {
-          "^/api": "/",
+          "^/proxy": "",
         },
       },
     },
+    // before: require("./mock/mock-server.js"),
   },
   // ====================================================== //
   // ========================= 重命名 ======================== //
   // ====================================================== //
+
   configureWebpack: {
     // 在webpack的名称字段中提供应用程序的标题，以便
     // 可以在index.html中对其进行访问以注入正确的标题。
@@ -84,6 +92,32 @@ module.exports = {
         style: resolve("src/style"), // 通用样式
       },
     },
+    // 加入PWD骨架屏
+    plugins: [
+      new SkeletonWebpackPlugin({
+        webpackConfig: {
+          entry: {
+            app: path.join(__dirname, "./src/skeleton/entry-skeleton.js"), //这里为上面的entry-skeleton.js
+          },
+        },
+        minimize: true,
+        // quiet: true,
+        // 对应需要router的路径会为当前路径生成骨架屏
+        router: {
+          mode: "hash",
+          routes: [
+            {
+              path: "/", //和router.js中的路径一样就行
+              skeletonId: "skeleton1", //之前的id
+            },
+            {
+              path: "/router",
+              skeletonId: "skeleton2",
+            },
+          ],
+        },
+      }),
+    ],
   },
   // 去除vue元素之间的空格
   chainWebpack(config) {
@@ -114,7 +148,11 @@ module.exports = {
         args[0].minify.minifyCSS = true;
         return args;
       });
+      // 启动 webpack 打包分析
+      config.plugin("webpack-bundle-analyzer").use(BundleAnalyzerPlugin);
+
       // FIXME: UglifyJs 无法解压ES6文件，node-modules中文件dist有es6导致文件压缩失败
+
       // config.optimization.minimizer([
       //   new UglifyJsPlugin({
       //     uglifyOptions: {
@@ -196,6 +234,8 @@ module.exports = {
   // ====================== CSS 相关选项 ====================== //
   // ====================================================== //
   css: {
+    // 是否使用css分离插件 ExtractTextPlugin
+    extract: true,
     loaderOptions: {
       // 设置 scss 公用文件
       sass: {
