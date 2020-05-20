@@ -14,7 +14,7 @@
 const path = require("path");
 const defaultSettings = require("./src/settings.js");
 // 使用uglify-js进行js文件的压缩。
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+// const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const resolve = (dir) => path.join(__dirname, dir);
 
 const name = defaultSettings.title || "vue模板"; // page title
@@ -118,17 +118,17 @@ module.exports = {
         return args;
       });
       // 移除 console
-      config.optimization.minimizer([
-        new UglifyJsPlugin({
-          uglifyOptions: {
-            compress: {
-              drop_console: true,
-              drop_debugger: true,
-              pure_funcs: ["console.log"],
-            },
-          },
-        }),
-      ]);
+      // config.optimization.minimizer([
+      //   new UglifyJsPlugin({
+      //     uglifyOptions: {
+      //       compress: {
+      //         drop_console: true,
+      //         drop_debugger: true,
+      //         pure_funcs: ["console.log"],
+      //       },
+      //     },
+      //   }),
+      // ]);
       config
         .plugin("ScriptExtHtmlWebpackPlugin")
         .after("html")

@@ -23,7 +23,7 @@
     import { AccountLogin } from '@/api/account/login.js';
     import { queryDogCard, queryDogServicePoint } from '@/api/home.js'
     export default {
-        name: 'index',
+        name: 'home',
         components:{
             PageHeader,
             Top,

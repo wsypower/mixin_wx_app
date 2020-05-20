@@ -89,7 +89,6 @@
             transitionName() {
                 return defaultSetting.needPageTrans ? this.direction : "";
             }
-
         }
     }
 </script>

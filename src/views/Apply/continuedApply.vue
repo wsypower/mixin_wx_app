@@ -95,7 +95,7 @@
     import { queryImmuneSite } from '@/api/common.js'
     import { bidDogCard } from '@/api/apply.js'
     export default{
-        name: 'stepFour',
+        name: 'continuedApply',
         components:{
             PageHeader,
             [Divider.name]: Divider,
