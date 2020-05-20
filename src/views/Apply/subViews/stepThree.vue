@@ -190,7 +190,7 @@
         }
         .dialog{
             width: 500px;
-            height: 350px;
+            height: 380px;
             .dialog-header{
                 width: 500px;
                 height: 80px;

@@ -13,17 +13,29 @@
             <van-divider class="large-line"></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
                 <div class="upload-item">
-                    <div class="file-zm_icon"></div>
+                    <div class="has-img" v-if="submitData.informationPic">
+                        <img :src="submitData.informationPic"/>
+                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('informationPic')">X</div>
+                    </div>
+                    <div class="file-zm_icon" v-else @click="openMethodPanel('informationPic')"></div>
                     <div class="file-zm_text">添加信息登记表</div>
                 </div>
                 <div class="upload-item">
-                    <div class="file-zm_icon"></div>
+                    <div class="has-img" v-if="submitData.commitmentPic">
+                        <img :src="submitData.commitmentPic"/>
+                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('commitmentPic')">X</div>
+                    </div>
+                    <div class="file-zm_icon" v-else @click="openMethodPanel('commitmentPic')"></div>
                     <div class="file-zm_text">添加养犬承诺书</div>
                 </div>
             </div>
             <div class="upload-img" flex="dir:left cross:center main:justify">
                 <div class="upload-item">
-                    <div class="file-zm_icon"></div>
+                    <div class="has-img" v-if="submitData.otherFilePic">
+                        <img :src="submitData.otherFilePic"/>
+                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('otherFilePic')">X</div>
+                    </div>
+                    <div class="file-zm_icon" v-else @click="openMethodPanel('otherFilePic')"></div>
                     <div class="file-zm_text">添加其他材料</div>
                 </div>
             </div>
@@ -50,11 +62,18 @@
                 <div class="dialog-footer"><van-button type="info" size="mini" @click="toHome">确定</van-button></div>
             </div>
         </van-popup>
+        <van-popup v-model="showMethodsPanel" position="bottom">
+            <div class="methods-panel" flex="dir:top cross:center">
+                <div @click="getImage('pz')">拍照</div>
+                <div @click="getImage('photo')">选择图片</div>
+            </div>
+        </van-popup>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import { Divider, Form, Field, Button, Popup, Picker, Toast } from 'vant';
     import MyRadioGroup from '@/components/myRadioGroup.vue';
+    import externalMethods from '@/utils/externalMethods/index.js'
     const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
     import { bidDogCard } from '@/api/apply.js'
     export default{
@@ -71,6 +90,8 @@
         data(){
             return {
                 ynArray,
+                imageType: '',
+                showMethodsPanel: false,
                 showDialog: false,
                 submitData:{
                     userId: '',
@@ -106,13 +127,27 @@
             getRealValue(attrName,value){
                 this.submitData[attrName] = parseInt(value);
             },
+            openMethodPanel(imageType){
+                this.imageType = imageType;
+                this.showMethodsPanel = true;
+            },
+            getImage(method){
+                this.showMethodsPanel = false;
+                externalMethods.getImageUrl(method).then((res)=>{
+                    console.log('000000000000000000000',res);
+                    this.submitData[this.imageType] = res.pics[0].path;
+                }).catch((err)=>{
+                    Toast(err);
+                })
+            },
+            clearImage(imageType){
+                this.submitData[imageType] = '';
+            },
             preStep(){
                 //如果在history里面有，则使用缓存数据，没有则去获取数据
                 this.$router.push('/newApply/stepThree');
             },
             submit(){
-                this.submitData.informationPic = 'http://p8.itc.cn/images03/20200514/7ff57354e0324e86a776b3d7f3bf79e1.jpeg';
-                this.submitData.commitmentPic = 'http://cs.wenming.cn/2/fr/201903/W020190314630706200502.jpg';
                 console.log('submitData', this.submitData);
                 bidDogCard(this.submitData).then( res => {
                     console.log(res, res);
@@ -178,6 +213,26 @@
                     color: #666666;
                     text-align: center;
                 }
+                .has-img{
+                    width: 298px;
+                    height: 222px;
+                    position: relative;
+                    img{
+                        width: 100%;
+                        height: 100%;
+                    }
+                    .close_btn{
+                        position: absolute;
+                        top: -16px;
+                        right: -16px;
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 40px;
+                        background-color: rgba(0,0,0,0.5);
+                        font-size: 36px;
+                        color: #ffffff;
+                    }
+                }
             }
         }
         .form-item-label{
@@ -203,12 +258,22 @@
                 background-color: #6392f4;
             }
         }
+        .methods-panel{
+            width: 100%;
+            >div{
+                width: 100%;
+                height: 120px;
+                font-size: 40px;
+                line-height: 120px;
+                text-align: center;
+            }
+        }
         .dialog-warp{
             border-radius: 20px;
         }
         .dialog{
             width: 500px;
-            height: 300px;
+            height: 320px;
             .dialog-header{
                 width: 500px;
                 height: 80px;

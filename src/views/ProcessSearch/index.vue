@@ -73,7 +73,7 @@
             statusId: '0',
             statusName: '未提交',
         },
-        '-10-60-':{
+        '-10-30-60-':{
             statusId: '1',
             statusName: '审核中',
         },

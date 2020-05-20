@@ -112,7 +112,11 @@
             <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
                 <div class="upload-item">
-                    <div class="file-zm_icon"></div>
+                    <div class="has-img" v-if="submitData.businessLicense">
+                        <img :src="submitData.businessLicense"/>
+                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('businessLicense')">X</div>
+                    </div>
+                    <div class="file-zm_icon" v-else @click="openMethodPanel('businessLicense')"></div>
                     <div class="file-zm_text">上传单位营业执照</div>
                 </div>
             </div>
@@ -120,12 +124,19 @@
         <div class="btn-panel" flex="dir:top cross:center main:center">
             <van-button type="info" class="next-btn" @click="nextStep">下一步</van-button>
         </div>
+        <van-popup v-model="showMethodsPanel" position="bottom">
+            <div class="methods-panel" flex="dir:top cross:center">
+                <div @click="getImage('pz')">拍照</div>
+                <div @click="getImage('photo')">选择图片</div>
+            </div>
+        </van-popup>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import { Divider, Form, Field, Button, Popup, Picker, Toast } from 'vant';
     import MyRadioGroup from '@/components/myRadioGroup.vue';
     const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
+    import externalMethods from '@/utils/externalMethods/index.js'
     import { queryAddressByParentId } from '@/api/common.js';
     import { sendSms, checkSms, bidDogCard } from '@/api/apply.js'
     export default{
@@ -142,6 +153,8 @@
         data(){
             return {
                 ynArray,
+                showMethodsPanel: false,
+                imageType: '',
                 //获取验证码的两个参数
                 sendAuthCode:true,/*布尔值，通过v-show控制显示‘按钮’还是‘倒计时’ */
                 auth_time: 0, /*倒计时 计数器*/
@@ -315,6 +328,22 @@
                 this.submitData.communityId = value.id;
                 this.showCommunityPicker = false;
             },
+            openMethodPanel(imageType){
+                this.imageType = imageType;
+                this.showMethodsPanel = true;
+            },
+            getImage(method){
+                this.showMethodsPanel = false;
+                externalMethods.getImageUrl(method).then((res)=>{
+                    console.log('000000000000000000000',res);
+                    this.submitData[this.imageType] = res.pics[0].path;
+                }).catch((err)=>{
+                    Toast(err);
+                })
+            },
+            clearImage(imageType){
+                this.submitData[imageType] = '';
+            },
             nextStep(){
                 console.log('submitData', this.submitData);
                 this.submitData.idCardFront = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589368147966&di=6a4bbaf6d6966c45e26f6791fb470471&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20171025%2Fe7f95b3b97bf4770b2ac06f22819803c.jpeg';
@@ -401,6 +430,26 @@
                 color: #666666;
                 text-align: center;
             }
+            .has-img{
+                width: 298px;
+                height: 222px;
+                position: relative;
+                img{
+                    width: 100%;
+                    height: 100%;
+                }
+                .close_btn{
+                    position: absolute;
+                    top: -16px;
+                    right: -16px;
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 40px;
+                    background-color: rgba(0,0,0,0.5);
+                    font-size: 36px;
+                    color: #ffffff;
+                }
+            }
         }
     }
     .sfz-file{
@@ -416,7 +465,16 @@
             height: 80px;
         }
     }
-
+    .methods-panel{
+        width: 100%;
+        >div{
+            width: 100%;
+            height: 120px;
+            font-size: 40px;
+            line-height: 120px;
+            text-align: center;
+        }
+    }
 }
 </style>
 <style lang="scss">

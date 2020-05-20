@@ -3,7 +3,7 @@
         <page-header title="养犬管理" :leftArrow="false">
             <div class="header-left" slot="left">
                 <span class="icon iconfont point">&#xe63e;</span>
-                <span class="address">越城区</span>
+                <span class="address">{{areaName}}</span>
             </div>
         </page-header>
         <div class="main" flex="dir:top cross:center">
@@ -20,6 +20,7 @@
     import Operate from './components/operate.vue'
     import ServicePlace from './components/serviceplace.vue'
     import { getURLParameters } from '@/utils/index';
+    import externalMethods from '@/utils/externalMethods/index.js'
     import { AccountLogin } from '@/api/account/login.js';
     import { queryDogCard, queryDogServicePoint } from '@/api/home.js'
     export default {
@@ -33,11 +34,18 @@
         data(){
             return {
                 dogCards: [],
-                servePlaceList: []
+                servePlaceList: [],
+                areaName: '',
             }
         },
         mounted(){
-            this.getData();
+            externalMethods.getPosition().then(res =>{
+                console.log('position', res)
+                this.areaName = res.adName;
+                this.$store.commit('updateOriginLat',res.latitude);
+                this.$store.commit('updateOriginLon',res.longitude);
+                this.getData();
+            });
         },
         methods: {
             async getUserId(){

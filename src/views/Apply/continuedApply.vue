@@ -50,17 +50,29 @@
             <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
                 <div class="upload-item">
-                    <div class="file-zm_icon"></div>
-                    <div class="file-zm_text">添加信息登记表</div>
+                    <div class="has-img" v-if="submitData.immunePhotos">
+                        <img :src="submitData.immunePhotos"/>
+                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('immunePhotos')">X</div>
+                    </div>
+                    <div class="file-zm_icon" v-else @click="openMethodPanel('immunePhotos')"></div>
+                    <div class="file-zm_text">添加免疫证首页</div>
                 </div>
                 <div class="upload-item">
-                    <div class="file-zm_icon"></div>
-                    <div class="file-zm_text">添加养犬承诺书</div>
+                    <div class="has-img" v-if="submitData.immuneRecord">
+                        <img :src="submitData.immuneRecord"/>
+                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('immuneRecord')">X</div>
+                    </div>
+                    <div class="file-fm_icon" v-else @click="openMethodPanel('immuneRecord')"></div>
+                    <div class="file-zm_text">添加宠物免疫记录</div>
                 </div>
             </div>
             <div class="upload-img" flex="dir:left cross:center main:justify">
                 <div class="upload-item">
-                    <div class="file-zm_icon"></div>
+                    <div class="has-img" v-if="submitData.otherFilePic">
+                        <img :src="submitData.otherFilePic"/>
+                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('otherFilePic')">X</div>
+                    </div>
+                    <div class="file-zm_icon" v-else @click="openMethodPanel('otherFilePic')"></div>
                     <div class="file-zm_text">添加其他材料</div>
                 </div>
             </div>
@@ -86,12 +98,19 @@
                 <div class="dialog-footer"><van-button type="info" size="mini" @click="toHome">确定</van-button></div>
             </div>
         </van-popup>
+        <van-popup v-model="showMethodsPanel" position="bottom">
+            <div class="methods-panel" flex="dir:top cross:center">
+                <div @click="getImage('pz')">拍照</div>
+                <div @click="getImage('photo')">选择图片</div>
+            </div>
+        </van-popup>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import { Divider, Form, Field, Button, Popup, Picker, DatetimePicker, Toast } from 'vant';
     import PageHeader from '@/components/pageHeader.vue';
     import { formatDate } from '@/utils/index.js'
+    import externalMethods from '@/utils/externalMethods/index.js'
     import { queryImmuneSite } from '@/api/common.js'
     import { bidDogCard } from '@/api/apply.js'
     export default{
@@ -105,10 +124,12 @@
             [Picker.name]: Picker,
             [Popup.name]: Popup,
             [DatetimePicker.name]: DatetimePicker
-
         },
         data(){
             return {
+                imageType: '',
+                showMethodsPanel: false,
+
                 showImmuneAddressPicker: false,
                 immuneAddressColumns: ['xxx','yyy'],
                 immuneTime: '',
@@ -127,10 +148,10 @@
                     immuneNumber: '',
                     //免疫登记日期
                     immuneTime: null,
-                    //信息登记表
-                    informationPic: '',
-                    //养犬承诺书
-                    commitmentPic: '',
+                    //免疫证照片
+                    immunePhotos: '',
+                    //免疫记录照片
+                    immuneRecord: '',
                     //其他材料
                     otherFilePic: '',
                     // 备注
@@ -155,6 +176,22 @@
             })
         },
         methods:{
+            openMethodPanel(imageType){
+                this.imageType = imageType;
+                this.showMethodsPanel = true;
+            },
+            getImage(method){
+                this.showMethodsPanel = false;
+                externalMethods.getImageUrl(method).then((res)=>{
+                    console.log('000000000000000000000',res);
+                    this.submitData[this.imageType] = res.pics[0].path;
+                }).catch((err)=>{
+                    Toast(err);
+                })
+            },
+            clearImage(imageType){
+                this.submitData[imageType] = '';
+            },
             onImmuneAddressConfirm(value){
                 this.submitData.immuneAddress = value;
                 this.showImmuneAddressPicker = false;
@@ -165,8 +202,6 @@
                 this.showImmuneTimePicker = false;
             },
             submit(){
-                this.submitData.informationPic = 'http://p8.itc.cn/images03/20200514/7ff57354e0324e86a776b3d7f3bf79e1.jpeg';
-                this.submitData.commitmentPic = 'http://cs.wenming.cn/2/fr/201903/W020190314630706200502.jpg';
                 console.log('submitData', this.submitData);
                 this.showDialog = true;
                 bidDogCard(this.submitData).then( res => {
@@ -201,6 +236,12 @@
                     @include bg-image("~assets/images/file-zm");
                     background-size: 100% 100%;
                 }
+                .file-fm_icon{
+                    width: 298px;
+                    height: 222px;
+                    @include bg-image("~assets/images/myjl");
+                    background-size: 100% 100%;
+                }
                 .file-zm_text{
                     margin-top: 24px;
                     font-family: PingFangSC-Regular;
@@ -211,6 +252,26 @@
                     letter-spacing: 0px;
                     color: #666666;
                     text-align: center;
+                }
+                .has-img{
+                    width: 298px;
+                    height: 222px;
+                    position: relative;
+                    img{
+                        width: 100%;
+                        height: 100%;
+                    }
+                    .close_btn{
+                        position: absolute;
+                        top: -16px;
+                        right: -16px;
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 40px;
+                        background-color: rgba(0,0,0,0.5);
+                        font-size: 36px;
+                        color: #ffffff;
+                    }
                 }
             }
         }
@@ -231,6 +292,16 @@
             .next-btn{
                 width: 702px;
                 height: 80px;
+            }
+        }
+        .methods-panel{
+            width: 100%;
+            >div{
+                width: 100%;
+                height: 120px;
+                font-size: 40px;
+                line-height: 120px;
+                text-align: center;
             }
         }
         .dialog-warp{

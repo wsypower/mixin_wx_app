@@ -83,12 +83,20 @@
             </van-popup>
             <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
-                <div class="upload-item">
-                    <div class="file-zm_icon"></div>
+                <div class="upload-item" >
+                    <div class="has-img" v-if="submitData.dogPhotoFront">
+                        <img :src="submitData.dogPhotoFront"/>
+                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('dogPhotoFront')">X</div>
+                    </div>
+                    <div class="file-zm_icon" v-else @click="openMethodPanel('dogPhotoFront')"></div>
                     <div class="file-zm_text">上传宠物正面照</div>
                 </div>
                 <div class="upload-item">
-                    <div class="file-zm_icon"></div>
+                    <div class="has-img" v-if="submitData.dogPhotoBack">
+                        <img :src="submitData.dogPhotoBack"/>
+                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('dogPhotoBack')">X</div>
+                    </div>
+                    <div class="file-zm_icon" v-else @click="openMethodPanel('dogPhotoBack')"></div>
                     <div class="file-zm_text">上传宠物侧面照</div>
                 </div>
             </div>
@@ -142,11 +150,19 @@
             <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
                 <div class="upload-item">
-                    <div class="file-zm_icon"></div>
+                    <div class="has-img" v-if="submitData.immunePhotos">
+                        <img :src="submitData.immunePhotos"/>
+                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('immunePhotos')">X</div>
+                    </div>
+                    <div class="file-zm_icon" v-else @click="openMethodPanel('immunePhotos')"></div>
                     <div class="file-zm_text">添加免疫证首页</div>
                 </div>
                 <div class="upload-item">
-                    <div class="file-fm_icon"></div>
+                    <div class="has-img" v-if="submitData.immuneRecord">
+                        <img :src="submitData.immuneRecord"/>
+                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('immuneRecord')">X</div>
+                    </div>
+                    <div class="file-fm_icon" v-else @click="openMethodPanel('immuneRecord')"></div>
                     <div class="file-zm_text">添加宠物免疫记录</div>
                 </div>
             </div>
@@ -177,11 +193,18 @@
             <van-button type="info" class="btn pre-btn" @click="preStep">上一步</van-button>
             <van-button type="info" class="btn next-btn" @click="nextStep">下一步</van-button>
         </div>
+        <van-popup v-model="showMethodsPanel" position="bottom">
+            <div class="methods-panel" flex="dir:top cross:center">
+                <div @click="getImage('pz')">拍照</div>
+                <div @click="getImage('photo')">选择图片</div>
+            </div>
+        </van-popup>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import { Divider, Form, Field, Button, Popup, Picker, DatetimePicker, Toast } from 'vant';
     import MyRadioGroup from '@/components/myRadioGroup.vue';
+    import externalMethods from '@/utils/externalMethods/index.js'
     import { queryImmuneSite } from '@/api/common.js'
     import { queryDogServicePoint } from '@/api/home.js'
     const sexArray = [{labelName: '公',value: '1'},{labelName: '母',value: '0'}];
@@ -205,6 +228,9 @@
             return {
                 sexArray,
                 jyArray,
+                imageType: '',
+                showMethodsPanel: false,
+
                 showBirthdatePicker: false,
                 showAdoptTimePicker: false,
 
@@ -352,6 +378,22 @@
             getRealValue(attrName,value){
                 this.submitData[attrName] = parseInt(value);
             },
+            openMethodPanel(imageType){
+                this.imageType = imageType;
+                this.showMethodsPanel = true;
+            },
+            getImage(method){
+                this.showMethodsPanel = false;
+                externalMethods.getImageUrl(method).then((res)=>{
+                    console.log('000000000000000000000',res);
+                    this.submitData[this.imageType] = res.pics[0].path;
+                }).catch((err)=>{
+                    Toast(err);
+                })
+            },
+            clearImage(imageType){
+                this.submitData[imageType] = '';
+            },
             preStep(){
                 //如果在history里面有，则使用缓存数据，没有则去获取数据
                 if(this.submitData.userType===0){
@@ -363,19 +405,6 @@
 
             },
             nextStep(){
-                //犬正面照
-                //http://image.biaobaiju.com/uploads/20180211/02/1518286061-jwfJBQVhoH.jpg
-                //http://image.biaobaiju.com/uploads/20180211/02/1518286061-ezPIBniowG.jpg
-                this.submitData.dogPhotoFront = 'http://image.biaobaiju.com/uploads/20180211/02/1518286057-fLgvpPnYqi.jpg';
-                //犬侧面照
-                //http://image.biaobaiju.com/uploads/20180211/02/1518286064-yiUWeLgaBn.jpg
-                //http://image.biaobaiju.com/uploads/20180211/02/1518286067-RojChAkneO.jpg
-                this.submitData.dogPhotoBack  = 'http://image.biaobaiju.com/uploads/20180211/02/1518286059-xuorBvWsPz.jpg';
-                //免疫证照片
-                this.submitData.immunePhotos = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589809235179&di=1ac27907772ce4ffb5a4868b6a1ce5ad&imgtype=0&src=http%3A%2F%2Fimg.beihai365.com%2Fbbs%2FMon_1405%2F60_203525_93335af59f453f7.jpg';
-                //免疫记录照片
-                this.submitData.immuneRecord = 'https://qcloud.dpfile.com/pc/W6i9-BY2RwUbd3gcbvLj1vdqhkOK47sK3grG9MuMaFl2Z2NWo8mGzuxwarQuIULZjoJrvItByyS4HHaWdXyO_I7F0UeCRQYMHlogzbt7GHgNNiIYVnHvzugZCuBITtvjski7YaLlHpkrQUr5euoQrg.jpg';
-
                 console.log('submitData', this.submitData);
                 this.$store.commit('updateIsLoading', true);
                 bidDogCard(this.submitData).then( res => {
@@ -439,6 +468,26 @@
                     color: #666666;
                     text-align: center;
                 }
+                .has-img{
+                    width: 298px;
+                    height: 222px;
+                    position: relative;
+                    img{
+                        width: 100%;
+                        height: 100%;
+                    }
+                    .close_btn{
+                        position: absolute;
+                        top: -16px;
+                        right: -16px;
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 40px;
+                        background-color: rgba(0,0,0,0.5);
+                        font-size: 36px;
+                        color: #ffffff;
+                    }
+                }
             }
         }
         .btn-panel{
@@ -453,7 +502,16 @@
                 background-color: #6392f4;
             }
         }
-
+        .methods-panel{
+            width: 100%;
+            >div{
+                width: 100%;
+                height: 120px;
+                font-size: 40px;
+                line-height: 120px;
+                text-align: center;
+            }
+        }
     }
 </style>
 <style lang="scss">

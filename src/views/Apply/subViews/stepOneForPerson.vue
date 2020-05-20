@@ -151,12 +151,20 @@
             <van-field v-model="submitData.address" label="详细地址：" placeholder="请填写详细地址" input-align="right"/>
             <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
-                <div class="upload-item">
-                    <div class="file-zm_icon"></div>
+                <div class="upload-item" >
+                    <div class="has-img" v-if="submitData.residencyProofFront">
+                        <img :src="submitData.residencyProofFront"/>
+                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('residencyProofFront')">X</div>
+                    </div>
+                    <div class="file-zm_icon" v-else @click="openMethodPanel('residencyProofFront')"></div>
                     <div class="file-zm_text">上传居住证明</div>
                 </div>
                 <div class="upload-item">
-                    <div class="file-fm_icon"></div>
+                    <div class="has-img" v-if="submitData.residencyProofBack">
+                        <img :src="submitData.residencyProofBack"/>
+                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('residencyProofBack')">X</div>
+                    </div>
+                    <div class="file-fm_icon" v-else @click="openMethodPanel('residencyProofBack')"></div>
                     <div class="file-zm_text">上传居住证明</div>
                 </div>
             </div>
@@ -164,6 +172,12 @@
         <div class="btn-panel" flex="dir:top cross:center main:center">
             <van-button type="info" class="next-btn" @click="nextStep">下一步</van-button>
         </div>
+        <van-popup v-model="showMethodsPanel" position="bottom">
+            <div class="methods-panel" flex="dir:top cross:center">
+                <div @click="getImage('pz')">拍照</div>
+                <div @click="getImage('photo')">选择图片</div>
+            </div>
+        </van-popup>
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -172,6 +186,7 @@
     const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
     const fileTypeArray = [{labelName: '身份证',value: '1'},{labelName: '驾驶证',value: '2'},{labelName: '护照',value: '3'}];
     const sexArray = [{labelName: '男',value: '1'},{labelName: '女',value: '0'}];
+    import externalMethods from '@/utils/externalMethods/index.js'
     import { queryAddressByParentId } from '@/api/common.js';
     import { sendSms, checkSms, bidDogCard } from '@/api/apply.js'
     export default{
@@ -191,6 +206,8 @@
                 ynArray,
                 fileTypeArray,
                 sexArray,
+                imageType: '',
+                showMethodsPanel: false,
                 //获取验证码的两个参数
                 sendAuthCode:true,/*布尔值，通过v-show控制显示‘按钮’还是‘倒计时’ */
                 auth_time: 0, /*倒计时 计数器*/
@@ -281,6 +298,22 @@
         methods:{
             getRealValue(attrName,value){
                 this.submitData[attrName] = parseInt(value);
+            },
+            openMethodPanel(imageType){
+                this.imageType = imageType;
+                this.showMethodsPanel = true;
+            },
+            getImage(method){
+              this.showMethodsPanel = false;
+              externalMethods.getImageUrl(method).then((res)=>{
+                    console.log('000000000000000000000',res);
+                  this.submitData[this.imageType] = res.pics[0].path;
+                }).catch((err)=>{
+                    Toast(err);
+              })
+            },
+            clearImage(imageType){
+                this.submitData[imageType] = '';
             },
             getAuthCode:function () {
                 this.sendAuthCode = false;
@@ -377,7 +410,7 @@
                 this.submitData.idCardFront = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589368147966&di=6a4bbaf6d6966c45e26f6791fb470471&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20171025%2Fe7f95b3b97bf4770b2ac06f22819803c.jpeg';
                 this.submitData.idCardBack = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589368126527&di=830749a463a0acc209fc2d51974005ab&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200409%2F94880ee7acde45abb2f13b9d05024279.jpeg';
                 this.submitData.residencyProofBack = 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1793680595,3911934779&fm=26&gp=0.jpg';
-                this.submitData.residencyProofFront = 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1793680595,3911934779&fm=26&gp=0.jpg';
+                //this.submitData.residencyProofFront = 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1793680595,3911934779&fm=26&gp=0.jpg';
                 let params = {
                     userId: this.submitData.userId,
                     phoneNumber: this.submitData.phone,
@@ -401,8 +434,6 @@
                         Toast.fail({message: res.errmsg});
                     }
                 });
-
-
             }
         }
     }
@@ -461,6 +492,26 @@
                 color: #666666;
                 text-align: center;
             }
+            .has-img{
+                width: 298px;
+                height: 222px;
+                position: relative;
+                img{
+                    width: 100%;
+                    height: 100%;
+                }
+                .close_btn{
+                    position: absolute;
+                    top: -16px;
+                    right: -16px;
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 40px;
+                    background-color: rgba(0,0,0,0.5);
+                    font-size: 36px;
+                    color: #ffffff;
+                }
+            }
         }
     }
     .sfz-file{
@@ -476,7 +527,16 @@
             height: 80px;
         }
     }
-
+    .methods-panel{
+        width: 100%;
+        >div{
+            width: 100%;
+            height: 120px;
+            font-size: 40px;
+            line-height: 120px;
+            text-align: center;
+        }
+    }
 }
 </style>
 <style lang="scss">

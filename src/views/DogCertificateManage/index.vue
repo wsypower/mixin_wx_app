@@ -78,6 +78,7 @@
         width: 100%;
         height: 100%;
         padding-top: 88px;
+        background-color: #f5f5f5;
         .dog-manage-body{
             width: 100%;
         }
