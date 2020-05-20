@@ -189,6 +189,7 @@
                 }
                 else{
                     console.log('跳转至订单详情页');
+                    this.$router.push('/' + item.orderCode + '/detail');
                 }
 
             }

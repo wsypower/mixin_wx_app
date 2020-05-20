@@ -5,7 +5,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "process" */ '@/views/ProcessSearch/index.vue')
     },
     {
-        path: '/detail',
+        path: '/:orderNo/detail',
         name: 'detail',
         component: () => import(/* webpackChunkName: "process" */ '@/views/ProcessSearch/detail.vue')
     }

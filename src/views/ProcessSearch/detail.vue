@@ -28,18 +28,11 @@
                 <span class="header-left">申办进度</span>
             </div>
             <div class="log-body">
-                <div class="log-item" flex="dir:left">
-                    <div class="log-item-left">2020.01.03 14:22</div>
+                <div class="log-item" flex="dir:left" v-for="item in orderInfo.logList" :key="item.id">
+                    <div class="log-item-left">{{item.operatorTime|timeFormatter}}</div>
                     <div class="log-item-right">
                         <div class="dot"></div>
-                        <div class="message">信息审核中，请耐心等待</div>
-                    </div>
-                </div>
-                <div class="log-item" flex="dir:left">
-                    <div class="log-item-left">2020.01.03 14:22</div>
-                    <div class="log-item-right">
-                        <div class="dot"></div>
-                        <div class="message">资料已提交</div>
+                        <div class="message">{{item.remark||item.stepName}}</div>
                     </div>
                 </div>
             </div>
@@ -48,6 +41,7 @@
 </template>
 <script type="text/ecmascript-6">
     import PageHeader from '@/components/pageHeader.vue'
+    import { queryOrderDetail } from '@/api/process.js'
     export default {
         name: 'detail',
         components:{
@@ -72,16 +66,27 @@
             }
         },
         mounted(){
+            console.log('orderNo', this.$route.params.orderNo)
             this.getDetailData();
         },
         methods: {
             getDetailData(){
-                this.orderInfo.orderNo = '2000001568';
-                this.orderInfo.cardType = '新办';
-                this.orderInfo.ownerName = '菲菲';
-                this.orderInfo.dogName =  '飞飞';
-                this.orderInfo.breed = '柴犬';
-                this.orderInfo.logList = [];
+                let params = {
+                    userId: this.$store.getters['userId'],
+                    orderNo: this.$route.params.orderNo
+                }
+                queryOrderDetail(params).then( res => {
+                    console.log('queryOrderDetail', res);
+                    let order = res.data.dogOrder;
+                    this.orderInfo.orderNo = order.orderNo;
+                    this.orderInfo.cardType = order.cardType===0 ? '新办':'续办';
+                    this.orderInfo.ownerName = order.ownerName;
+                    this.orderInfo.dogName = order.dogName;
+                    this.orderInfo.breed = order.breed;
+                    this.orderInfo.logList = res.data.list;
+                });
+
+
             }
         }
     }

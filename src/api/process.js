@@ -40,13 +40,14 @@ export const queryPidDogCard = data => {
  * @date 2020-05-18 12:04
  * @param {String} userId 请求参数 :用户唯一标识符默认参数）
  */
-// export const querybidDogCardRecord = data => {
-//     return request({
-//         url: `/dogOrder/querybidDogCardRecord/${data.userId}`,
-//         method: 'post',
-//         params: data
-//     })
-// }
+
+export const queryOrderDetail = data => {
+    return request({
+        url: `/dogOrder/queryOrderDetail/${data.userId}`,
+        method: 'post',
+        params: data
+    })
+}
 
 
 /**

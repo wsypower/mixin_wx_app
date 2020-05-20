@@ -44,9 +44,9 @@
                 this.areaName = res.adName;
                 this.$store.commit('updateOriginLat',res.latitude);
                 this.$store.commit('updateOriginLon',res.longitude);
-                this.getData();
-            });
 
+            });
+            this.getData();
         },
         methods: {
             async getUserId(){
