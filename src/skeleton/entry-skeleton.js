@@ -18,12 +18,10 @@
 import Vue from "vue";
 import Skeleton1 from "./modules/home.vue";
 import Skeleton2 from "./modules/list.vue";
-import { ContentLoader } from "vue-content-loader";
 export default new Vue({
   components: {
     Skeleton1,
     Skeleton2,
-    ContentLoader,
   },
   template: `
        <div style='height: 100%;'>
