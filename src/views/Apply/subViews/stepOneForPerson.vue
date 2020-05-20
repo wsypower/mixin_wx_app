@@ -26,11 +26,19 @@
             <template v-if="submitData.idType === 1">
                 <div class="upload-img sfz-file" flex="dir:left cross:center main:justify">
                     <div class="upload-item">
-                        <div class="file-zm_icon"></div>
+                        <div class="has-img" v-if="submitData.idCardFront">
+                            <img :src="submitData.idCardFront"/>
+                            <div class="close_btn" flex="cross:center main:center" @click="clearImage('idCardFront')">X</div>
+                        </div>
+                        <div class="file-zm_icon" v-else @click="getImageUrlAndMoreMessage('idCardFront')"></div>
                         <div class="file-zm_text">拍摄身份证人像面</div>
                     </div>
                     <div class="upload-item">
-                        <div class="file-fm_icon"></div>
+                        <div class="has-img" v-if="submitData.idCardBack">
+                            <img :src="submitData.idCardBack"/>
+                            <div class="close_btn" flex="cross:center main:center" @click="clearImage('idCardBack')">X</div>
+                        </div>
+                        <div class="file-fm_icon" v-else @click="getImageUrlAndMoreMessage('idCardBack')"></div>
                         <div class="file-zm_text">拍摄身份证反面</div>
                     </div>
                 </div>
@@ -42,7 +50,11 @@
             <template v-if="submitData.idType === 2">
                 <div class="upload-img" flex="dir:left cross:center main:justify">
                     <div class="upload-item">
-                        <div class="file-zm_icon"></div>
+                        <div class="has-img" v-if="submitData.idCardFront">
+                            <img :src="submitData.idCardFront"/>
+                            <div class="close_btn" flex="cross:center main:center" @click="clearImage('idCardFront')">X</div>
+                        </div>
+                        <div class="file-zm_icon" v-else @click="getImageUrlAndMoreMessage('driverLicense')"></div>
                         <div class="file-zm_text">拍摄证件照片像面</div>
                     </div>
                 </div>
@@ -52,7 +64,11 @@
             <template v-if="submitData.idType === 3">
                 <div class="upload-img" flex="dir:left cross:center main:justify">
                     <div class="upload-item">
-                        <div class="file-zm_icon"></div>
+                        <div class="has-img" v-if="submitData.idCardFront">
+                            <img :src="submitData.idCardFront"/>
+                            <div class="close_btn" flex="cross:center main:center" @click="clearImage('idCardFront')">X</div>
+                        </div>
+                        <div class="file-zm_icon" v-else @click="getImageUrlAndMoreMessage('idCardFront')"></div>
                         <div class="file-zm_text">拍摄证件照片像面</div>
                     </div>
                 </div>
@@ -277,27 +293,62 @@
                 }
             }
         },
-        mounted(){},
-        beforeRouteEnter(to,from,next) {
-            console.log('one beforeRouteEnter', to, from);
-            next(vm=>{
-                const orderInfo = vm.$store.getters['order/orderInfo'];
-                Object.keys(vm.submitData).forEach(key=>{
-                    vm.submitData[key] = orderInfo[key]
-                })
-                vm.submitData.userId = vm.$store.getters['userId'];
-                vm.getAddressData('3306','1');
-                if(vm.submitData.regionId){
-                    vm.getAddressData(vm.submitData.regionId, '2');
-                }
-                if(vm.submitData.streetId){
-                    vm.getAddressData(vm.submitData.streetId, '3');
-                }
+        mounted(){
+            const orderInfo = this.$store.getters['order/orderInfo'];
+            Object.keys(this.submitData).forEach(key=>{
+                this.submitData[key] = orderInfo[key]
             })
+            this.submitData.userId = this.$store.getters['userId'];
+            this.getAddressData('3306','1');
+            if(this.submitData.regionId){
+                this.getAddressData(this.submitData.regionId, '2');
+            }
+            if(this.submitData.streetId){
+                this.getAddressData(this.submitData.streetId, '3');
+            }
+        },
+        watch:{
+            'submitData.idType': function(value){
+                console.log('watch submitData.isType',value);
+                this.submitData.ownerName = '';
+                this.submitData.idCard = '';
+                this.submitData.idCardFront= '';
+                this.submitData.idCardBack= '';
+                this.submitData.firstName = '';
+                this.submitData.lastName = '';
+                this.submitData.country = '';
+                this.submitData.passport = '';
+                this.submitData.sex = 0;
+            }
         },
         methods:{
             getRealValue(attrName,value){
                 this.submitData[attrName] = parseInt(value);
+            },
+            getImageUrlAndMoreMessage(type){
+                externalMethods.getImageUrlAndMoreMessage(type).then(res => {
+                    console.log('9999999999999', res);
+                    if(type === 'idCardFront'){
+                        this.submitData.ownerName = res.name;
+                        this.submitData.idCard = res.idCardNumber;
+                        this.submitData.idCardFront= res.imageUrl;
+                    }
+                    else if(type === 'idCardBack'){
+                        this.submitData.idCardBack= res.imageUrl;
+                    }
+                    else if(type === 'driverLicense'){
+                        this.submitData.ownerName = res.name;
+                        this.submitData.idCardFront= res.imageUrl;
+                    }
+                    else{
+                        this.submitData.idCardFront= res.imageUrl;
+                        this.submitData.firstName = res.firstName;
+                        this.submitData.lastName = res.lastName;
+                        this.submitData.country = res.country;
+                        this.submitData.passport = res.passportNumber;
+                        this.submitData.sex = res.sex;
+                    }
+                })
             },
             openMethodPanel(imageType){
                 this.imageType = imageType;

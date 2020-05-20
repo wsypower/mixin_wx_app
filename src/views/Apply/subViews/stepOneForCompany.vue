@@ -10,20 +10,28 @@
                 </template>
             </van-field>
             <van-divider></van-divider>
-            <van-field name="radio" label="是否备案犬证：" class="label-width-200">
+            <van-field name="radio" label="是否备案犬证：" class="label-width-200" v-show="submitData.isOwner===0">
                 <template #input>
                     <my-radio-group :initValue="submitData.isRecord.toString()" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isRecord', name)}"></my-radio-group>
                 </template>
             </van-field>
-            <div class="warn-note">（备案犬证后，后续您也可以对犬证进行管理）</div>
-            <van-divider></van-divider>
+            <div class="warn-note" v-show="submitData.isOwner===0">（备案犬证后，后续您也可以对犬证进行管理）</div>
+            <van-divider v-show="submitData.isOwner===0"></van-divider>
             <div class="upload-img sfz-file" flex="dir:left cross:center main:justify">
                 <div class="upload-item">
-                    <div class="file-zm_icon"></div>
+                    <div class="has-img" v-if="submitData.idCardFront">
+                        <img :src="submitData.idCardFront"/>
+                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('idCardFront')">X</div>
+                    </div>
+                    <div class="file-zm_icon" v-else @click="getImageUrlAndMoreMessage('idCardFront')"></div>
                     <div class="file-zm_text">拍摄身份证人像面</div>
                 </div>
                 <div class="upload-item">
-                    <div class="file-fm_icon"></div>
+                    <div class="has-img" v-if="submitData.idCardBack">
+                        <img :src="submitData.idCardBack"/>
+                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('idCardBack')">X</div>
+                    </div>
+                    <div class="file-fm_icon" v-else @click="getImageUrlAndMoreMessage('idCardBack')"></div>
                     <div class="file-zm_text">拍摄身份证反面</div>
                 </div>
             </div>
@@ -178,7 +186,7 @@
                     //是否犬主本人
                     isOwner: 1,
                     //是否备案
-                    isRecord: 0,
+                    isRecord: 1,
                     //什么类型证件：1身份证2驾驶证3护照
                     idType: 1,
                     //身份证正面图片路径
@@ -238,6 +246,19 @@
         methods:{
             getRealValue(attrName,value){
                 this.submitData[attrName] = parseInt(value);
+            },
+            getImageUrlAndMoreMessage(type){
+                externalMethods.getImageUrlAndMoreMessage(type).then(res => {
+                    console.log('9999999999999', res);
+                    if(type === 'idCardFront'){
+                        this.submitData.ownerName = res.name;
+                        this.submitData.idCard = res.idCardNumber;
+                        this.submitData.idCardFront= res.imageUrl;
+                    }
+                    else if(type === 'idCardBack'){
+                        this.submitData.idCardBack= res.imageUrl;
+                    }
+                })
             },
             getAuthCode:function () {
                 this.sendAuthCode = false;
