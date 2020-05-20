@@ -30,6 +30,7 @@
             <van-divider></van-divider>
             <div class="form-item-label">备注：</div>
             <van-field
+                    class="textarea-c"
                     type="textarea"
                     v-model="submitData.remark"
                     rows="4"
@@ -76,11 +77,11 @@
                     //订单ID
                     dogOrderId: '',
                     //当前步骤
-                    currentStep: '4',
+                    currentStep: 4,
                     //手机号码
                     phone: '',
                     //是否盖章
-                    isStamp: '1',
+                    isStamp: 1,
                     //信息登记表
                     informationPic: '',
                     //养犬承诺书
@@ -93,18 +94,13 @@
             }
         },
         mounted(){
-            this.submitData.dogOrderId = this.$store.getters['apply/dogOrderId'];
-            this.submitData.userId = this.$store.getters['userId'];
-        },
-        beforeRouteEnter(to,from,next) {
-            console.log('beforeRouteEnter', to, from);
-            next(vm=>{
-                const orderInfo = vm.$store.getters['order/orderInfo'];
-                Object.keys(vm.submitData).forEach(key=>{
-                    vm.submitData[key] = orderInfo[key]
-                })
-                vm.submitData.currentStep = 4;
+            const orderInfo = this.$store.getters['order/orderInfo'];
+            Object.keys(this.submitData).forEach(key=>{
+                this.submitData[key] = orderInfo[key]
             })
+            this.submitData.currentStep = 4;
+            this.submitData.userId = this.$store.getters['userId'];
+            this.submitData.isStamp = this.submitData.isStamp ? this.submitData.isStamp : 1;
         },
         methods:{
             getRealValue(attrName,value){
@@ -256,9 +252,10 @@
         .label-width-200{
             .van-field__label{
                 width: 260px;
+                padding-top: 10px;
             }
         }
-        .van-cell{
+        .textarea-c.van-cell{
             padding-top: 0px;
             padding-bottom: 40px;
         }

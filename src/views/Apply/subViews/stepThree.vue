@@ -56,7 +56,7 @@
                    dogOrderId: '',
                    userId: '',
                    //当前步骤
-                   currentStep: '3',
+                   currentStep: 3,
                    //手机号码
                    phone: ''
                },
@@ -76,25 +76,25 @@
 
         },
         mounted(){
-            console.log(222222);
-        },
-        beforeRouteEnter(to,from,next) {
-            console.log('beforeRouteEnter', to, from);
-            next(vm=>{
-                const orderInfo = vm.$store.getters['order/orderInfo'];
-                vm.pdfUrl = orderInfo.picPath;
-                console.log('three beforeRouteEnter', orderInfo, vm.pdfUrl);
-                const pdfUrlArr = vm.pdfUrl.split('//');
-                vm.src = pdf.createLoadingTask('/pdf/' + pdfUrlArr[pdfUrlArr.length-1]);// upload/file/2020/05/18/20200518195301513703.pdf
-                vm.src.then(pdf => {
-                    vm.numPages = pdf.numPages;
+            this.$nextTick(()=>{
+                setTimeout(()=>{
+                    const orderInfo = this.$store.getters['order/orderInfo'];
+                    this.pdfUrl = orderInfo.picPath;
+                    console.log('three', orderInfo, this.pdfUrl);
+                    const pdfUrlArr = this.pdfUrl.split('//');
+                    this.src = pdf.createLoadingTask('/pdf/' + pdfUrlArr[pdfUrlArr.length-1]);// upload/file/2020/05/18/20200518195301513703.pdf
+                    this.src.then(pdf => {
+                        this.numPages = pdf.numPages;
+                    });
+                    Object.keys(this.submitData).forEach(key=>{
+                        this.submitData[key] = orderInfo[key]
+                    })
+                    this.submitData.currentStep = 3;
+                    this.submitData.userId = this.$store.getters['userId'];
                 });
-                Object.keys(vm.submitData).forEach(key=>{
-                    vm.submitData[key] = orderInfo[key]
-                })
-                vm.submitData.currentStep = 3;
             })
         },
+
         methods:{
             copyDJFileUrl(){
                 const clipboard = new Clipboard('.copyDJFileUrl');

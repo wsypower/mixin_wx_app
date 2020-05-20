@@ -16,7 +16,7 @@
         </div>
         <div class="item-row" flex="dir:left cross:center main:justify">
             <div class="item-row-left">提交时间：</div>
-            <div class="item-row-right">2{{cardInfo.submitTime}}</div>
+            <div class="item-row-right">{{cardInfo.submitTime}}</div>
         </div>
         <div class="item-row" flex="dir:left cross:center main:justify">
             <div class="item-row-left">办证类型：</div>

@@ -58,7 +58,6 @@
             },
             nextPage(){
                 console.log(this.userType, this.cardType);
-                this.$store.commit('apply/updateDogOrderId', '');
                 this.$store.commit('order/updateOrderInfo', orderInitInfo);
                 if(this.cardType==='0'){
                     //代表个人的新办

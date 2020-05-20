@@ -313,6 +313,8 @@
                     vm.timeObj.immuneTime = formatDate(new Date(vm.submitData.immuneTime), 'yyyy-MM-dd');
                 }
                 vm.submitData.purposeName = purposeColumns[vm.submitData.purpose];
+                vm.submitData.dogSex = vm.submitData.dogSex ? vm.submitData.dogSex : 1;
+                vm.submitData.isSterilization = vm.submitData.isSterilization ? vm.submitData.isSterilization : 1;
             })
         },
         methods:{

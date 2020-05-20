@@ -173,8 +173,7 @@
     const fileTypeArray = [{labelName: '身份证',value: '1'},{labelName: '驾驶证',value: '2'},{labelName: '护照',value: '3'}];
     const sexArray = [{labelName: '男',value: '1'},{labelName: '女',value: '0'}];
     import { queryAddressByParentId } from '@/api/common.js';
-    import { bidDogCard } from '@/api/apply.js'
-    import qs from 'qs'
+    import { sendSms, checkSms, bidDogCard } from '@/api/apply.js'
     export default{
         name: 'stepOneForPerson',
         components:{
@@ -285,14 +284,28 @@
             },
             getAuthCode:function () {
                 this.sendAuthCode = false;
-                this.auth_time = 60;
-                var auth_timetimer =  setInterval(()=>{
-                    this.auth_time--;
-                    if(this.auth_time<=0){
-                        this.sendAuthCode = true;
-                        clearInterval(auth_timetimer);
+                if(this.submitData.phone){
+                    let params = {
+                        userId: this.submitData.userId,
+                        phoneNumber: this.submitData.phone
                     }
-                }, 1000);
+                    sendSms(params).then( res => {
+                        if(res.errno!==0){
+                            Toast.fail({message: res.errmsg});
+                        }
+                    })
+                    this.auth_time = 60;
+                    var auth_timetimer =  setInterval(()=>{
+                        this.auth_time--;
+                        if(this.auth_time<=0){
+                            this.sendAuthCode = true;
+                            clearInterval(auth_timetimer);
+                        }
+                    }, 1000);
+                }
+                else{
+                    Toast('请填写手机号码！');
+                }
             },
             getAddressData(parentId, type){
                 let params = {
@@ -365,18 +378,30 @@
                 this.submitData.idCardBack = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589368126527&di=830749a463a0acc209fc2d51974005ab&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200409%2F94880ee7acde45abb2f13b9d05024279.jpeg';
                 this.submitData.residencyProofBack = 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1793680595,3911934779&fm=26&gp=0.jpg';
                 this.submitData.residencyProofFront = 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1793680595,3911934779&fm=26&gp=0.jpg';
-
-                bidDogCard(this.submitData).then( res => {
-                    console.log(res, res);
-                    if(res.errno === 0){
-                        this.$store.commit('order/updateOrderInfo', this.submitData);
-                        this.$store.commit('order/updateOrderInfo', {dogOrderId: res.data.orderId});
-                        this.$router.push('/newApply/stepTwo');
+                let params = {
+                    userId: this.submitData.userId,
+                    phoneNumber: this.submitData.phone,
+                    smsCode:  this.submitData.verificationCode
+                }
+                checkSms(params).then( res => {
+                    if(res.errno===0){
+                        bidDogCard(this.submitData).then( res => {
+                            console.log(res, res);
+                            if(res.errno === 0){
+                                this.$store.commit('order/updateOrderInfo', this.submitData);
+                                this.$store.commit('order/updateOrderInfo', {dogOrderId: res.data.orderId});
+                                this.$router.push('/newApply/stepTwo');
+                            }
+                            else{
+                                Toast.fail({message: res.errmsg,duration: 3000});
+                            }
+                        });
                     }
                     else{
-                        Toast.fail({message: res.errmsg,duration: 3000});
+                        Toast.fail({message: res.errmsg});
                     }
                 });
+
 
             }
         }

@@ -50,7 +50,6 @@
                     else{
                         _link = routerArr[vm.preStep];
                     }
-                    vm.$store.commit('apply/updateDogOrderId', to.query.orderId);
                     vm.$router.replace({
                         path: _link
                     });

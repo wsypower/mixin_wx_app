@@ -145,7 +145,7 @@
                             statusId: statusObj[statusKey].statusId,
                             statusName: statusObj[statusKey].statusName,
                             dogName: item.dogName,
-                            submitTime: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'',
+                            submitTime: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'----',
                             cardType: item.cardType==='0'? '新办': '续办'
                         }
                         acc.push(temp);
