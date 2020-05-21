@@ -68,7 +68,7 @@
                             <img :src="submitData.idCardFront"/>
                             <div class="close_btn" flex="cross:center main:center" @click="clearImage('idCardFront')">X</div>
                         </div>
-                        <div class="file-zm_icon" v-else @click="getImageUrlAndMoreMessage('idCardFront')"></div>
+                        <div class="file-zm_icon" v-else @click="getImageUrlAndMoreMessage('passport')"></div>
                         <div class="file-zm_text">拍摄证件照片像面</div>
                     </div>
                 </div>

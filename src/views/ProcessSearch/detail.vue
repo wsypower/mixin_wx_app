@@ -29,13 +29,13 @@
             </div>
             <div class="log-body">
                 <div class="log-item" flex="dir:left" v-for="item in orderInfo.logList" :key="item.id">
-                    <div class="log-item-left">{{item.operatorTime|timeFormatter}}</div>
+                    <div class="log-item-left">{{item.operatorTime||item.createtime|timeFormatter}}</div>
                     <div class="log-item-right">
                         <div class="dot"></div>
                         <div class="message">{{item.remark||item.stepName}}</div>
                     </div>
                 </div>
-                <div class="btn-panel" flex="dir:top cross:center main:center">
+                <div class="btn-panel" flex="dir:top cross:center main:center" v-show="showButton">
                     <van-button type="info" class="op-btn" @click="goToPage">{{buttonName}}</van-button>
                 </div>
             </div>
@@ -94,24 +94,30 @@
                 }
                 queryOrderDetail(params).then( res => {
                     console.log('queryOrderDetail', res);
-                    let order = res.data.dogOrder;
-                    this.orderInfo.orderId = order.id;
-                    this.orderInfo.orderNo = order.orderNo;
-                    this.orderInfo.cardType = order.cardType===0 ? '新办':'续办';
-                    this.orderInfo.userType = order.userType;
-                    this.orderInfo.ownerName = order.ownerName;
-                    this.orderInfo.dogName = order.dogName;
-                    this.orderInfo.breed = order.breed;
-                    this.orderInfo.logList = res.data.list;
-                    let temp = res.data.list[0];
-                    let needKey = Object.keys(buttonObj).find(key => key.indexOf('-' + temp.stepCode + '-')>=0)
-                    if(needKey){
-                        this.showButton = true;
-                        this.buttonName = buttonObj[needKey].name;
-                        this.pagePath = buttonObj[needKey].path;
+                    if(res.errno===0){
+                        let order = res.data.dogOrder;
+                        this.orderInfo.orderId = order.id;
+                        this.orderInfo.orderNo = order.orderNo;
+                        this.orderInfo.cardType = order.cardType===0 ? '新办':'续办';
+                        this.orderInfo.userType = order.userType;
+                        this.orderInfo.ownerName = order.ownerName;
+                        this.orderInfo.dogName = order.dogName;
+                        this.orderInfo.breed = order.breed;
+                        this.orderInfo.logList = res.data.list;
+                        let temp = res.data.list[0];
+                        let needKey = Object.keys(buttonObj).find(key => key.indexOf('-' + temp.stepCode + '-')>=0)
+                        debugger
+                        if(needKey){
+                            this.showButton = true;
+                            this.buttonName = buttonObj[needKey].name;
+                            this.pagePath = buttonObj[needKey].path;
+                        }
+                        else{
+                            this.showButton = false;
+                        }
                     }
                     else{
-                        this.showButton = false;
+                        Toast.fail({message:res.errmsg});
                     }
                 });
             },
@@ -255,19 +261,6 @@
                         }
                     }
                     &:nth-last-child(2){
-                        background-color: #e03131;
-                        .log-item-right{
-                            border-width: 0px;
-                        }
-                    }
-                    &:nth-last-child(1){
-                        background-color: #e03131;
-                        .log-item-right{
-                            border-width: 0px;
-                        }
-                    }
-                    &:nth-last-child(0){
-                        background-color: #e03131;
                         .log-item-right{
                             border-width: 0px;
                         }
