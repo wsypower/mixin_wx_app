@@ -106,7 +106,6 @@
                         this.orderInfo.logList = res.data.list;
                         let temp = res.data.list[0];
                         let needKey = Object.keys(buttonObj).find(key => key.indexOf('-' + temp.stepCode + '-')>=0)
-                        debugger
                         if(needKey){
                             this.showButton = true;
                             this.buttonName = buttonObj[needKey].name;

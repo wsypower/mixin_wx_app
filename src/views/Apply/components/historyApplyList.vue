@@ -90,7 +90,8 @@
                             statusId: statusObj[statusKey].statusId,
                             statusName: statusObj[statusKey].statusName,
                             userType: item.userType,
-                            cardType: item.cardType
+                            cardType: item.cardType,
+                            orderCode: item.orderNo
                         }
                         acc.push(temp);
                         return acc
@@ -132,6 +133,7 @@
                 }
                 else{
                     console.log('跳转至订单详情页');
+                    this.$router.push('/' + item.orderCode + '/detail');
                 }
 
             }

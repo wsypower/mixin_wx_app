@@ -4,12 +4,12 @@
             <img class="dog-item-img" :src="dogData.dogPhotoFront">
             <div flex="dir:top" class="dog-item_mes">
                 <span class="dog-item_name">{{dogData.dogName}}</span>
-                <span class="dog-item_status" :class="{warning: dogData.statusId===1,wrong: dogData.statusId===2}">{{dogData.statusName}}</span>
+                <span class="dog-item_status" :class="{warning: dogData.dogCarStatus===1,wrong: dogData.dogCarStatus===2}">{{dogData.statusName}}</span>
             </div>
         </div>
         <div flex="dir:left main:justify cross:bottom">
             <div class="dog-item-des">
-                <div>有效期：{{item.validityStart|timeFormatter('YYYY-MM-DD')}}至{{item.validityEnd|timeFormatter('YYYY-MM-DD')}}</div>
+                <div>有效期：{{dogData.validityStart|timeFormatter('YYYY-MM-DD')}}至{{dogData.validityEnd|timeFormatter('YYYY-MM-DD')}}</div>
                 <div>登记证号：{{dogData.dogCardNumber}}</div>
             </div>
             <img class="dog-item-qr" :src="dogData.qRCodePath">
