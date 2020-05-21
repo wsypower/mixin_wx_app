@@ -174,7 +174,14 @@
             queryImmuneSite(params).then( res => {
                 this.immuneAddressColumns = res.data;
             })
+            const orderInfo = this.$store.getters['order/orderInfo'];
+            Object.keys(this.submitData).forEach(key=>{
+                this.submitData[key] = orderInfo[key]
+            })
+            this.submitData.currentStep = 5;
+            this.submitData.userId = this.$store.getters['userId'];
         },
+
         methods:{
             openMethodPanel(imageType){
                 this.imageType = imageType;

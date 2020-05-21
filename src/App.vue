@@ -63,8 +63,8 @@ body {
   height: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  //text-align: center;
+  //color: #2c3e50;
 }
   .bcolor{
     background-color: rgba(255,255,255,0.5)

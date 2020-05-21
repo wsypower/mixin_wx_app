@@ -89,7 +89,8 @@
                             submitDay: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'----',
                             statusId: statusObj[statusKey].statusId,
                             statusName: statusObj[statusKey].statusName,
-                            userType: item.userType
+                            userType: item.userType,
+                            cardType: item.cardType
                         }
                         acc.push(temp);
                         return acc
@@ -109,14 +110,25 @@
                     });
                 }
                 else if(item.statusId === 3){
-                    this.$router.push({
-                        path:'/newApply',
-                        query:{
-                            currentStep: 1,
-                            orderId: item.id,
-                            userType: item.userType
-                        }
-                    });
+                    if(item.cardType===0){
+                        this.$router.push({
+                            path:'/newApply',
+                            query:{
+                                currentStep: 1,
+                                orderId: item.id,
+                                userType: item.userType
+                            }
+                        });
+                    }
+                    else{
+                        this.$router.push({
+                            path:'/continuedApply',
+                            query:{
+                                currentStep: 5,
+                                orderId: this.orderInfo.orderId
+                            }
+                        });
+                    }
                 }
                 else{
                     console.log('跳转至订单详情页');

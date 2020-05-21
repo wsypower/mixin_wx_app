@@ -42,7 +42,7 @@
             <van-divider></van-divider>
             <van-field v-model="submitData.phone" label="联系电话：" placeholder="请输入" input-align="right"/>
             <van-divider></van-divider>
-            <van-field v-model="submitData.verificationCode" label="验证码：" placeholder="请输入短信验证码" >
+            <van-field v-model="submitData.verificationCode" label="验证码：" placeholder="请输入短信验证码" @blur="checkSms">
                 <template #button>
                     <van-button v-show="sendAuthCode" plain type="info" size="small" @click="getAuthCode">获取验证码</van-button>
                     <van-button v-show="!sendAuthCode" plain type="info" size="small" >{{auth_time}} 秒后重发</van-button>
@@ -166,6 +166,8 @@
                 //获取验证码的两个参数
                 sendAuthCode:true,/*布尔值，通过v-show控制显示‘按钮’还是‘倒计时’ */
                 auth_time: 0, /*倒计时 计数器*/
+                //是否验证通过
+                isCheckSms: false,
 
                 showRegionPicker: false,
                 regionColumns:[],
@@ -222,26 +224,26 @@
             }
         },
         mounted(){
-
-        },
-        beforeRouteEnter(to,from,next) {
-            console.log('beforeRouteEnter', to, from);
-            next(vm=>{
-                const orderInfo = vm.$store.getters['order/orderInfo'];
-                Object.keys(vm.submitData).forEach(key=>{
-                    vm.submitData[key] = orderInfo[key]
-                })
-                vm.submitData.userType = 1;
-                vm.submitData.currentStep = 1;
-                vm.submitData.userId = vm.$store.getters['userId'];
-                vm.getAddressData('3306','1');
-                if(vm.submitData.regionId){
-                    vm.getAddressData(vm.submitData.regionId, '2');
-                }
-                if(vm.submitData.streetId){
-                    vm.getAddressData(vm.submitData.streetId, '3');
-                }
+            const orderInfo = this.$store.getters['order/orderInfo'];
+            Object.keys(this.submitData).forEach(key=>{
+                this.submitData[key] = orderInfo[key]
             })
+            this.submitData.userType = 1;
+            this.submitData.currentStep = 1;
+            this.submitData.userId = this.$store.getters['userId'];
+            this.getAddressData('3306','1');
+            if(this.submitData.regionId){
+                this.getAddressData(vm.submitData.regionId, '2');
+            }
+            if(this.submitData.streetId){
+                this.getAddressData(this.submitData.streetId, '3');
+            }
+        },
+        watch:{
+            'submitData.phone': function(){
+                this.submitData.verificationCode = '';
+                this.isCheckSms = false;
+            }
         },
         methods:{
             getRealValue(attrName,value){
@@ -284,6 +286,21 @@
                 else{
                     Toast('请填写手机号码！');
                 }
+            },
+            checkSms(){
+                let params = {
+                    userId: this.submitData.userId,
+                    phoneNumber: this.submitData.phone,
+                    smsCode:  this.submitData.verificationCode
+                }
+                checkSms(params).then( res => {
+                    if(res.errno===0){
+                        this.isCheckSms = true;
+                    }
+                    else{
+                        Toast.fail({message: res.errmsg});
+                    }
+                });
             },
             getAddressData(parentId, type){
                 let params = {
@@ -367,32 +384,22 @@
             },
             nextStep(){
                 console.log('submitData', this.submitData);
-                this.submitData.idCardFront = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589368147966&di=6a4bbaf6d6966c45e26f6791fb470471&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20171025%2Fe7f95b3b97bf4770b2ac06f22819803c.jpeg';
-                this.submitData.idCardBack = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589368126527&di=830749a463a0acc209fc2d51974005ab&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200409%2F94880ee7acde45abb2f13b9d05024279.jpeg';
-                this.submitData.businessLicense = 'http://5b0988e595225.cdn.sohucs.com/images/20190222/0f462d915b3f470a86037782f2880b36.jpeg';
-                let params = {
-                    userId: this.submitData.userId,
-                    phoneNumber: this.submitData.phone,
-                    smsCode:  this.submitData.verificationCode
+                if(this.isCheckSms){
+                    bidDogCard(this.submitData).then( res => {
+                        console.log(res, res);
+                        if(res.errno === 0){
+                            this.$store.commit('order/updateOrderInfo', {dogOrderId: res.data.orderId});
+                            this.$store.commit('order/updateOrderInfo', this.submitData);
+                            this.$router.push('/newApply/stepTwo');
+                        }
+                        else{
+                            Toast.fail({message: res.errmsg,duration: 3000});
+                        }
+                    });
                 }
-                checkSms(params).then( res => {
-                    if(res.errno===0){
-                        bidDogCard(this.submitData).then( res => {
-                            console.log(res, res);
-                            if(res.errno === 0){
-                                this.$store.commit('order/updateOrderInfo', {dogOrderId: res.data.orderId});
-                                this.$store.commit('order/updateOrderInfo', this.submitData);
-                                this.$router.push('/newApply/stepTwo');
-                            }
-                            else{
-                                Toast.fail({message: res.errmsg,duration: 3000});
-                            }
-                        });
-                    }
-                    else{
-                        Toast.fail({message: res.errmsg});
-                    }
-                });
+                else{
+                    Toast.fail({message: '短信验证未通过'});
+                }
             }
         }
     }

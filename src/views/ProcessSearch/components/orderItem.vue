@@ -22,7 +22,7 @@
             <div class="item-row-left">办证类型：</div>
             <div class="item-row-right">{{cardInfo.cardType}}</div>
         </div>
-        <van-button plain type="info" class="btn" v-if="cardInfo.statusId === '0'" @click="deleteDogItem(cardInfo.orderId)">作废</van-button>
+        <van-button plain type="info" class="btn" v-if="cardInfo.statusId === '0'" @click.stop="deleteDogItem(cardInfo.orderId)">作废</van-button>
     </div>
 </template>
 <script type="text/ecmascript-6">

@@ -87,6 +87,8 @@ const orderInitInfo = {
     immuneTime: null,
     //意向地点
     intentionRegistrationSite: '',
+    //服务点id
+    serviceCode: '',
     //免疫证照片
     immunePhotos: '',
     //免疫记录照片

@@ -35,19 +35,20 @@
             return {
                 dogCards: [],
                 servePlaceList: [],
-                areaName: '',
+                areaName: '越城区',
             }
         },
         mounted(){
-            externalMethods.getPosition().then(res =>{
-                console.log('position', res)
-                this.areaName = res.adName;
-                this.$store.commit('updateOriginLat',res.latitude);
-                this.$store.commit('updateOriginLon',res.longitude);
-
-            });
+            // externalMethods.getPosition().then(res =>{
+            //     console.log('position', res)
+            //     this.areaName = res.adName;
+            //     this.$store.commit('updateOriginLat',res.latitude);
+            //     this.$store.commit('updateOriginLon',res.longitude);
+            //
+            // });
             this.getData();
         },
+
         methods: {
             async getUserId(){
                 let userId = this.$store.getters['userId'];

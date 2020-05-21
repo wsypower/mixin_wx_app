@@ -35,25 +35,42 @@
                         <div class="message">{{item.remark||item.stepName}}</div>
                     </div>
                 </div>
+                <div class="btn-panel" flex="dir:top cross:center main:center">
+                    <van-button type="info" class="op-btn" @click="goToPage">{{buttonName}}</van-button>
+                </div>
             </div>
         </div>
     </div>
 </template>
 <script type="text/ecmascript-6">
+    import { Button, Toast } from 'vant'
     import PageHeader from '@/components/pageHeader.vue'
     import { queryOrderDetail } from '@/api/process.js'
+
+    const buttonObj = {
+        '-20-': { name:'查看服务点',path: ''},
+        '-25-45-85-': {name:'修改信息',path:'applyPage'},
+        '-40-80-': {name:'查看犬证',path: ''}
+    }
     export default {
         name: 'detail',
         components:{
+            [Button.name]: Button,
             PageHeader
         },
         data(){
             return {
+                showButton: false,
+                buttonName: '',
+                pagePath: '',
                 orderInfo:{
+                    orderId: '',
                     //预约单号
                     orderNo: '',
                     //办证类型
                     carType: '',
+                    //个人还是单位
+                    userType: 0,
                     //犬主姓名
                     ownerName: '',
                     //宠物昵称
@@ -62,7 +79,7 @@
                     breed: '',
                     //申办进度
                     logList: []
-                }
+                },
             }
         },
         mounted(){
@@ -78,15 +95,51 @@
                 queryOrderDetail(params).then( res => {
                     console.log('queryOrderDetail', res);
                     let order = res.data.dogOrder;
+                    this.orderInfo.orderId = order.id;
                     this.orderInfo.orderNo = order.orderNo;
                     this.orderInfo.cardType = order.cardType===0 ? '新办':'续办';
+                    this.orderInfo.userType = order.userType;
                     this.orderInfo.ownerName = order.ownerName;
                     this.orderInfo.dogName = order.dogName;
                     this.orderInfo.breed = order.breed;
                     this.orderInfo.logList = res.data.list;
+                    let temp = res.data.list[0];
+                    let needKey = Object.keys(buttonObj).find(key => key.indexOf('-' + temp.stepCode + '-')>=0)
+                    if(needKey){
+                        this.showButton = true;
+                        this.buttonName = buttonObj[needKey].name;
+                        this.pagePath = buttonObj[needKey].path;
+                    }
+                    else{
+                        this.showButton = false;
+                    }
                 });
-
-
+            },
+            goToPage(){
+                if(this.pagePath===''){
+                    Toast('还未开发');
+                }
+                else{
+                    if(this.orderInfo.cardType==='新办'){
+                        this.$router.push({
+                            path:'/newApply',
+                            query:{
+                                currentStep: 1,
+                                orderId: this.orderInfo.orderId,
+                                userType: this.orderInfo.userType
+                            }
+                        });
+                    }
+                    else{
+                        this.$router.push({
+                            path:'/continuedApply',
+                            query:{
+                                currentStep: 5,
+                                orderId: this.orderInfo.orderId
+                            }
+                        });
+                    }
+                }
             }
         }
     }
@@ -201,10 +254,31 @@
                             }
                         }
                     }
-                    &:last-child{
+                    &:nth-last-child(2){
+                        background-color: #e03131;
                         .log-item-right{
                             border-width: 0px;
                         }
+                    }
+                    &:nth-last-child(1){
+                        background-color: #e03131;
+                        .log-item-right{
+                            border-width: 0px;
+                        }
+                    }
+                    &:nth-last-child(0){
+                        background-color: #e03131;
+                        .log-item-right{
+                            border-width: 0px;
+                        }
+                    }
+                }
+                .btn-panel{
+                    height: 170px;
+                    width: 100%;
+                    .op-btn{
+                        width: 702px;
+                        height: 80px;
                     }
                 }
             }

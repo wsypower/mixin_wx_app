@@ -292,6 +292,8 @@
                     immuneTime: null,
                     //意向地点
                     intentionRegistrationSite: '',
+                    //服务点id
+                    serviceCode:'',
                     //免疫证照片
                     immunePhotos: '',
                     //免疫记录照片
@@ -314,7 +316,11 @@
             })
             queryDogServicePoint(params).then( res => {
                 this.siteColumns = res.data.reduce((acc, item) => {
-                    acc.push(item.servicePointName);
+                    let temp = {
+                        text: item.servicePointName,
+                        id: item.id
+                    }
+                    acc.push(temp);
                     return acc
                 }, []);
             })
@@ -372,7 +378,8 @@
                 this.showImmuneTimePicker = false;
             },
             onSiteConfirm(value){
-                this.submitData.intentionRegistrationSite = value;
+                this.submitData.intentionRegistrationSite = value.text;
+                this.submitData.serviceCode = value.id;
                 this.showSitePicker = false;
             },
             getRealValue(attrName,value){

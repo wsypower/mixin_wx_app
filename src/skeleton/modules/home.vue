@@ -31,7 +31,7 @@ img {
   height: 100%;
   position: fixed;
   top: 0;
-  background-color: #1b1b1b78;
+  background-color: rgba(27, 27, 27, 0.33);
   z-index: 10;
 }
 .make-warp {

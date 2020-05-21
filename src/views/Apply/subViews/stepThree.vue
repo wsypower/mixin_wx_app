@@ -72,9 +72,6 @@
                 return this.$store.getters['isWX'];
             }
         },
-        created(){
-
-        },
         mounted(){
             this.$nextTick(()=>{
                 setTimeout(()=>{
