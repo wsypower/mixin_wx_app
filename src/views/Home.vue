@@ -12,6 +12,12 @@ export default {
   name: "home",
   components: {
     HelloWorld
+  },
+  created() {
+    console.log("新页面");
+  },
+  activated() {
+    console.log("复用的页面");
   }
 };
 </script>

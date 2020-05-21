@@ -93,7 +93,6 @@
 
 <script>
 import { Button } from "vant";
-import { add } from "../api/example/list";
 export default {
   name: "HelloWorld",
   components: {
@@ -103,14 +102,11 @@ export default {
     msg: String
   },
   mounted() {
-    add().then(res => {
-      console.log(res);
-    });
     console.log(123);
   },
   methods: {
     routerLink() {
-      this.$router.push("/ceshi");
+      this.$router.push("/router");
     }
   }
 };

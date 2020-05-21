@@ -1,7 +1,10 @@
+
 <template>
   <div id="app">
     <transition :name="transitionName">
+      <!-- <Navigation> -->
       <router-view v-wechat-title="$route.meta.title" />
+      <!-- </Navigation> -->
     </transition>
     <van-overlay :show="show" @click="show = false" class-name=bcolor>
       <div class="wrapper">
@@ -41,6 +44,12 @@ export default {
 <style lang="scss">
 @import "@/style/flex";
 @import "@/style/animations/pageAnimations";
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
 * {
     box-sizing: border-box;
 }
@@ -52,6 +61,10 @@ export default {
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma, Simsun, sans-serif;
   width: 100%;
   height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
 }
   .bcolor{
     background-color: rgba(255,255,255,0.5)

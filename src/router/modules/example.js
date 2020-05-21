@@ -9,10 +9,19 @@ const routes = [
       import(/* webpackChunkName: "about" */ "@/views/About.vue"),
   },
   {
-    path: "/ceshi",
-    name: "ceshi",
+    path: "/router",
+    name: "router",
     component: () =>
       import(/* webpackChunkName: "router" */ "@/views/router.vue"),
+    meta: {
+      title: "犬类列表",
+    },
+  },
+  {
+    path: "/detail",
+    name: "detail",
+    component: () =>
+      import(/* webpackChunkName: "detail" */ "@/views/detail.vue"),
     meta: {
       title: "犬类列表",
     },

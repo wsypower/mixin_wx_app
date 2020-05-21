@@ -52,16 +52,5 @@ new Vue({
   render: (h) => h(App),
   created(){
     this.$store.commit('updateSystem', navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1)
-
-    // await AccountLogin({token: token})
-    //     .then(async res => {
-    //         console.log('res', res);
-    //         await this.$store.commit('updateUserId', '6');
-    //         resolve(res)
-    //     })
-    //     .catch(err => {
-    //         console.log(err)
-    //         reject(err)
-    //     })
   }
 }).$mount("#app");

@@ -10,7 +10,9 @@
 /*                                                                                                           */
 /* ********************************************************************************************************* */
 import vueWechatTitle from "vue-wechat-title";
-
+// TODO: 只能用于单路由，如遇到tab路由形式，压栈的形式就会有问题，推荐移动端不采用子路由，改换动态组件
+// import router from "@/router";
+// import Navigation from "./navigation/index";
 import service from "./request/index";
 export default {
   install(Vue) {
@@ -18,6 +20,7 @@ export default {
     // https://cn.vuejs.org/v2/api/#productionTip
     Vue.config.productionTip = false;
     Vue.use(service);
+    // Vue.use(Navigation, { router });
     Vue.use(vueWechatTitle);
   },
 };
