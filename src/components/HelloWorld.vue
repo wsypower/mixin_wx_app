@@ -12,32 +12,32 @@
     <h3>Ecosystem</h3>
     <div class="pdf">
       <!-- <pdf src="/api/upload/file/2020/05/18/20200518195301513703.pdf"></pdf> -->
-      <pdf
+      <!-- <pdf
         v-for="i in numPages"
         :key="i"
         :src="src"
         :page="i"
         style="display: inline-block; width: 25%"
-      ></pdf>
+      ></pdf> -->
     </div>
   </div>
 </template>
 
 <script>
 import { Button } from "vant";
-import pdf from "vue-pdf";
-var loadingTask = pdf.createLoadingTask(
-  "/api/upload/file/2020/05/18/20200518195301513703.pdf"
-);
+// import pdf from "vue-pdf";
+// var loadingTask = pdf.createLoadingTask(
+//   "/api/upload/file/2020/05/18/20200518195301513703.pdf"
+// );
 export default {
   name: "HelloWorld",
   components: {
-    [Button.name]: Button,
-    pdf
+    [Button.name]: Button
+    // pdf
   },
   data() {
     return {
-      src: loadingTask,
+      // src: loadingTask,
       numPages: undefined
     };
   },
@@ -45,9 +45,9 @@ export default {
     msg: String
   },
   mounted() {
-    this.src.then(pdf => {
-      this.numPages = pdf.numPages;
-    });
+    // this.src.then(pdf => {
+    //   this.numPages = pdf.numPages;
+    // });
     console.log(123);
   },
   activated() {
