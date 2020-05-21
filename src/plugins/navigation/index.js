@@ -1,68 +1,78 @@
-import {
-  VuePageStack,
-  getIndexByKey,
-  getStack,
-} from "./components/VuePageStack";
-import mixin from "./mixin";
-import history from "./history";
-import config from "./config/config";
+import Routes from "./routes";
+import Navigator from "./navigator";
+import NavComponent from "./components/Navigation";
+import { genKey, isObjEqual } from "./utils";
 
-function hasKey(query, keyName) {
-  return !!query[keyName];
-}
-
-function getKey(src) {
-  return src.replace(/[xy]/g, function(c) {
-    let r = (Math.random() * 16) | 0;
-    let v = c === "x" ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-}
-
-const Navigation = {};
-
-Navigation.install = function(
-  Vue,
-  { router, name = config.componentName, keyName = config.keyName }
-) {
-  if (!router) {
-    throw Error("\n vue-router is necessary. \n\n");
-  }
-  Vue.component(name, VuePageStack(keyName));
-
-  Vue.prototype.$pageStack = {
-    getStack,
-  };
-
-  mixin(router);
-
-  function beforeEach(to, from, next) {
-    if (!hasKey(to.query, keyName)) {
-      to.query[keyName] = getKey("xxxxxxxx");
-      let replace =
-        history.action === config.replaceName || !hasKey(from.query, keyName);
-      next({
-        hash: to.hash,
-        path: to.path,
-        name: to.name,
-        params: to.params,
-        query: to.query,
-        meta: to.meta,
-        replace: replace,
-      });
-    } else {
-      let index = getIndexByKey(to.query[keyName]);
-      if (index === -1) {
-        to.params[keyName + "-dir"] = config.forwardName;
-      } else {
-        to.params[keyName + "-dir"] = config.backName;
-      }
-      next({ params: to.params });
+export default {
+  install: (
+    Vue,
+    { router, store, moduleName = "navigation", keyName = "VNK" } = {}
+  ) => {
+    if (!router) {
+      console.error("vue-navigation need options: router");
+      return;
     }
-  }
 
-  // 确保这是第一个之前
-  router.beforeHooks.unshift(beforeEach);
+    const bus = new Vue();
+    const navigator = Navigator(bus, store, moduleName, keyName);
+
+    // hack vue-router replace for replaceFlag
+    const routerReplace = router.replace.bind(router);
+    let replaceFlag = false;
+    router.replace = (location, onComplete, onAbort) => {
+      replaceFlag = true;
+      routerReplace(location, onComplete, onAbort);
+    };
+
+    // init router`s keyName
+    router.beforeEach((to, from, next) => {
+      if (!to.query[keyName]) {
+        const query = { ...to.query };
+        // go to the same route will be set the same key
+        console.log(from.query[keyName]);
+        if (
+          to.path === from.path &&
+          isObjEqual(
+            { ...to.query, [keyName]: null },
+            { ...from.query, [keyName]: null }
+          ) &&
+          from.query[keyName]
+        ) {
+          query[keyName] = from.query[keyName];
+        } else {
+          query[keyName] = genKey();
+        }
+        next({
+          name: to.name,
+          params: to.params,
+          query,
+          replace: replaceFlag || !from.query[keyName],
+        });
+      } else {
+        next();
+      }
+    });
+
+    // record router change
+    router.afterEach((to, from) => {
+      navigator.record(to, from, replaceFlag);
+      replaceFlag = false;
+    });
+
+    Vue.component("navigation", NavComponent(keyName));
+
+    Vue.navigation = Vue.prototype.$navigation = {
+      on: (event, callback) => {
+        bus.$on(event, callback);
+      },
+      once: (event, callback) => {
+        bus.$once(event, callback);
+      },
+      off: (event, callback) => {
+        bus.$off(event, callback);
+      },
+      getRoutes: () => Routes.slice(),
+      cleanRoutes: () => navigator.reset(),
+    };
+  },
 };
-
-export default Navigation;

@@ -25,6 +25,13 @@ export default {
    */
   actions: {
     pageSwitchEvent({ commit }, { to, from }) {
+      // 屏蔽掉子元素，会导致Navigation 压栈失败
+      // const regexp = /\/.*\//;
+      // if (regexp.test(to.path) && regexp.test(from.path)) {
+      //   console.log(123);
+      //   commit("updateDirection", "");
+      //   return;
+      // }
       if (to.params.direction) {
         commit("updateDirection", to.params.direction);
       } else {

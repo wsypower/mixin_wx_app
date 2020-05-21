@@ -18,11 +18,14 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store/index";
-import "amfe-flexible";
 import "assets/iconfont/iconfont.css";
 
 import vueFiltersDate from '@/filters/moment/main'
 Vue.use(vueFiltersDate)
+
+import FastClick from "fastclick";
+FastClick.attach(document.body);
+
 //
 // ─── PLUGINS ────────────────────────────────────────────────────────────────────
 //
