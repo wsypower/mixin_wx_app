@@ -9,7 +9,7 @@
                 <div class="place-item" v-for="item in placeList" :key="item.id" @click="gotoPointDetail(item.id)">
                     <div class="first" flex="dir:left cross:center main:justify">
                         <span class="place-item-name">{{item.servicePointName}}</span>
-                        <span class="place-item-point"><span class="icon iconfont point">&#xe63e;</span>{{item.distance}}</span>
+                        <span class="place-item-point"><span class="icon iconfont point">&#xe63e;</span>{{(item.distance/1000).toFixed(2)}}km</span>
                     </div>
                     <div class="text-panel"><span>地址：</span><span>{{item.address}}</span></div>
                     <div class="text-panel"><span>服务时间：</span><span>{{item.serviceTime}}</span></div>

@@ -51,6 +51,8 @@
                 </div>
                 <van-divider></van-divider>
                 <van-field v-model="submitData.ownerName" label="犬主姓名：" placeholder="请输入" input-align="right"/>
+                <van-divider></van-divider>
+                <van-field v-model="submitData.idCard" label="身份证号：" placeholder="请输入" input-align="right"/>
             </template>
             <template v-if="submitData.idType === 3">
                 <div class="upload-img" flex="dir:left cross:center main:justify">
@@ -169,11 +171,9 @@
     import MyRadioGroup from '@/components/myRadioGroup.vue';
     import UploadImage from '../components/uploadImage.vue';
     import PhotoForMessage from '../components/photoForMessage.vue';
-    const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
-    const fileTypeArray = [{labelName: '身份证',value: '1'},{labelName: '驾驶证',value: '2'},{labelName: '护照',value: '3'}];
-    const sexArray = [{labelName: '男',value: '1'},{labelName: '女',value: '0'}];
-    import { queryAddressByParentId } from '@/api/common.js';
-    import { sendSms, checkSms, bidDogCard } from '@/api/apply.js'
+    import myMixin from '@/utils/mixin.js';
+    import { queryAddressByParentId, sendSms, checkSms, queryDogByOwnerIdCard } from '@/api/common.js';
+    import { bidDogCard } from '@/api/apply.js';
     export default{
         name: 'stepOneForPerson',
         components:{
@@ -188,22 +188,24 @@
             PhotoForMessage,
             UploadImage
         },
+        mixins: [myMixin],
         data(){
             return {
-                ynArray,
-                fileTypeArray,
-                sexArray,
                 //获取验证码的两个参数
                 sendAuthCode:true,/*布尔值，通过v-show控制显示‘按钮’还是‘倒计时’ */
                 auth_time: 0, /*倒计时 计数器*/
                 //是否验证通过
                 isCheckSms: false,
+                //出现区县选择区域
                 showRegionPicker: false,
                 regionColumns:[],
+                //出现街道选择区域
                 showStreetPicker: false,
                 streetColumns: [],
+                //出现社区选择区域
                 showCommunityPicker: false,
                 communityColumns: [],
+                //选择项数据加载
                 adLoading: false,
                 submitData:{
                     userId: null,
@@ -264,20 +266,24 @@
             }
         },
         mounted(){
+            //从缓存中读入素有orderInfo数据，适用于新建与编辑
             const orderInfo = this.$store.getters['order/orderInfo'];
             Object.keys(this.submitData).forEach(key=>{
                 this.submitData[key] = orderInfo[key]
             })
             this.submitData.userId = this.$store.getters['userId'];
             this.getAddressData('3306','1');
+            //编辑时，根据已有的区县Id获取街道选项数据
             if(this.submitData.regionId){
                 this.getAddressData(this.submitData.regionId, '2');
             }
+            //编辑时，根据已有的街道Id获取社区选项数据
             if(this.submitData.streetId){
                 this.getAddressData(this.submitData.streetId, '3');
             }
         },
         watch:{
+            //当证件类型改变时，清理与证件相关的所有数据
             'submitData.idType': function(value){
                 console.log('watch submitData.isType',value);
                 this.submitData.ownerName = '';
@@ -290,15 +296,18 @@
                 this.submitData.passport = '';
                 this.submitData.sex = 0;
             },
+            //当手机号码改变时，清理与验证码相关的数据
             'submitData.phone': function(){
                 this.submitData.verificationCode = '';
                 this.isCheckSms = false;
             }
         },
         methods:{
+            //单选实际值
             getRealValue(attrName,value){
                 this.submitData[attrName] = parseInt(value);
             },
+            //身份证正面、反面、驾驶证、护照拍照识别信息后返回获取相应的值
             getResultMessage(data){
                 let type = data.imageType;
                 if(type === 'idCardFront'){
@@ -311,6 +320,7 @@
                 }
                 else if(type === 'driverLicense'){
                     this.submitData.ownerName = data.data.name;
+                    this.submitData.idCard = data.data.idCardNumber;
                     this.submitData.idCardFront = data.data.imageUrl;
                 }
                 else{
@@ -322,6 +332,7 @@
                     this.submitData.sex = data.data.sex;
                 }
             },
+            //删除照片
             clearImage(data){
                 if(data.imageType === 'idCardBack'){
                     this.submitData.idCardBack = '';
@@ -330,9 +341,11 @@
                     this.submitData.idCardFront = '';
                 }
             },
+            //图片上传
             getResultImage(data){
                 this.submitData[data.imageType] = data.url;
             },
+            //获取手机验证码，60s之后可再次请求
             getAuthCode:function () {
                 this.sendAuthCode = false;
                 if(this.submitData.phone){
@@ -358,6 +371,7 @@
                     Toast('请填写手机号码！');
                 }
             },
+            //检查验证码是否正确
             checkSms(){
                 let params = {
                     userId: this.submitData.userId,
@@ -373,6 +387,7 @@
                     }
                 });
             },
+            //获取区域信息
             getAddressData(parentId, type){
                 let params = {
                     userId: this.submitData.userId,
@@ -407,6 +422,7 @@
                     }
                  );
             },
+            //选中区县后赋值以及获取街道选项信息
             onRegionConfirm(value){
                 console.log(`当前选中值:`,value);
                 if(value.id!==this.submitData.regionId) {
@@ -420,6 +436,7 @@
                 this.submitData.regionId = value.id;
                 this.showRegionPicker = false;
             },
+            //选中街道后赋值以及获取社区选项信息
             onStreetConfirm(value){
                 console.log(`当前选中值：`, value);
                 if(value.id!==this.submitData.streetId){
@@ -431,32 +448,45 @@
                 this.submitData.streetId = value.id;
                 this.showStreetPicker = false;
             },
+            //选中社区后赋值
             onCommunityConfirm(value){
                 console.log(`当前选中值：`,value);
                 this.submitData.community = value.text;
                 this.submitData.communityId = value.id;
                 this.showCommunityPicker = false;
             },
-
+            //第一步数据提交：1、检查身份证是否已有犬只绑定；2、检查验证码是否通过；
             nextStep(){
                 console.log('submitData', this.submitData);
-                if(this.isCheckSms){
-                    bidDogCard(this.submitData).then( res => {
-                        console.log(res, res);
-                        if(res.errno === 0){
-                            this.$store.commit('order/updateOrderInfo', this.submitData);
-                            this.$store.commit('order/updateOrderInfo', {dogOrderId: res.data.orderId});
-                            this.$router.push('/newApply/stepTwo');
+                //身份证判断
+                let params = {
+                    userId: this.submitData.userId,
+                    idCard: this.submitData.idCard
+                }
+                queryDogByOwnerIdCard(params).then(res => {
+                    if(res.errno===0){
+                        //验证码判断
+                        if(this.isCheckSms){
+                            bidDogCard(this.submitData).then( res => {
+                                console.log(res, res);
+                                if(res.errno === 0){
+                                    this.$store.commit('order/updateOrderInfo', this.submitData);
+                                    this.$store.commit('order/updateOrderInfo', {dogOrderId: res.data.orderId});
+                                    this.$router.push('/newApply/stepTwo');
+                                }
+                                else{
+                                    Toast.fail({message: res.errmsg,duration: 3000});
+                                }
+                            });
                         }
                         else{
-                            Toast.fail({message: res.errmsg,duration: 3000});
+                            Toast.fail({message: '短信验证未通过'});
                         }
-                    });
-                }
-                else{
-                    Toast.fail({message: '短信验证未通过'});
-                }
-
+                    }
+                    else{
+                        Toast.fail({message: '该身份证下已有犬只',duration: 3000});
+                    }
+                });
             }
         }
     }

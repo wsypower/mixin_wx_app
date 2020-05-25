@@ -50,10 +50,15 @@
             }
         },
         mounted(){
-            this.dogList = JSON.parse(JSON.stringify(this.dogCards));
-            this.dogList.forEach(item => {
-                item.statusName = statusArr[item.dogCarStatus];
-            })
+
+        },
+        watch:{
+            dogCards: function(val){
+                this.dogList = JSON.parse(JSON.stringify(val));
+                this.dogList.forEach(item => {
+                    item.statusName = statusArr[item.dogCarStatus];
+                })
+            }
         },
         methods:{
             gotoDogDetailPage(dogId){

@@ -18,22 +18,6 @@
             <div class="warn-note" v-show="false">（备案犬证后，后续您也可以对犬证进行管理）</div>
             <van-divider v-show="false"></van-divider>
             <div class="upload-img sfz-file" flex="dir:left cross:center main:justify">
-                <!--<div class="upload-item">-->
-                    <!--<div class="has-img" v-if="submitData.idCardFront">-->
-                        <!--<img :src="submitData.idCardFront"/>-->
-                        <!--<div class="close_btn" flex="cross:center main:center" @click="clearImage('idCardFront')">X</div>-->
-                    <!--</div>-->
-                    <!--<div class="file-zm_icon" v-else @click="getImageUrlAndMoreMessage('idCardFront')"></div>-->
-                    <!--<div class="file-zm_text">拍摄身份证人像面</div>-->
-                <!--</div>-->
-                <!--<div class="upload-item">-->
-                    <!--<div class="has-img" v-if="submitData.idCardBack">-->
-                        <!--<img :src="submitData.idCardBack"/>-->
-                        <!--<div class="close_btn" flex="cross:center main:center" @click="clearImage('idCardBack')">X</div>-->
-                    <!--</div>-->
-                    <!--<div class="file-fm_icon" v-else @click="getImageUrlAndMoreMessage('idCardBack')"></div>-->
-                    <!--<div class="file-zm_text">拍摄身份证反面</div>-->
-                <!--</div>-->
                 <photo-for-message textValue="拍摄身份证人像面"
                                    uploadIconType="1"
                                    @getMessage="getResultMessage"
@@ -129,14 +113,6 @@
             <van-field v-model="submitData.address" label="详细地址：" placeholder="请填写详细地址" input-align="right"/>
             <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
-                <!--<div class="upload-item">-->
-                    <!--<div class="has-img" v-if="submitData.businessLicense">-->
-                        <!--<img :src="submitData.businessLicense"/>-->
-                        <!--<div class="close_btn" flex="cross:center main:center" @click="clearImage('businessLicense')">X</div>-->
-                    <!--</div>-->
-                    <!--<div class="file-zm_icon" v-else @click="openMethodPanel('businessLicense')"></div>-->
-                    <!--<div class="file-zm_text">上传单位营业执照</div>-->
-                <!--</div>-->
                 <upload-image textValue="上传单位营业执照" uploadIconType="1" @changeImage="getResultImage" imageType="businessLicense"></upload-image>
             </div>
         </van-form>
@@ -150,9 +126,9 @@
     import MyRadioGroup from '@/components/myRadioGroup.vue';
     import UploadImage from '../components/uploadImage.vue';
     import PhotoForMessage from '../components/photoForMessage.vue';
-    const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
-    import { queryAddressByParentId } from '@/api/common.js';
-    import { sendSms, checkSms, bidDogCard } from '@/api/apply.js'
+    import myMixin from '@/utils/mixin.js';
+    import { queryAddressByParentId, sendSms, checkSms, queryDogByOwnerIdCard } from '@/api/common.js';
+    import { bidDogCard } from '@/api/apply.js'
     export default{
         name: 'stepOneForCompany',
         components:{
@@ -166,24 +142,26 @@
             UploadImage,
             PhotoForMessage
         },
+        mixins: [myMixin],
         data(){
             return {
-                ynArray,
                 //获取验证码的两个参数
                 sendAuthCode:true,/*布尔值，通过v-show控制显示‘按钮’还是‘倒计时’ */
                 auth_time: 0, /*倒计时 计数器*/
                 //是否验证通过
                 isCheckSms: false,
-
+                ///出现区县选择区域
                 showRegionPicker: false,
                 regionColumns:[],
+                //出现街道选择区域
                 showStreetPicker: false,
                 streetColumns: [],
+                //出现社区选择区域
                 showCommunityPicker: false,
                 communityColumns: [],
+                //加载区域数据动效
                 adLoading: false,
                 submitData:{
-
                     userId: null,
                     //单位
                     userType: 1,
@@ -230,6 +208,7 @@
             }
         },
         mounted(){
+            //从缓存中读入素有orderInfo数据，适用于新建与编辑
             const orderInfo = this.$store.getters['order/orderInfo'];
             Object.keys(this.submitData).forEach(key=>{
                 this.submitData[key] = orderInfo[key]
@@ -238,23 +217,28 @@
             this.submitData.currentStep = 1;
             this.submitData.userId = this.$store.getters['userId'];
             this.getAddressData('3306','1');
+            //编辑时，根据已有的区县Id获取街道选项数据
             if(this.submitData.regionId){
-                this.getAddressData(vm.submitData.regionId, '2');
+                this.getAddressData(this.submitData.regionId, '2');
             }
+            //编辑时，根据已有的街道Id获取社区选项数据
             if(this.submitData.streetId){
                 this.getAddressData(this.submitData.streetId, '3');
             }
         },
         watch:{
+            //当手机号码改变时，清理与验证码相关的数据
             'submitData.phone': function(){
                 this.submitData.verificationCode = '';
                 this.isCheckSms = false;
             }
         },
         methods:{
+            //单选实际值
             getRealValue(attrName,value){
                 this.submitData[attrName] = parseInt(value);
             },
+            //身份证正面、反面拍照识别信息后返回获取相应的值
             getResultMessage(data){
                 let type = data.imageType;
                 if(type === 'idCardFront'){
@@ -266,6 +250,7 @@
                     this.submitData.idCardBack = data.data.imageUrl;
                 }
             },
+            //删除照片
             clearImage(data){
                 if(data.imageType === 'idCardBack'){
                     this.submitData.idCardBack = '';
@@ -274,9 +259,11 @@
                     this.submitData.idCardFront = '';
                 }
             },
+            //图片上传
             getResultImage(data){
                 this.submitData[data.imageType] = data.url;
             },
+            //获取手机验证码，60s之后可再次请求
             getAuthCode:function () {
                 this.sendAuthCode = false;
                 if(this.submitData.phone){
@@ -302,6 +289,7 @@
                     Toast('请填写手机号码！');
                 }
             },
+            //检查验证码是否正确
             checkSms(){
                 let params = {
                     userId: this.submitData.userId,
@@ -317,6 +305,7 @@
                     }
                 });
             },
+            //获取区域信息
             getAddressData(parentId, type){
                 let params = {
                     userId: this.submitData.userId,
@@ -351,6 +340,7 @@
                     }
                 );
             },
+            //选中区县后赋值以及获取街道选项信息
             onRegionConfirm(value){
                 console.log(`当前选中值:`,value);
                 if(value.id!==this.submitData.regionId) {
@@ -364,6 +354,7 @@
                 this.submitData.regionId = value.id;
                 this.showRegionPicker = false;
             },
+            //选中街道后赋值以及获取社区选项信息
             onStreetConfirm(value){
                 console.log(`当前选中值：`, value);
                 if(value.id!==this.submitData.streetId){
@@ -375,31 +366,45 @@
                 this.submitData.streetId = value.id;
                 this.showStreetPicker = false;
             },
+            //选中社区后赋值
             onCommunityConfirm(value){
                 console.log(`当前选中值：`,value);
                 this.submitData.community = value.text;
                 this.submitData.communityId = value.id;
                 this.showCommunityPicker = false;
             },
-
+            //第一步数据提交：1、检查身份证是否已有犬只绑定；2、检查验证码是否通过；
             nextStep(){
                 console.log('submitData', this.submitData);
-                if(this.isCheckSms){
-                    bidDogCard(this.submitData).then( res => {
-                        console.log(res, res);
-                        if(res.errno === 0){
-                            this.$store.commit('order/updateOrderInfo', {dogOrderId: res.data.orderId});
-                            this.$store.commit('order/updateOrderInfo', this.submitData);
-                            this.$router.push('/newApply/stepTwo');
-                        }
-                        else{
-                            Toast.fail({message: res.errmsg,duration: 3000});
-                        }
-                    });
+                //身份证判断
+                let params = {
+                    userId: this.submitData.userId,
+                    idCard: this.submitData.idCard
                 }
-                else{
-                    Toast.fail({message: '短信验证未通过'});
-                }
+                queryDogByOwnerIdCard(params).then(res => {
+                    if (res.errno === 0) {
+                        //验证码判断
+                        if (this.isCheckSms) {
+                            bidDogCard(this.submitData).then(res => {
+                                console.log(res, res);
+                                if (res.errno === 0) {
+                                    this.$store.commit('order/updateOrderInfo', {dogOrderId: res.data.orderId});
+                                    this.$store.commit('order/updateOrderInfo', this.submitData);
+                                    this.$router.push('/newApply/stepTwo');
+                                }
+                                else {
+                                    Toast.fail({message: res.errmsg, duration: 3000});
+                                }
+                            });
+                        }
+                        else {
+                            Toast.fail({message: '短信验证未通过'});
+                        }
+                    }
+                    else {
+                        Toast.fail({message: '该身份证下已有犬只', duration: 3000});
+                    }
+                });
             }
         }
     }
@@ -434,56 +439,6 @@
     .upload-img{
         padding: 37px 45px;
         background-color: #ffffff;
-        .upload-item{
-            .file-zm_icon{
-                width: 298px;
-                height: 222px;
-                @include bg-image("~assets/images/file-zm");
-                background-size: 100% 100%;
-            }
-            .file-fm_icon{
-                width: 298px;
-                height: 222px;
-                @include bg-image("~assets/images/jzz-fm");
-                background-size: 100% 100%;
-            }
-            .file-zm_text{
-                margin-top: 24px;
-                font-family: PingFangSC-Regular;
-                font-size: 24px;
-                font-weight: normal;
-                font-stretch: normal;
-                line-height: 23px;
-                letter-spacing: 0px;
-                color: #666666;
-                text-align: center;
-            }
-            .has-img{
-                width: 298px;
-                height: 222px;
-                position: relative;
-                img{
-                    width: 100%;
-                    height: 100%;
-                }
-                .close_btn{
-                    position: absolute;
-                    top: -16px;
-                    right: -16px;
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 40px;
-                    background-color: rgba(0,0,0,0.5);
-                    font-size: 36px;
-                    color: #ffffff;
-                }
-            }
-        }
-    }
-    .sfz-file{
-        .upload-item .file-fm_icon{
-            @include bg-image("~assets/images/sfz-fm");
-        }
     }
     .btn-panel{
         height: 170px;
@@ -491,16 +446,6 @@
         .next-btn{
             width: 702px;
             height: 80px;
-        }
-    }
-    .methods-panel{
-        width: 100%;
-        >div{
-            width: 100%;
-            height: 120px;
-            font-size: 40px;
-            line-height: 120px;
-            text-align: center;
         }
     }
 }
