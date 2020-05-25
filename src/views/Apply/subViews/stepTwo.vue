@@ -243,7 +243,7 @@
                 showImmuneTimePicker: false,
 
                 showSitePicker: false,
-                siteColumns: ['xxx','yyy'],
+                siteColumns: [{text:'xxx',id:'x1'},{text:'yyy',id:'y1'}],
 
                 timeObj:{
                     //出生日期

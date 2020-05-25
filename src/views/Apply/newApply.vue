@@ -50,9 +50,7 @@
                     else{
                         _link = routerArr[vm.preStep];
                     }
-                    vm.$router.replace({
-                        path: _link
-                    });
+
                     let params = {
                         userId : vm.$store.getters['userId'],
                         orderId: to.query.orderId
@@ -63,6 +61,9 @@
                         if(res.errno===0){
                             console.log('zt');
                             vm.$store.commit('order/updateOrderInfo', res.data);
+                            vm.$router.replace({
+                                path: _link
+                            });
                         }
                         else{
                             Toast('数据获取失败');
