@@ -83,22 +83,8 @@
             </van-popup>
             <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
-                <div class="upload-item" >
-                    <div class="has-img" v-if="submitData.dogPhotoFront">
-                        <img :src="submitData.dogPhotoFront"/>
-                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('dogPhotoFront')">X</div>
-                    </div>
-                    <div class="file-zm_icon" v-else @click="openMethodPanel('dogPhotoFront')"></div>
-                    <div class="file-zm_text">上传宠物正面照</div>
-                </div>
-                <div class="upload-item">
-                    <div class="has-img" v-if="submitData.dogPhotoBack">
-                        <img :src="submitData.dogPhotoBack"/>
-                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('dogPhotoBack')">X</div>
-                    </div>
-                    <div class="file-zm_icon" v-else @click="openMethodPanel('dogPhotoBack')"></div>
-                    <div class="file-zm_text">上传宠物侧面照</div>
-                </div>
+                <upload-image textValue="上传宠物正面照" uploadIconType="1" @changeImage="getResultImage" imageType="dogPhotoFront"></upload-image>
+                <upload-image textValue="上传宠物侧面照" uploadIconType="1" @changeImage="getResultImage" imageType="dogPhotoBack"></upload-image>
             </div>
             <van-divider></van-divider>
         </van-form>
@@ -149,22 +135,8 @@
             </van-popup>
             <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
-                <div class="upload-item">
-                    <div class="has-img" v-if="submitData.immunePhotos">
-                        <img :src="submitData.immunePhotos"/>
-                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('immunePhotos')">X</div>
-                    </div>
-                    <div class="file-zm_icon" v-else @click="openMethodPanel('immunePhotos')"></div>
-                    <div class="file-zm_text">添加免疫证首页</div>
-                </div>
-                <div class="upload-item">
-                    <div class="has-img" v-if="submitData.immuneRecord">
-                        <img :src="submitData.immuneRecord"/>
-                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('immuneRecord')">X</div>
-                    </div>
-                    <div class="file-fm_icon" v-else @click="openMethodPanel('immuneRecord')"></div>
-                    <div class="file-zm_text">添加宠物免疫记录</div>
-                </div>
+                <upload-image textValue="添加免疫证首页" uploadIconType="1" @changeImage="getResultImage" imageType="immunePhotos"></upload-image>
+                <upload-image textValue="添加宠物免疫记录" uploadIconType="3" @changeImage="getResultImage" imageType="immuneRecord"></upload-image>
             </div>
         </van-form>
         <div class="step-module-header" flex="dir:left cross:center">
@@ -193,18 +165,12 @@
             <van-button type="info" class="btn pre-btn" @click="preStep">上一步</van-button>
             <van-button type="info" class="btn next-btn" @click="nextStep">下一步</van-button>
         </div>
-        <van-popup v-model="showMethodsPanel" position="bottom">
-            <div class="methods-panel" flex="dir:top cross:center">
-                <div @click="getImage('pz')">拍照</div>
-                <div @click="getImage('photo')">选择图片</div>
-            </div>
-        </van-popup>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import { Divider, Form, Field, Button, Popup, Picker, DatetimePicker, Toast } from 'vant';
     import MyRadioGroup from '@/components/myRadioGroup.vue';
-    import externalMethods from '@/utils/externalMethods/index.js'
+    import UploadImage from '../components/uploadImage.vue';
     import { queryImmuneSite } from '@/api/common.js'
     import { queryDogServicePoint } from '@/api/home.js'
     const sexArray = [{labelName: '公',value: '1'},{labelName: '母',value: '0'}];
@@ -222,14 +188,13 @@
             [Picker.name]: Picker,
             [Popup.name]: Popup,
             [DatetimePicker.name]: DatetimePicker,
-            MyRadioGroup
+            MyRadioGroup,
+            UploadImage
         },
         data(){
             return {
                 sexArray,
                 jyArray,
-                imageType: '',
-                showMethodsPanel: false,
 
                 showBirthdatePicker: false,
                 showAdoptTimePicker: false,
@@ -385,22 +350,10 @@
             getRealValue(attrName,value){
                 this.submitData[attrName] = parseInt(value);
             },
-            openMethodPanel(imageType){
-                this.imageType = imageType;
-                this.showMethodsPanel = true;
+            getResultImage(data){
+                this.submitData[data.imageType] = data.url;
             },
-            getImage(method){
-                this.showMethodsPanel = false;
-                externalMethods.getImageUrl(method).then((res)=>{
-                    console.log('000000000000000000000',res);
-                    this.submitData[this.imageType] = res.pics[0].path;
-                }).catch((err)=>{
-                    Toast(err);
-                })
-            },
-            clearImage(imageType){
-                this.submitData[imageType] = '';
-            },
+
             preStep(){
                 //如果在history里面有，则使用缓存数据，没有则去获取数据
                 if(this.submitData.userType===0){
@@ -451,51 +404,6 @@
         .upload-img{
             padding: 37px 45px;
             background-color: #ffffff;
-            .upload-item{
-                .file-zm_icon{
-                    width: 298px;
-                    height: 222px;
-                    @include bg-image("~assets/images/file-zm");
-                    background-size: 100% 100%;
-                }
-                .file-fm_icon{
-                    width: 298px;
-                    height: 222px;
-                    @include bg-image("~assets/images/myjl");
-                    background-size: 100% 100%;
-                }
-                .file-zm_text{
-                    margin-top: 24px;
-                    font-family: PingFangSC-Regular;
-                    font-size: 24px;
-                    font-weight: normal;
-                    font-stretch: normal;
-                    line-height: 23px;
-                    letter-spacing: 0px;
-                    color: #666666;
-                    text-align: center;
-                }
-                .has-img{
-                    width: 298px;
-                    height: 222px;
-                    position: relative;
-                    img{
-                        width: 100%;
-                        height: 100%;
-                    }
-                    .close_btn{
-                        position: absolute;
-                        top: -16px;
-                        right: -16px;
-                        width: 40px;
-                        height: 40px;
-                        border-radius: 40px;
-                        background-color: rgba(0,0,0,0.5);
-                        font-size: 36px;
-                        color: #ffffff;
-                    }
-                }
-            }
         }
         .btn-panel{
             height: 170px;
@@ -507,16 +415,6 @@
             }
             .pre-btn{
                 background-color: #6392f4;
-            }
-        }
-        .methods-panel{
-            width: 100%;
-            >div{
-                width: 100%;
-                height: 120px;
-                font-size: 40px;
-                line-height: 120px;
-                text-align: center;
             }
         }
     }

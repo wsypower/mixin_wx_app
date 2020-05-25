@@ -10,7 +10,7 @@
                 </template>
             </van-field>
             <van-divider></van-divider>
-            <van-field name="radio" label="是否备案犬证：" class="label-width-200" v-show="submitData.isOwner===0">
+            <van-field name="radio" label="是否备案犬证：" class="label-width-200"  v-show="false">
                 <template #input>
                     <my-radio-group :initValue="submitData.isRecord.toString()" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isRecord', name)}"></my-radio-group>
                 </template>

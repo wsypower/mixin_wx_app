@@ -12,32 +12,11 @@
             <div class="warn-note">（若未盖章，请在“添加其他材料项”中，上传“房产证/租房合同/居住证（三者任选一项）”信息。）</div>
             <van-divider class="large-line"></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
-                <div class="upload-item">
-                    <div class="has-img" v-if="submitData.informationPic">
-                        <img :src="submitData.informationPic"/>
-                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('informationPic')">X</div>
-                    </div>
-                    <div class="file-zm_icon" v-else @click="openMethodPanel('informationPic')"></div>
-                    <div class="file-zm_text">添加信息登记表</div>
-                </div>
-                <div class="upload-item">
-                    <div class="has-img" v-if="submitData.commitmentPic">
-                        <img :src="submitData.commitmentPic"/>
-                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('commitmentPic')">X</div>
-                    </div>
-                    <div class="file-zm_icon" v-else @click="openMethodPanel('commitmentPic')"></div>
-                    <div class="file-zm_text">添加养犬承诺书</div>
-                </div>
+                <upload-image textValue="添加信息登记表" uploadIconType="1" @changeImage="getResultImage" imageType="informationPic"></upload-image>
+                <upload-image textValue="添加养犬承诺书" uploadIconType="1" @changeImage="getResultImage" imageType="commitmentPic"></upload-image>
             </div>
             <div class="upload-img" flex="dir:left cross:center main:justify">
-                <div class="upload-item">
-                    <div class="has-img" v-if="submitData.otherFilePic">
-                        <img :src="submitData.otherFilePic"/>
-                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('otherFilePic')">X</div>
-                    </div>
-                    <div class="file-zm_icon" v-else @click="openMethodPanel('otherFilePic')"></div>
-                    <div class="file-zm_text">添加其他材料</div>
-                </div>
+                <upload-image textValue="添加其他材料" uploadIconType="1" @changeImage="getResultImage" imageType="otherFilePic"></upload-image>
             </div>
             <van-divider></van-divider>
             <div class="form-item-label">备注：</div>
@@ -62,18 +41,12 @@
                 <div class="dialog-footer"><van-button type="info" size="mini" @click="toHome">确定</van-button></div>
             </div>
         </van-popup>
-        <van-popup v-model="showMethodsPanel" position="bottom">
-            <div class="methods-panel" flex="dir:top cross:center">
-                <div @click="getImage('pz')">拍照</div>
-                <div @click="getImage('photo')">选择图片</div>
-            </div>
-        </van-popup>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import { Divider, Form, Field, Button, Popup, Picker, Toast } from 'vant';
     import MyRadioGroup from '@/components/myRadioGroup.vue';
-    import externalMethods from '@/utils/externalMethods/index.js'
+    import UploadImage from '../components/uploadImage.vue';
     const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
     import { bidDogCard } from '@/api/apply.js'
     export default{
@@ -85,13 +58,12 @@
             [Button.name]: Button,
             [Picker.name]: Picker,
             [Popup.name]: Popup,
-            MyRadioGroup
+            MyRadioGroup,
+            UploadImage
         },
         data(){
             return {
                 ynArray,
-                imageType: '',
-                showMethodsPanel: false,
                 showDialog: false,
                 submitData:{
                     userId: '',
@@ -127,21 +99,8 @@
             getRealValue(attrName,value){
                 this.submitData[attrName] = parseInt(value);
             },
-            openMethodPanel(imageType){
-                this.imageType = imageType;
-                this.showMethodsPanel = true;
-            },
-            getImage(method){
-                this.showMethodsPanel = false;
-                externalMethods.getImageUrl(method).then((res)=>{
-                    console.log('000000000000000000000',res);
-                    this.submitData[this.imageType] = res.pics[0].path;
-                }).catch((err)=>{
-                    Toast(err);
-                })
-            },
-            clearImage(imageType){
-                this.submitData[imageType] = '';
+            getResultImage(data){
+                this.submitData[data.imageType] = data.url;
             },
             preStep(){
                 //如果在history里面有，则使用缓存数据，没有则去获取数据
@@ -195,45 +154,6 @@
         .upload-img{
             padding: 37px 45px;
             background-color: #ffffff;
-            .upload-item{
-                .file-zm_icon{
-                    width: 298px;
-                    height: 222px;
-                    @include bg-image("~assets/images/file-zm");
-                    background-size: 100% 100%;
-                }
-                .file-zm_text{
-                    margin-top: 24px;
-                    font-family: PingFangSC-Regular;
-                    font-size: 24px;
-                    font-weight: normal;
-                    font-stretch: normal;
-                    line-height: 23px;
-                    letter-spacing: 0px;
-                    color: #666666;
-                    text-align: center;
-                }
-                .has-img{
-                    width: 298px;
-                    height: 222px;
-                    position: relative;
-                    img{
-                        width: 100%;
-                        height: 100%;
-                    }
-                    .close_btn{
-                        position: absolute;
-                        top: -16px;
-                        right: -16px;
-                        width: 40px;
-                        height: 40px;
-                        border-radius: 40px;
-                        background-color: rgba(0,0,0,0.5);
-                        font-size: 36px;
-                        color: #ffffff;
-                    }
-                }
-            }
         }
         .form-item-label{
             background-color: #ffffff;
@@ -256,16 +176,6 @@
             }
             .pre-btn{
                 background-color: #6392f4;
-            }
-        }
-        .methods-panel{
-            width: 100%;
-            >div{
-                width: 100%;
-                height: 120px;
-                font-size: 40px;
-                line-height: 120px;
-                text-align: center;
             }
         }
         .dialog-warp{

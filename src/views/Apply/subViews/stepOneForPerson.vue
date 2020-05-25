@@ -10,7 +10,7 @@
                 </template>
             </van-field>
             <van-divider></van-divider>
-            <van-field name="radio" label="是否备案犬证：" class="label-width-200" v-show="submitData.isOwner===0">
+            <van-field name="radio" label="是否备案犬证：" class="label-width-200" v-show="false">
                 <template #input>
                     <my-radio-group :initValue="submitData.isRecord.toString()" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isRecord', name)}"></my-radio-group>
                 </template>
@@ -25,22 +25,16 @@
             <van-divider class="mini-line"></van-divider>
             <template v-if="submitData.idType === 1">
                 <div class="upload-img sfz-file" flex="dir:left cross:center main:justify">
-                    <div class="upload-item">
-                        <div class="has-img" v-if="submitData.idCardFront">
-                            <img :src="submitData.idCardFront"/>
-                            <div class="close_btn" flex="cross:center main:center" @click="clearImage('idCardFront')">X</div>
-                        </div>
-                        <div class="file-zm_icon" v-else @click="getImageUrlAndMoreMessage('idCardFront')"></div>
-                        <div class="file-zm_text">拍摄身份证人像面</div>
-                    </div>
-                    <div class="upload-item">
-                        <div class="has-img" v-if="submitData.idCardBack">
-                            <img :src="submitData.idCardBack"/>
-                            <div class="close_btn" flex="cross:center main:center" @click="clearImage('idCardBack')">X</div>
-                        </div>
-                        <div class="file-fm_icon" v-else @click="getImageUrlAndMoreMessage('idCardBack')"></div>
-                        <div class="file-zm_text">拍摄身份证反面</div>
-                    </div>
+                    <photo-for-message textValue="拍摄身份证人像面"
+                                       uploadIconType="1"
+                                       @getMessage="getResultMessage"
+                                       imageType="idCardFront"
+                                       @clearImage="clearImage"></photo-for-message>
+                    <photo-for-message textValue="拍摄身份证反面"
+                                       uploadIconType="2"
+                                       @getMessage="getResultMessage"
+                                       imageType="idCardBack"
+                                       @clearImage="clearImage"></photo-for-message>
                 </div>
                 <van-divider></van-divider>
                 <van-field v-model="submitData.ownerName" label="犬主姓名：" placeholder="请输入" input-align="right"/>
@@ -49,28 +43,22 @@
             </template>
             <template v-if="submitData.idType === 2">
                 <div class="upload-img" flex="dir:left cross:center main:justify">
-                    <div class="upload-item">
-                        <div class="has-img" v-if="submitData.idCardFront">
-                            <img :src="submitData.idCardFront"/>
-                            <div class="close_btn" flex="cross:center main:center" @click="clearImage('idCardFront')">X</div>
-                        </div>
-                        <div class="file-zm_icon" v-else @click="getImageUrlAndMoreMessage('driverLicense')"></div>
-                        <div class="file-zm_text">拍摄证件照片像面</div>
-                    </div>
+                    <photo-for-message textValue="拍摄证件照片像面"
+                                       uploadIconType="1"
+                                       @getMessage="getResultMessage"
+                                       imageType="driverLicense"
+                                       @clearImage="clearImage"></photo-for-message>
                 </div>
                 <van-divider></van-divider>
                 <van-field v-model="submitData.ownerName" label="犬主姓名：" placeholder="请输入" input-align="right"/>
             </template>
             <template v-if="submitData.idType === 3">
                 <div class="upload-img" flex="dir:left cross:center main:justify">
-                    <div class="upload-item">
-                        <div class="has-img" v-if="submitData.idCardFront">
-                            <img :src="submitData.idCardFront"/>
-                            <div class="close_btn" flex="cross:center main:center" @click="clearImage('idCardFront')">X</div>
-                        </div>
-                        <div class="file-zm_icon" v-else @click="getImageUrlAndMoreMessage('passport')"></div>
-                        <div class="file-zm_text">拍摄证件照片像面</div>
-                    </div>
+                    <photo-for-message textValue="拍摄证件照片像面"
+                                       uploadIconType="1"
+                                       @getMessage="getResultMessage"
+                                       imageType="passport"
+                                       @clearImage="clearImage"></photo-for-message>
                 </div>
                 <van-divider></van-divider>
                 <van-field v-model="submitData.firstName" label="First name：" placeholder="请输入内容" input-align="right"/>
@@ -167,42 +155,23 @@
             <van-field v-model="submitData.address" label="详细地址：" placeholder="请填写详细地址" input-align="right"/>
             <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
-                <div class="upload-item" >
-                    <div class="has-img" v-if="submitData.residencyProofFront">
-                        <img :src="submitData.residencyProofFront"/>
-                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('residencyProofFront')">X</div>
-                    </div>
-                    <div class="file-zm_icon" v-else @click="openMethodPanel('residencyProofFront')"></div>
-                    <div class="file-zm_text">上传居住证明</div>
-                </div>
-                <div class="upload-item">
-                    <div class="has-img" v-if="submitData.residencyProofBack">
-                        <img :src="submitData.residencyProofBack"/>
-                        <div class="close_btn" flex="cross:center main:center" @click="clearImage('residencyProofBack')">X</div>
-                    </div>
-                    <div class="file-fm_icon" v-else @click="openMethodPanel('residencyProofBack')"></div>
-                    <div class="file-zm_text">上传居住证明</div>
-                </div>
+                <upload-image textValue="上传居住证明" uploadIconType="1" @changeImage="getResultImage" imageType="residencyProofFront"></upload-image>
+                <upload-image textValue="上传居住证明" uploadIconType="2" @changeImage="getResultImage" imageType="residencyProofBack"></upload-image>
             </div>
         </van-form>
         <div class="btn-panel" flex="dir:top cross:center main:center">
             <van-button type="info" class="next-btn" @click="nextStep">下一步</van-button>
         </div>
-        <van-popup v-model="showMethodsPanel" position="bottom">
-            <div class="methods-panel" flex="dir:top cross:center">
-                <div @click="getImage('pz')">拍照</div>
-                <div @click="getImage('photo')">选择图片</div>
-            </div>
-        </van-popup>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import { Divider, Form, Field, Button, Popup, Picker, Toast } from 'vant';
     import MyRadioGroup from '@/components/myRadioGroup.vue';
+    import UploadImage from '../components/uploadImage.vue';
+    import PhotoForMessage from '../components/photoForMessage.vue';
     const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
     const fileTypeArray = [{labelName: '身份证',value: '1'},{labelName: '驾驶证',value: '2'},{labelName: '护照',value: '3'}];
     const sexArray = [{labelName: '男',value: '1'},{labelName: '女',value: '0'}];
-    import externalMethods from '@/utils/externalMethods/index.js'
     import { queryAddressByParentId } from '@/api/common.js';
     import { sendSms, checkSms, bidDogCard } from '@/api/apply.js'
     export default{
@@ -215,15 +184,15 @@
             [Picker.name]: Picker,
             [Popup.name]: Popup,
             [Toast.name]: Toast,
-            MyRadioGroup
+            MyRadioGroup,
+            PhotoForMessage,
+            UploadImage
         },
         data(){
             return {
                 ynArray,
                 fileTypeArray,
                 sexArray,
-                imageType: '',
-                showMethodsPanel: false,
                 //获取验证码的两个参数
                 sendAuthCode:true,/*布尔值，通过v-show控制显示‘按钮’还是‘倒计时’ */
                 auth_time: 0, /*倒计时 计数器*/
@@ -330,46 +299,39 @@
             getRealValue(attrName,value){
                 this.submitData[attrName] = parseInt(value);
             },
-            getImageUrlAndMoreMessage(type){
-                externalMethods.getImageUrlAndMoreMessage(type).then(res => {
-                    console.log('9999999999999', res);
-                    if(type === 'idCardFront'){
-                        this.submitData.ownerName = res.name;
-                        this.submitData.idCard = res.idCardNumber;
-                        this.submitData.idCardFront= res.imageUrl;
-                    }
-                    else if(type === 'idCardBack'){
-                        this.submitData.idCardBack= res.imageUrl;
-                    }
-                    else if(type === 'driverLicense'){
-                        this.submitData.ownerName = res.name;
-                        this.submitData.idCardFront= res.imageUrl;
-                    }
-                    else{
-                        this.submitData.idCardFront= res.imageUrl;
-                        this.submitData.firstName = res.firstName;
-                        this.submitData.lastName = res.lastName;
-                        this.submitData.country = res.country;
-                        this.submitData.passport = res.passportNumber;
-                        this.submitData.sex = res.sex;
-                    }
-                })
+            getResultMessage(data){
+                let type = data.imageType;
+                if(type === 'idCardFront'){
+                    this.submitData.ownerName = data.data.name;
+                    this.submitData.idCard = data.data.idCardNumber;
+                    this.submitData.idCardFront = data.data.imageUrl;
+                }
+                else if(type === 'idCardBack'){
+                    this.submitData.idCardBack = data.data.imageUrl;
+                }
+                else if(type === 'driverLicense'){
+                    this.submitData.ownerName = data.data.name;
+                    this.submitData.idCardFront = data.data.imageUrl;
+                }
+                else{
+                    this.submitData.idCardFront = data.data.imageUrl;
+                    this.submitData.firstName = data.data.firstName;
+                    this.submitData.lastName = data.data.lastName;
+                    this.submitData.country = data.data.country;
+                    this.submitData.passport = data.data.passportNumber;
+                    this.submitData.sex = data.data.sex;
+                }
             },
-            openMethodPanel(imageType){
-                this.imageType = imageType;
-                this.showMethodsPanel = true;
+            clearImage(data){
+                if(data.imageType === 'idCardBack'){
+                    this.submitData.idCardBack = '';
+                }
+                else{
+                    this.submitData.idCardFront = '';
+                }
             },
-            getImage(method){
-              this.showMethodsPanel = false;
-              externalMethods.getImageUrl(method).then((res)=>{
-                    console.log('000000000000000000000',res);
-                  this.submitData[this.imageType] = res.pics[0].path;
-                }).catch((err)=>{
-                    Toast(err);
-              })
-            },
-            clearImage(imageType){
-                this.submitData[imageType] = '';
+            getResultImage(data){
+                this.submitData[data.imageType] = data.url;
             },
             getAuthCode:function () {
                 this.sendAuthCode = false;
@@ -529,51 +491,6 @@
     .upload-img{
         padding: 37px 45px;
         background-color: #ffffff;
-        .upload-item{
-            .file-zm_icon{
-                width: 298px;
-                height: 222px;
-                @include bg-image("~assets/images/file-zm");
-                background-size: 100% 100%;
-            }
-            .file-fm_icon{
-                width: 298px;
-                height: 222px;
-                @include bg-image("~assets/images/jzz-fm");
-                background-size: 100% 100%;
-            }
-            .file-zm_text{
-                margin-top: 24px;
-                font-family: PingFangSC-Regular;
-                font-size: 24px;
-                font-weight: normal;
-                font-stretch: normal;
-                line-height: 23px;
-                letter-spacing: 0px;
-                color: #666666;
-                text-align: center;
-            }
-            .has-img{
-                width: 298px;
-                height: 222px;
-                position: relative;
-                img{
-                    width: 100%;
-                    height: 100%;
-                }
-                .close_btn{
-                    position: absolute;
-                    top: -16px;
-                    right: -16px;
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 40px;
-                    background-color: rgba(0,0,0,0.5);
-                    font-size: 36px;
-                    color: #ffffff;
-                }
-            }
-        }
     }
     .sfz-file{
         .upload-item .file-fm_icon{
@@ -586,16 +503,6 @@
         .next-btn{
             width: 702px;
             height: 80px;
-        }
-    }
-    .methods-panel{
-        width: 100%;
-        >div{
-            width: 100%;
-            height: 120px;
-            font-size: 40px;
-            line-height: 120px;
-            text-align: center;
         }
     }
 }
