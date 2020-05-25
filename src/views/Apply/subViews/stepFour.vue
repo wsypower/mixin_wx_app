@@ -47,8 +47,8 @@
     import { Divider, Form, Field, Button, Popup, Picker, Toast } from 'vant';
     import MyRadioGroup from '@/components/myRadioGroup.vue';
     import UploadImage from '../components/uploadImage.vue';
-    const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
     import { bidDogCard } from '@/api/apply.js'
+    import myMixin from '@/utils/mixin.js'
     export default{
         name: 'stepFour',
         components:{
@@ -61,9 +61,10 @@
             MyRadioGroup,
             UploadImage
         },
+        mixins: [myMixin],
         data(){
             return {
-                ynArray,
+                //提交成功后的弹窗显示
                 showDialog: false,
                 submitData:{
                     userId: '',
@@ -87,25 +88,30 @@
             }
         },
         mounted(){
+            //从缓存中读入素有orderInfo数据，适用于新建与编辑
             const orderInfo = this.$store.getters['order/orderInfo'];
             Object.keys(this.submitData).forEach(key=>{
                 this.submitData[key] = orderInfo[key]
             })
+            //在缓存中的currentStep是当时提交之后的下一步，故需要在这里重新指向当前步
             this.submitData.currentStep = 4;
             this.submitData.userId = this.$store.getters['userId'];
             this.submitData.isStamp = this.submitData.isStamp ? this.submitData.isStamp : 1;
         },
         methods:{
+            //单选框实际值
             getRealValue(attrName,value){
                 this.submitData[attrName] = parseInt(value);
             },
+            //图片上传
             getResultImage(data){
                 this.submitData[data.imageType] = data.url;
             },
+            //上一步
             preStep(){
-                //如果在history里面有，则使用缓存数据，没有则去获取数据
                 this.$router.push('/newApply/stepThree');
             },
+            //最终提交
             submit(){
                 console.log('submitData', this.submitData);
                 bidDogCard(this.submitData).then( res => {

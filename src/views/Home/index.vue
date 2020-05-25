@@ -64,16 +64,19 @@
             async getData(){
                 const userId = await this.getUserId();
                 console.log(111111111, userId);
+                //获取已有的犬证
                 queryDogCard({userId: userId}).then( res => {
                     this.dogCards = res.data;
                 });
+                //获取范围内的服务点
                 let originLon = this.$store.getters['originLon'];
                 let originLat = this.$store.getters['originLat'];
+                let areaCode = this.$store.getters['areaCode'];
                 let params = {
                     userId,
                     originLon,
                     originLat,
-                    areaCode: '3306'
+                    areaCode
                 }
                 queryDogServicePoint(params).then( res => {
                     console.log('queryDogServicePoint',res.data);

@@ -8,7 +8,7 @@
             <van-divider></van-divider>
             <van-field name="radio" label="宠物性别：" input-align="right">
                 <template #input>
-                    <my-radio-group :initValue="submitData.dogSex.toString()" :radioGroup="sexArray" @getRealValue="(name)=>{getRealValue('dogSex', name)}" style="width:unset"></my-radio-group>
+                    <my-radio-group :initValue="submitData.dogSex.toString()" :radioGroup="animalSexArray" @getRealValue="(name)=>{getRealValue('dogSex', name)}" style="width:unset"></my-radio-group>
                 </template>
             </van-field>
             <van-divider></van-divider>
@@ -171,13 +171,12 @@
     import { Divider, Form, Field, Button, Popup, Picker, DatetimePicker, Toast } from 'vant';
     import MyRadioGroup from '@/components/myRadioGroup.vue';
     import UploadImage from '../components/uploadImage.vue';
+    import { formatDate } from '@/utils/index';
     import { queryImmuneSite } from '@/api/common.js'
     import { queryDogServicePoint } from '@/api/home.js'
-    const sexArray = [{labelName: '公',value: '1'},{labelName: '母',value: '0'}];
-    const jyArray = [{labelName: '已绝育',value: '1'},{labelName: '未绝育',value: '0'}];
-    const purposeColumns = ['观赏犬','导盲犬','看守犬'];
-    import { formatDate } from '@/utils/index';
     import { bidDogCard } from '@/api/apply.js'
+    import myMixin from '@/utils/mixin.js'
+    const purposeColumns = ['观赏犬','导盲犬','看守犬'];
     export default{
         name: 'stepTwo',
         components:{
@@ -191,25 +190,23 @@
             MyRadioGroup,
             UploadImage
         },
+        mixins: [myMixin],
         data(){
             return {
-                sexArray,
-                jyArray,
-
+                //展示时间选择（出生日期、领养日期、免疫登记日期）
                 showBirthdatePicker: false,
                 showAdoptTimePicker: false,
-
+                showImmuneTimePicker: false,
+                //展示犬用途弹窗
                 showPurposePicker: false,
                 purposeColumns,
-
+                //免疫地点选择
                 showImmuneAddressPicker: false,
-                immuneAddressColumns: ['xxx','yyy'],
-
-                showImmuneTimePicker: false,
-
+                immuneAddressColumns: [],
+                //意向办证点选择
                 showSitePicker: false,
-                siteColumns: [{text:'xxx',id:'x1'},{text:'yyy',id:'y1'}],
-
+                siteColumns: [],
+                //前端显示与后端需要的数据存在格式上的不同，故此字段用于前端显示
                 timeObj:{
                     //出生日期
                     birthdate: '',
@@ -270,15 +267,18 @@
             let userId = this.$store.getters['userId'];
             let originLon = this.$store.getters['originLon'];
             let originLat = this.$store.getters['originLat'];
+            let areaCode = this.$store.getters['areaCode'];
             let params = {
                 userId,
                 originLon,
                 originLat,
-                areaCode: '3306'
+                areaCode
             }
+            //获取免疫点数据
             queryImmuneSite(params).then( res => {
                 this.immuneAddressColumns = res.data;
-            })
+            });
+            //获取意向点数据
             queryDogServicePoint(params).then( res => {
                 this.siteColumns = res.data.reduce((acc, item) => {
                     let temp = {
@@ -293,77 +293,93 @@
         beforeRouteEnter(to,from,next) {
             console.log('beforeRouteEnter', to, from);
             next(vm=>{
+                //从缓存中读入素有orderInfo数据，适用于新建与编辑
                 const orderInfo = vm.$store.getters['order/orderInfo'];
                 Object.keys(vm.submitData).forEach(key=>{
                     vm.submitData[key] = orderInfo[key]
                 })
                 vm.submitData.userId = vm.$store.getters['userId'];
+                //在缓存中的currentStep是当时提交之后的下一步，故需要在这里重新指向当前步
                 vm.submitData.currentStep = 2;
                 console.log('currentStep 2:', vm.submitData)
+                //有出生日期时，进行格式转化，用于前端显示
                 if( vm.submitData.birthdate){
                     vm.timeObj.birthdate = formatDate(new Date(vm.submitData.birthdate), 'yyyy-MM-dd');
                 }
+                //有领养日期时，进行格式转化，用于前端显示
                 if( vm.submitData.adoptTime){
                     vm.timeObj.adoptTime = formatDate(new Date(vm.submitData.adoptTime), 'yyyy-MM-dd');
                 }
+                //有免疫登记日期时，进行格式转化，用于前端显示
                 if( vm.submitData.immuneTime){
                     vm.timeObj.immuneTime = formatDate(new Date(vm.submitData.immuneTime), 'yyyy-MM-dd');
                 }
+                //获取犬用途，用于前端显示
                 vm.submitData.purposeName = purposeColumns[vm.submitData.purpose];
+                //设置性别默认值
                 vm.submitData.dogSex = vm.submitData.dogSex ? vm.submitData.dogSex : 1;
+                //设置是否绝育默认值
                 vm.submitData.isSterilization = vm.submitData.isSterilization ? vm.submitData.isSterilization : 1;
             })
         },
         methods:{
+            //获取出生日期
             onBirthdateConfirm(value){
                 console.log(`当前选中值：`,value);
                 this.timeObj.birthdate  = formatDate(value, 'yyyy-MM-dd');
                 this.submitData.birthdate = value.getTime();
                 this.showBirthdatePicker = false;
             },
+            //获取领养日期
             onAdoptTimeConfirm(value){
                 console.log(`当前选中值：`, value);
                 this.timeObj.adoptTime = formatDate(value, 'yyyy-MM-dd');
                 this.submitData.adoptTime = value.getTime();
                 this.showAdoptTimePicker = false;
             },
+            //获取犬用途
             onPurposeConfirm(value){
                 console.log(`当前选中值：`, value);
                 this.submitData.purposeName = value;
                 this.submitData.purpose = purposeColumns.findIndex(e => e === value);
                 this.showPurposePicker = false;
             },
+            //获取免疫地点
             onImmuneAddressConfirm(value){
                 this.submitData.immuneAddress = value;
                 this.showImmuneAddressPicker = false;
             },
+            //获取免疫登记日期
             onImmuneTimeConfirm(value){
                 this.timeObj.immuneTime = formatDate(value, 'yyyy-MM-dd');
                 this.submitData.immuneTime = value.getTime();
                 this.showImmuneTimePicker = false;
             },
+            //获取办证意向地点
             onSiteConfirm(value){
                 this.submitData.intentionRegistrationSite = value.text;
                 this.submitData.serviceCode = value.id;
                 this.showSitePicker = false;
             },
+            //单选框实际值
             getRealValue(attrName,value){
                 this.submitData[attrName] = parseInt(value);
             },
+            //图片上传
             getResultImage(data){
                 this.submitData[data.imageType] = data.url;
             },
-
+            //上一步
             preStep(){
-                //如果在history里面有，则使用缓存数据，没有则去获取数据
+                //如果是个人，则跳转到个人的第一步，否则进入单位的第一步
                 if(this.submitData.userType===0){
                     this.$router.push('/newApply/stepOneForPerson');
                 }
                 else{
                     this.$router.push('/newApply/stepOneForCompany');
                 }
-
             },
+            //提交进入下一步
             nextStep(){
                 console.log('submitData', this.submitData);
                 this.$store.commit('updateIsLoading', true);
@@ -371,6 +387,7 @@
                     this.$store.commit('updateIsLoading', false);
                     console.log(res, res);
                     if(res.errno === 0){
+                        //pdf地址是提交成功之后生成的，所以需要额外引入
                         let sData = Object.assign({},this.submitData, { picPath: res.data.picPath});
                         this.$store.commit('order/updateOrderInfo', sData);
                         this.$router.push('/newApply/stepThree');

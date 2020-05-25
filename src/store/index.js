@@ -29,6 +29,7 @@ export default new Vuex.Store({
       userId: 'xxx', // 养犬管理的用户UserId
       originLon: '120.57', // 经度
       originLat: '30.00', // 纬度
+      areaCode: '3306' //区域Code
   },
   getters: {
       isWX: state => {
@@ -45,6 +46,9 @@ export default new Vuex.Store({
       },
       isLoading: state =>{
           return state.isLoading
+      },
+      areaCode: state =>{
+          return state.areaCode
       }
   },
   mutations: {
@@ -71,6 +75,10 @@ export default new Vuex.Store({
       // 设置纬度
       updateOriginLat(state, originLat) {
           state.originLat = originLat;
+      },
+      // 设置区域Code
+      updateAreaCode(state, areaCode) {
+          state.areaCode = areaCode;
       },
   },
   actions: {},

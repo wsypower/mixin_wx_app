@@ -30,8 +30,7 @@
     import HistoryApplyList from './components/historyApplyList.vue'
     import MyRadioGroup from '@/components/myRadioGroup.vue';
     import orderInitInfo from '@/utils/orderInit.js'
-    const typeArray = [{labelName: '个人',value:'0'},{labelName: '单位',value:'1'}];
-    const methodArray = [{labelName: '新办',value:'0'},{labelName: '续办',value:'1'}];
+    import myMixin from '@/utils/mixin.js'
     export default {
         name: 'apply',
         components: {
@@ -43,16 +42,16 @@
             HistoryApplyList,
             MyRadioGroup
         },
+        mixins: [myMixin],
         data(){
             return {
-                typeArray,
-                methodArray,
                 userType: '0',
                 cardType : '0'
             }
         },
         mounted(){},
         methods: {
+            //单选实际值
             getRealValue(attrName, value){
                 this[attrName] = value;
             },

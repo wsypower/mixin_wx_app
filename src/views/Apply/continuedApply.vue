@@ -101,9 +101,12 @@
         },
         data(){
             return {
+                //展示免疫地点选项
                 showImmuneAddressPicker: false,
-                immuneAddressColumns: ['xxx','yyy'],
+                immuneAddressColumns: [],
+                //免疫登记日期，用于前端显示
                 immuneTime: '',
+                //显示免疫登记日期选择
                 showImmuneTimePicker: false,
                 submitData:{
                     userId: '',
@@ -128,44 +131,52 @@
                     // 备注
                     remark: ''
                 },
+                //提交成功后的提示
                 showDialog: false
             }
         },
         mounted(){
             this.submitData.userId = this.$store.getters['userId'];
-
             let originLon = this.$store.getters['originLon'];
             let originLat = this.$store.getters['originLat'];
+            let areaCode = this.$store.getters['areaCode'];
             let params = {
                 userId: this.submitData.userId,
                 originLon,
                 originLat,
-                areaCode: '3306'
+                areaCode
             }
+            //获取免疫登记地点选项数据
             queryImmuneSite(params).then( res => {
                 this.immuneAddressColumns = res.data;
-            })
+            });
+            //从缓存中读入素有orderInfo数据，适用于新建与编辑
             const orderInfo = this.$store.getters['order/orderInfo'];
             Object.keys(this.submitData).forEach(key=>{
                 this.submitData[key] = orderInfo[key]
             })
+            //防止缓存中的currentStep不正确，故需要在这里重新指向当前步
             this.submitData.currentStep = 5;
             this.submitData.userId = this.$store.getters['userId'];
         },
 
         methods:{
+            //上传图片
             getResultImage(data){
                 this.submitData[data.imageType] = data.url;
             },
+            //获取免疫地点
             onImmuneAddressConfirm(value){
                 this.submitData.immuneAddress = value;
                 this.showImmuneAddressPicker = false;
             },
+            //获取免疫登记日期
             onImmuneTimeConfirm(value){
                 this.immuneTime = formatDate(value, 'yyyy-MM-dd');
                 this.submitData.immuneTime = value.getTime();
                 this.showImmuneTimePicker = false;
             },
+            //提交
             submit(){
                 console.log('submitData', this.submitData);
                 this.showDialog = true;
@@ -173,6 +184,7 @@
                     console.log(res, res);
                     if(res.errno === 0){
                         this.showDialog = true;
+                        this.$store.commit('order/updateOrderInfo', this.submitData);
                     }
                     else{
                         Toast.fail({message: res.errmsg,duration: 3000});

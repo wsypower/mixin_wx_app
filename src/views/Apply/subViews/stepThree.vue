@@ -39,7 +39,7 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Button, ImagePreview, Popup, Toast } from 'vant';
+    import { Button, Popup, Toast } from 'vant';
     import Clipboard from 'clipboard';
     import pdf from 'vue-pdf'
     import { bidDogCard } from '@/api/apply.js'
@@ -60,11 +60,15 @@
                    //手机号码
                    phone: ''
                },
+               //pdf数据流
                src: '',
-               pdfUrl: '',
-               showDialog: false,
+               //pdf页数
                numPages: undefined,
                showBigger: false,
+               //用于pdf链接的复制
+               pdfUrl: '',
+               //复制成功后的弹窗
+               showDialog: false,
            }
         },
         computed:{
@@ -74,25 +78,27 @@
         },
         mounted(){
             this.$nextTick(()=>{
-                setTimeout(()=>{
-                    const orderInfo = this.$store.getters['order/orderInfo'];
-                    this.pdfUrl = orderInfo.picPath;
-                    console.log('three', orderInfo, this.pdfUrl);
-                    const pdfUrlArr = this.pdfUrl.split('//');
-                    this.src = pdf.createLoadingTask('/pdf/' + pdfUrlArr[pdfUrlArr.length-1]);// upload/file/2020/05/18/20200518195301513703.pdf
-                    this.src.then(pdf => {
-                        this.numPages = pdf.numPages;
-                    });
-                    Object.keys(this.submitData).forEach(key=>{
-                        this.submitData[key] = orderInfo[key]
-                    })
-                    this.submitData.currentStep = 3;
-                    this.submitData.userId = this.$store.getters['userId'];
+                //从缓存中读入素有orderInfo数据，适用于新建与编辑
+                const orderInfo = this.$store.getters['order/orderInfo'];
+                this.pdfUrl = orderInfo.picPath;
+                console.log('three', orderInfo, this.pdfUrl);
+                const pdfUrlArr = this.pdfUrl.split('//');
+                this.src = pdf.createLoadingTask('/pdf/' + pdfUrlArr[pdfUrlArr.length-1]);
+                //this.src = pdf.createLoadingTask(this.pdfUrl);
+                this.src.then(pdf => {
+                    this.numPages = pdf.numPages;
                 });
-            })
+                Object.keys(this.submitData).forEach(key=>{
+                    this.submitData[key] = orderInfo[key]
+                })
+                //在缓存中的currentStep是当时提交之后的下一步，故需要在这里重新指向当前步
+                this.submitData.currentStep = 3;
+                this.submitData.userId = this.$store.getters['userId'];
+            });
         },
 
         methods:{
+            //复制pdf链接
             copyDJFileUrl(){
                 const clipboard = new Clipboard('.copyDJFileUrl');
                 clipboard.on('success', () => {
@@ -106,9 +112,11 @@
                     });
                 })
             },
+            //pdf放大
             openBigger(){
                 this.showBigger = true;
             },
+            //pdf还原
             closeBigger(){
                 this.showBigger = false;
             },

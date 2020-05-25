@@ -35,31 +35,19 @@
         beforeRouteEnter(to,from,next){
             console.log('beforeRouteEnter', to, from);
             next(vm => {
+                //只有编辑的时候进入这个判断语句
                 if(to.query.currentStep){
                     vm.preStep = to.query.currentStep-1;
-                    let isUser = to.query.userType;
-                    let _link = '';
-                    if(vm.preStep===0){
-                        if(isUser==='0'){
-                            _link = routerArr[0]+ 'ForPerson'
-                        }
-                        else{
-                            _link = routerArr[0]+ 'ForCompany'
-                        }
-                    }
-                    else{
-                        _link = routerArr[vm.preStep];
-                    }
-
+                    let _link = routerArr[vm.preStep];
                     let params = {
                         userId : vm.$store.getters['userId'],
                         orderId: to.query.orderId
                     }
                     vm.$store.commit('updateIsLoading', true);
+                    //获取orderId下的全部数据，然后放入缓存store中
                     queryPidDogCard(params).then( res => {
                         vm.$store.commit('updateIsLoading', false);
                         if(res.errno===0){
-                            console.log('zt');
                             vm.$store.commit('order/updateOrderInfo', res.data);
                             vm.$router.replace({
                                 path: _link
@@ -71,7 +59,6 @@
                     });
                 }
             })
-
         },
         watch:{
             activeStep: function(){
