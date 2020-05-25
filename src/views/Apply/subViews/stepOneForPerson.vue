@@ -15,8 +15,8 @@
                     <my-radio-group :initValue="submitData.isRecord.toString()" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isRecord', name)}"></my-radio-group>
                 </template>
             </van-field>
-            <div class="warn-note" v-show="submitData.isOwner===0">（备案犬证后，后续您也可以对犬证进行管理）</div>
-            <van-divider v-show="submitData.isOwner===0"></van-divider>
+            <div class="warn-note" v-show="false">（备案犬证后，后续您也可以对犬证进行管理）</div>
+            <van-divider v-show="false"></van-divider>
             <van-field name="radio" label="证件类型：">
                 <template #input>
                     <my-radio-group :initValue="submitData.idType.toString()" :radioGroup="fileTypeArray" @getRealValue="(name)=>{getRealValue('idType', name)}"></my-radio-group>
