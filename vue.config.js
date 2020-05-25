@@ -92,7 +92,7 @@ module.exports = {
         style: resolve("src/style"), // 通用样式
       },
     },
-    // 加入PWD骨架屏
+    // 加入骨架屏
     plugins: [
       new SkeletonWebpackPlugin({
         webpackConfig: {
