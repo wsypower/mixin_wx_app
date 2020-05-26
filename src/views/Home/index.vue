@@ -12,7 +12,6 @@
             <service-place :servePlaces="servePlaceList"></service-place>
         </div>
     </div>
-
 </template>
 <script type="text/ecmascript-6">
     import PageHeader from '@/components/pageHeader.vue'
@@ -68,6 +67,7 @@
                 return userId
             },
             async getData(){
+                this.$store.commit('updateIsLoading',true);
                 const userId = await this.getUserId();
                 console.log(`userId: ${userId}`);
                 this.getDogCard(userId);
@@ -90,6 +90,7 @@
                 //获取已有的犬证
                 queryDogCard({userId: userId}).then( res => {
                     this.dogCards = res.data;
+                    this.$store.commit('updateIsLoading',false)
                 });
             },
             cycleTime() {
