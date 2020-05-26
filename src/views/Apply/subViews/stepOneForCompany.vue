@@ -38,8 +38,8 @@
             <van-divider></van-divider>
             <van-field v-model="submitData.verificationCode" label="验证码：" placeholder="请输入短信验证码" @blur="checkSms">
                 <template #button>
-                    <van-button v-show="sendAuthCode" plain type="info" size="small" @click="getAuthCode">获取验证码</van-button>
-                    <van-button v-show="!sendAuthCode" plain type="info" size="small" >{{auth_time}} 秒后重发</van-button>
+                    <van-button v-show="sendAuthCode" plain type="info" size="mini" @click="getAuthCode">获取验证码</van-button>
+                    <van-button v-show="!sendAuthCode" plain type="info" size="mini" >{{auth_time}} 秒后重发</van-button>
                 </template>
             </van-field>
         </van-form>
@@ -455,6 +455,9 @@
 </style>
 <style lang="scss">
     .step-one-page{
+        .van-button--mini{
+            width: 160px;
+        }
         .van-cell:not(:last-child)::after{
             border-bottom-width: 0px;
         }

@@ -212,7 +212,7 @@
     width: 100%;
     height: 100%;
     background-color: #f5f5f5;
-    padding-top: 88px;
+    padding: 88px 24px 0px 24px;
     .header-right{
         color: #ffffff;
         .icon-sousuo1{
@@ -220,7 +220,7 @@
         }
     }
     .search-panel{
-        width: 702px;
+        width: 100%;
         height: 330px;
         margin: 20px 0px;
         background-color: #ffffff;
@@ -279,7 +279,7 @@
         }
     }
     .result-panel{
-        width: 702px;
+        width: 100%;
         .result-panel-header{
             width: 100%;
             height: 90px;

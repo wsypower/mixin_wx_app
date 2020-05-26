@@ -12,9 +12,9 @@
 </template>
 <script type="text/ecmascript-6">
     import PageHeader from '@/components/pageHeader.vue';
-    import DogItem from './dogItem.vue';
+    import DogItem from './components/dogItem.vue';
     import { queryDogCard } from '@/api/home.js'
-    const statusArr = ["有效","即将到期","已到期"];
+    const statusArr = ["有效","即将到期","已到期","已注销"];
     export default {
         name: 'dogCertificateManage',
         components:{
