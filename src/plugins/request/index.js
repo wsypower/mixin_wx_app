@@ -23,7 +23,7 @@ axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 // ########################### axios config配置 ########################## //
 // ##################################################################### //
 let config = {
-  baseURL: '/api', // URL_CONFIG.baseURL
+  baseURL: URL_CONFIG.baseURL,
   timeout: 60 * 1000, // 请求超时时间
   //TODO:只能用在 'PUT', 'POST' 和 'PATCH' 这几个请求方法
   //修改请求数据添加必填项 userId
