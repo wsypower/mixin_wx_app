@@ -14,6 +14,7 @@
     import PageHeader from '@/components/pageHeader.vue';
     import DogItem from './dogItem.vue';
     import { queryDogCard } from '@/api/home.js'
+    const statusArr = ["有效","即将到期","已到期"];
     export default {
         name: 'dogCertificateManage',
         components:{
@@ -31,7 +32,10 @@
         methods:{
             getListData(){
                 queryDogCard({userId: this.$store.getters['userId']}).then( res => {
-                    this.dogList = res.data;
+                    this.dogList = res.data.map(item =>{
+                        item.statusId = statusArr.findIndex(it => it===item.dogCarStatus)
+                        return item
+                    });
                 });
             }
         }
@@ -46,6 +50,7 @@
         .dog-manage-body{
             width: 100%;
             padding: 0px 24px;
+            padding-bottom: 20px;
         }
         .no-data{
             width: 100%;

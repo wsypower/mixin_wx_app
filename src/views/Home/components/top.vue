@@ -11,7 +11,7 @@
                         <img class="dog-item-img" :src="item.dogPhotoFront">
                         <div flex="dir:top" class="dog-item_mes">
                             <span class="dog-item_name">{{item.dogName}}</span>
-                            <span class="dog-item_status" :class="{warning: item.dogCarStatus===1,wrong: item.dogCarStatus===2}">{{item.statusName}}</span>
+                            <span class="dog-item_status" :class="{warning: item.statusId===1,wrong: item.statusId===2}">{{item.dogCarStatus}}</span>
                         </div>
                     </div>
                     <div flex="dir:left main:justify cross:bottom">
@@ -56,7 +56,7 @@
             dogCards: function(val){
                 this.dogList = JSON.parse(JSON.stringify(val));
                 this.dogList.forEach(item => {
-                    item.statusName = statusArr[item.dogCarStatus];
+                    item.statusId = statusArr.findIndex(it=>it===item.dogCarStatus);
                 })
             }
         },

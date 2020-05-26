@@ -4,7 +4,7 @@
             <img class="dog-item-img" :src="dogData.dogPhotoFront">
             <div flex="dir:top" class="dog-item_mes">
                 <span class="dog-item_name">{{dogData.dogName}}</span>
-                <span class="dog-item_status" :class="{warning: dogData.dogCarStatus===1,wrong: dogData.dogCarStatus===2}">{{dogData.statusName}}</span>
+                <span class="dog-item_status" :class="{warning: dogData.statusId===1,wrong: dogData.statusId===2}">{{dogData.dogCarStatus}}</span>
             </div>
         </div>
         <div flex="dir:left main:justify cross:bottom">
