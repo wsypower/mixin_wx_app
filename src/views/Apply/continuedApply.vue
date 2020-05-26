@@ -231,7 +231,7 @@
         }
         .dialog{
             width: 500px;
-            height: 300px;
+            height: 320px;
             .dialog-header{
                 width: 500px;
                 height: 80px;
