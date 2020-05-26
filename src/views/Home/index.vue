@@ -33,6 +33,7 @@
         },
         data(){
             return {
+                interval: null,
                 dogCards: [],
                 servePlaceList: [],
                 areaName: '越城区',
@@ -51,6 +52,7 @@
                 this.getData();
             });
             // this.getData();
+            this.cycleTime();
         },
 
         methods: {
@@ -68,10 +70,7 @@
             async getData(){
                 const userId = await this.getUserId();
                 console.log(`userId: ${userId}`);
-                //获取已有的犬证
-                queryDogCard({userId: userId}).then( res => {
-                    this.dogCards = res.data;
-                });
+                this.getDogCard(userId);
                 //获取范围内的服务点
                 let originLon = this.$store.getters['originLon'];
                 let originLat = this.$store.getters['originLat'];
@@ -86,7 +85,19 @@
                     console.log('queryDogServicePoint',res.data);
                     this.servePlaceList = res.data;
                 });
-            }
+            },
+            getDogCard(userId){
+                //获取已有的犬证
+                queryDogCard({userId: userId}).then( res => {
+                    this.dogCards = res.data;
+                });
+            },
+            cycleTime() {
+                clearInterval(this.interval);
+                this.interval = setInterval(() => {
+                    this.getDogCard(this.$store.getters['userId'])
+                }, 1800000);
+            },
         }
     }
 </script>

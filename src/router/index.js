@@ -23,7 +23,8 @@ let routes = [
     name: "home",
     component: Home,
     meta: {
-      title:'养犬管理'
+      title:'养犬管理',
+      keepAlive:true
     }
   },
 ];
