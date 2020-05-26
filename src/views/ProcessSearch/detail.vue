@@ -33,7 +33,7 @@
                         <div class="log-item-left">{{item.operatorTime||item.createtime|timeFormatter}}</div>
                         <div class="log-item-right">
                             <div class="dot"></div>
-                            <div class="message">{{item.remark||item.stepName}}</div>
+                            <div class="message" :class="{wrong: item.stepCode===25||item.stepCode===45||item.stepCode===85}">{{item.remark||item.stepName}}</div>
                         </div>
                     </div>
                 </div>
@@ -254,6 +254,9 @@
                                 line-height: 50px;
                                 letter-spacing: 0px;
                                 color: #424242;
+                                &.wrong{
+                                    color: #ff0000;
+                                }
                             }
                         }
                         &:first-child{

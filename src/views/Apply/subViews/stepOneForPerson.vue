@@ -458,10 +458,14 @@
             //第一步数据提交：1、检查身份证是否已有犬只绑定；2、检查验证码是否通过；
             nextStep(){
                 console.log('submitData', this.submitData);
+                if(this.submitData.idType===3&&this.submitData.country==='CHN'){
+                    Toast.fail({message: '中国籍人员请使用身份证申请',duration: 3000});
+                    return
+                }
                 //身份证判断
                 let params = {
                     userId: this.submitData.userId,
-                    idCard: this.submitData.idCard
+                    idCard: this.submitData.idCard||this.submitData.passport
                 }
                 queryDogByOwnerIdCard(params).then(res => {
                     if(res.errno===0){

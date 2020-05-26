@@ -27,9 +27,9 @@ export default new Vuex.Store({
       isWX: true, // 是否是微信，
       token: '', // 用户原始登入有效期的唯一标识
       userId: 'xxx', // 养犬管理的用户UserId
-      originLon: '120.57', // 经度
-      originLat: '30.00', // 纬度
-      areaCode: '3306' //区域Code
+      originLon: '120.13', // 默认杭州西湖区的经度
+      originLat: '30.28', // 默认杭州西湖区的纬度
+      areaCode: '330106' //默认杭州西湖区的区域Code
   },
   getters: {
       isWX: state => {
