@@ -27,12 +27,14 @@
             <div class="log-header" flex="dir:left cross:center">
                 <span class="header-left">申办进度</span>
             </div>
-            <div class="log-body">
-                <div class="log-item" flex="dir:left" v-for="item in orderInfo.logList" :key="item.id">
-                    <div class="log-item-left">{{item.operatorTime||item.createtime|timeFormatter}}</div>
-                    <div class="log-item-right">
-                        <div class="dot"></div>
-                        <div class="message">{{item.remark||item.stepName}}</div>
+            <div class="log-body" flex="dir:top main:justify">
+                <div class="log-body-main">
+                    <div class="log-item" flex="dir:left" v-for="item in orderInfo.logList" :key="item.id">
+                        <div class="log-item-left">{{item.operatorTime||item.createtime|timeFormatter}}</div>
+                        <div class="log-item-right">
+                            <div class="dot"></div>
+                            <div class="message">{{item.remark||item.stepName}}</div>
+                        </div>
                     </div>
                 </div>
                 <div class="btn-panel" flex="dir:top cross:center main:center" v-show="showButton">
@@ -206,62 +208,66 @@
                 background-color: #ffffff;
                 padding-top: 40px;
                 height: calc(100% - 90px);
-                .log-item{
+                .log-body-main{
+                    height: 100%;
                     width: 100%;
-                    height: 140px;
-                    .log-item-left{
-                        width: 190px;
-                        text-align: center;
-                        font-family: PingFang-SC-Medium;
-                        font-size: 26px;
-                        font-weight: normal;
-                        font-stretch: normal;
-                        line-height: 40px;
-                        letter-spacing: 0px;
-                        color: #333333;
-                    }
-                    .log-item-right{
-                        margin-left: 20px;
-                        border-left: 3px solid #d9d9d9;
-                        height: 100%;
-                        position: relative;
-                        .dot{
-                            position: absolute;
-                            top: 0px;
-                            left: -19px;
-                            background-color: #b5b5b5;
-                            width: 40px;
-                            height: 40px;
-                            border-radius: 20px;
-                            border: 10px solid #e9e9e9;
-                        }
-                        .message{
-                            margin-left: 56px;
-                            width: 454px;
-                            background-color: #ffffff;
-                            box-shadow: 0px 4px 10px 0px rgba(48, 108, 231, 0.2);
-                            border-radius: 4px;
-                            padding: 20px 30px;
-                            font-family: PingFang-SC-Regular;
+                    .log-item{
+                        width: 100%;
+                        height: 140px;
+                        .log-item-left{
+                            width: 190px;
+                            text-align: center;
+                            font-family: PingFang-SC-Medium;
                             font-size: 26px;
-                            font-weight: bold;
+                            font-weight: normal;
                             font-stretch: normal;
-                            line-height: 50px;
+                            line-height: 40px;
                             letter-spacing: 0px;
-                            color: #424242;
+                            color: #333333;
                         }
-                    }
-                    &:first-child{
                         .log-item-right{
+                            margin-left: 20px;
+                            border-left: 3px solid #d9d9d9;
+                            height: 100%;
+                            position: relative;
                             .dot{
-                                background-color: #306ce7;
-                                border-color: #c0d3f8;
+                                position: absolute;
+                                top: 0px;
+                                left: -19px;
+                                background-color: #b5b5b5;
+                                width: 40px;
+                                height: 40px;
+                                border-radius: 20px;
+                                border: 10px solid #e9e9e9;
+                            }
+                            .message{
+                                margin-left: 56px;
+                                width: 454px;
+                                background-color: #ffffff;
+                                box-shadow: 0px 4px 10px 0px rgba(48, 108, 231, 0.2);
+                                border-radius: 4px;
+                                padding: 20px 30px;
+                                font-family: PingFang-SC-Regular;
+                                font-size: 26px;
+                                font-weight: bold;
+                                font-stretch: normal;
+                                line-height: 50px;
+                                letter-spacing: 0px;
+                                color: #424242;
                             }
                         }
-                    }
-                    &:nth-last-child(2){
-                        .log-item-right{
-                            border-width: 0px;
+                        &:first-child{
+                            .log-item-right{
+                                .dot{
+                                    background-color: #306ce7;
+                                    border-color: #c0d3f8;
+                                }
+                            }
+                        }
+                        &:last-child{
+                            .log-item-right{
+                                border-width: 0px;
+                            }
                         }
                     }
                 }

@@ -39,14 +39,18 @@
             }
         },
         mounted(){
-            // externalMethods.getPosition().then(res =>{
-            //     console.log('position', res)
-            //     this.areaName = res.adName;
-            //     this.$store.commit('updateOriginLat',res.latitude);
-            //     this.$store.commit('updateOriginLon',res.longitude);
-            //
-            // });
-            this.getData();
+            externalMethods.getPosition().then(res =>{
+                console.log('position', res)
+                this.areaName = res.district;
+                this.$store.commit('updateOriginLat',res.latitude);
+                this.$store.commit('updateOriginLon',res.longitude);
+                this.$store.commit('updateAreaCode',res.adcode);
+                this.getData();
+            }).catch(err => {
+                console.log('getPosition', err);
+                this.getData();
+            });
+            // this.getData();
         },
 
         methods: {
@@ -63,7 +67,7 @@
             },
             async getData(){
                 const userId = await this.getUserId();
-                console.log(111111111, userId);
+                console.log(`userId: ${userId}`);
                 //获取已有的犬证
                 queryDogCard({userId: userId}).then( res => {
                     this.dogCards = res.data;

@@ -6,7 +6,6 @@
 
 function timeFormatter(value, setting = 'YYYY-MM-DD HH:mm:ss') {
   let timestampReg = /^\d{1,13}$/
-  console.log('setting',setting);
   if (value && timestampReg.test(value)) {
     let time = new Date(parseInt(value))
     let Y = time.getFullYear()

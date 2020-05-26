@@ -82,9 +82,9 @@
                 const orderInfo = this.$store.getters['order/orderInfo'];
                 this.pdfUrl = orderInfo.picPath;
                 console.log('three', orderInfo, this.pdfUrl);
-                const pdfUrlArr = this.pdfUrl.split('//');
-                this.src = pdf.createLoadingTask('/pdf/' + pdfUrlArr[pdfUrlArr.length-1]);
-                //this.src = pdf.createLoadingTask(this.pdfUrl);
+                // const pdfUrlArr = this.pdfUrl.split('//');
+                // this.src = pdf.createLoadingTask('/pdf/' + pdfUrlArr[pdfUrlArr.length-1]);
+                this.src = pdf.createLoadingTask(this.pdfUrl);
                 this.src.then(pdf => {
                     this.numPages = pdf.numPages;
                 });

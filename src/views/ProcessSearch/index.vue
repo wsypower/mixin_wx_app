@@ -296,9 +296,6 @@
         .result-panel-body{
             .order-item{
                 margin-bottom: 20px;
-                /*&:first-child{*/
-                    /*margin-top: 10px;*/
-                /*}*/
             }
         }
     }
