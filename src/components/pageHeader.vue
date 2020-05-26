@@ -59,6 +59,8 @@
     .van-nav-bar__title{
         color: #fff;
         font-size: 38px;
+        height: 88px;
+        line-height: 88px;
     }
 }
 </style>

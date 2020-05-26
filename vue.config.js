@@ -71,7 +71,7 @@ module.exports = {
         },
       },
     '/dogapi': {
-        target: 'http://192.168.71.33:8999/api',
+        target: 'http://192.168.71.33:8999/dogapi',
         // target: 'http://192.168.30.139:8080',
         changeOrigin: true,
         secure: false,
