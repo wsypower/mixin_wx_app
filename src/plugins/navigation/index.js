@@ -16,7 +16,6 @@ export default {
     const bus = new Vue();
     const navigator = Navigator(bus, store, moduleName, keyName);
 
-    // hack vue-router replace for replaceFlag
     const routerReplace = router.replace.bind(router);
     let replaceFlag = false;
     router.replace = (location, onComplete, onAbort) => {
@@ -24,11 +23,11 @@ export default {
       routerReplace(location, onComplete, onAbort);
     };
 
-    // init router`s keyName
+    // 初始化路由器的keyName
     router.beforeEach((to, from, next) => {
       if (!to.query[keyName]) {
         const query = { ...to.query };
-        // go to the same route will be set the same key
+        // 转到相同的路线将设置相同的键
         console.log(from.query[keyName]);
         if (
           to.path === from.path &&
@@ -53,7 +52,7 @@ export default {
       }
     });
 
-    // record router change
+    // 记录路由器更改
     router.afterEach((to, from) => {
       navigator.record(to, from, replaceFlag);
       replaceFlag = false;
