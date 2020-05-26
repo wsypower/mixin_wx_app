@@ -149,8 +149,8 @@
                         let temp = {
                             orderId: item.id,
                             orderCode: item.orderNo,
-                            statusId: statusObj[statusKey].statusId,
-                            statusName: statusObj[statusKey].statusName,
+                            statusId: statusKey ? statusObj[statusKey].statusId: '',
+                            statusName: statusKey ? statusObj[statusKey].statusName: '',
                             dogName: item.dogName,
                             submitTime: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'----',
                             cardType: item.cardType===0? '新办': '续办',

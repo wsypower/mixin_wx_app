@@ -70,12 +70,13 @@ module.exports = {
           "^/proxy": "",
         },
       },
-    '/api': {
+    '/dogapi': {
         target: 'http://192.168.71.33:8999/api',
+        // target: 'http://192.168.30.139:8080',
         changeOrigin: true,
         secure: false,
         pathRewrite: {
-            '^/api': ''   //需要rewrite的,
+            '^/dogapi': ''   //需要rewrite的,
         }
     },
     '/pdf': {

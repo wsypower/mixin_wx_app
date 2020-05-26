@@ -8,7 +8,8 @@
             </div>
         </div>
         <div class="item-row process-chart">
-            <process-chart :activeIndex="activeIndex"></process-chart>
+            <process-chart v-if="cardInfo.cardType === '新办'" :activeIndex="activeIndex"></process-chart>
+            <process-chart-three v-else :activeIndex="activeIndex"></process-chart-three>
         </div>
         <div class="item-row" flex="dir:left cross:center main:justify">
             <div class="item-row-left">宠物昵称：</div>
@@ -28,6 +29,7 @@
 <script type="text/ecmascript-6">
     import { Button, Toast } from 'vant';
     import ProcessChart from './processChart.vue';
+    import ProcessChartThree from './processChartThree.vue';
     import { deleteDogItem } from '@/api/process.js'
     const indexArr = {
         '0': 0,
@@ -40,6 +42,7 @@
         name: 'cardItem',
         components:{
             ProcessChart,
+            ProcessChartThree,
             [Button.name]: Button,
         },
         props:{

@@ -271,6 +271,9 @@
             Object.keys(this.submitData).forEach(key=>{
                 this.submitData[key] = orderInfo[key]
             })
+            if(orderInfo.dogOrderId){
+                this.submitData.dogOrderId = orderInfo.dogOrderId;
+            }
             this.submitData.userId = this.$store.getters['userId'];
             this.getAddressData('3306','1');
             //编辑时，根据已有的区县Id获取街道选项数据

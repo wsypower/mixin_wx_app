@@ -212,7 +212,10 @@
             const orderInfo = this.$store.getters['order/orderInfo'];
             Object.keys(this.submitData).forEach(key=>{
                 this.submitData[key] = orderInfo[key]
-            })
+            });
+            if(orderInfo.dogOrderId){
+                this.submitData.dogOrderId = orderInfo.dogOrderId;
+            }
             this.submitData.userType = 1;
             this.submitData.currentStep = 1;
             this.submitData.userId = this.$store.getters['userId'];

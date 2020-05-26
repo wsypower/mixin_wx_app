@@ -87,8 +87,8 @@
                             name: item.dogName ? item.dogName : '----',
                             dogType: item.breed ?item.breed : '----',
                             submitDay: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'----',
-                            statusId: statusObj[statusKey].statusId,
-                            statusName: statusObj[statusKey].statusName,
+                            statusId: statusKey ? statusObj[statusKey].statusId: '',
+                            statusName: statusKey ? statusObj[statusKey].statusName: '',
                             userType: item.userType,
                             cardType: item.cardType,
                             orderCode: item.orderNo
