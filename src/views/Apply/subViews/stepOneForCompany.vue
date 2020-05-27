@@ -147,7 +147,7 @@
             return {
                 //获取验证码的两个参数
                 sendAuthCode:true,/*布尔值，通过v-show控制显示‘按钮’还是‘倒计时’ */
-                auth_time: 0, /*倒计时 计数器*/
+                auth_time: 60, /*倒计时 计数器*/
                 //是否验证通过
                 isCheckSms: false,
                 ///出现区县选择区域
@@ -268,8 +268,8 @@
             },
             //获取手机验证码，60s之后可再次请求
             getAuthCode:function () {
-                this.sendAuthCode = false;
                 if(this.submitData.phone){
+                    this.sendAuthCode = false;
                     let params = {
                         userId: this.submitData.userId,
                         phoneNumber: this.submitData.phone
@@ -456,7 +456,7 @@
 <style lang="scss">
     .step-one-page{
         .van-button--mini{
-            width: 160px;
+            width: 140px;
         }
         .van-cell:not(:last-child)::after{
             border-bottom-width: 0px;

@@ -76,7 +76,6 @@
             background-color: #ffffff;
             border: solid 3px #ffffff;
             border-radius: 110px;
-            //margin-top: 25px;
         }
         .dog-item_mes{
             margin-left: 30px;
