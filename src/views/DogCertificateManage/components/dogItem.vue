@@ -41,6 +41,7 @@
         methods:{
             share(){
                 Toast('还没开发分享');
+                // this.$router.push('/qrcodeResult');
             },
             gotToDogDetailPage(dogId){
                 if(this.needClick){

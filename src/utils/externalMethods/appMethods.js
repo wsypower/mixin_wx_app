@@ -93,4 +93,21 @@ APP.getImageUrl = (method) =>{
     }
 }
 
+/**
+ * 电话拨出
+ */
+APP.telephone = (phone) => {
+    return new Promise((resolve, reject) => {
+        hesc.biz.telephone.call({
+            phone: phone, //电话号码
+            onSuccess: function (result) {
+                resolve(result)
+            },
+            onFail: function (err) {
+                reject(err)
+            }
+        })
+    })
+}
+
 export default APP

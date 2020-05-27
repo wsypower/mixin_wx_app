@@ -46,6 +46,7 @@
 <script type="text/ecmascript-6">
     import { Button } from 'vant'
     import PageHeader from '@/components/pageHeader.vue';
+    import externalMethods from '@/utils/externalMethods/index.js'
     import { getURLParameters } from '@/utils/index.js';
     export default {
         name: 'share',
@@ -92,7 +93,8 @@
                 this.dogDetail.dogCardNumber = '33010319880823M';
             },
             phoneToDogManageCenter(){
-
+                //犬管中心电话
+                externalMethods.telephone('').then(()=>{})
             }
         }
     }
