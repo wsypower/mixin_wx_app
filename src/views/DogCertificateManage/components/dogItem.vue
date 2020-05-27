@@ -6,7 +6,7 @@
                 <span class="dog-item_name">{{dogData.dogName}}</span>
                 <span class="dog-item_status" :class="{warning: dogData.statusId===1,wrong: dogData.statusId===2,gray: dogData.statusId===3}">{{dogData.dogCarStatus}}</span>
             </div>
-            <div class="share_btn" flex="dir:left cross:center" @click.stop="share">
+            <div class="share_btn" flex="dir:left" @click.stop="share">
                 <span class="icon iconfont icon-fenxiang3"></span>
                 <span>分享</span>
             </div>
@@ -25,6 +25,12 @@
     export default {
         name: 'dogItem',
         props:{
+            needClick:{
+                type: Boolean,
+                default (){
+                    return true
+                }
+            },
             dogData:{
                 type: Object,
                 default(){
@@ -37,9 +43,11 @@
                 Toast('还没开发分享');
             },
             gotToDogDetailPage(dogId){
-                console.log(`dogId: ${dogId}`);
-                //Toast('还没开发');
-                this.$router.push('/dogCertificateManage/detail');
+                if(this.needClick){
+                    console.log(`dogId: ${dogId}`);
+                    //Toast('还没开发');
+                    this.$router.push('/dogCertificateManage/detail');
+                }
             }
         }
     }
@@ -56,6 +64,7 @@
         .share_btn{
             width: 110px;
             height: 40px;
+            line-height: 40px;
             border-radius: 20px;
             border: solid 2px #ffffff;
             position: absolute;
@@ -63,11 +72,11 @@
             right: 0;
             span{
                 font-family: PingFang-SC-Regular;
-                font-size: 26px;
+                font-size: 24px;
                 color: #ffffff;
             }
             .icon-fenxiang3{
-                margin: 0px 6px 0px 10px;
+                margin: 0px 6px 0px 14px;
             }
         }
         .dog-item-img{

@@ -12,6 +12,12 @@ const routes = [
         meta: { keepAlive:false }
     },
     {
+        path: '/dogCertificateManage/annual',
+        name: 'annual',
+        component: () => import(/* webpackChunkName: "dogCertificateManage" */ '@/views/DogCertificateManage/annualCheck.vue'),
+        meta: { keepAlive:false }
+    },
+    {
         path: '/dogCertificateManage/unbind',
         name: 'unbind',
         component: () => import(/* webpackChunkName: "dogCertificateManage" */ '@/views/DogCertificateManage/unbind.vue'),

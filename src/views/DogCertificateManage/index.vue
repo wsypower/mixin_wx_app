@@ -2,7 +2,7 @@
     <div class="dog-manage-page">
         <page-header title="犬证管理"></page-header>
         <div class="dog-manage-body" flex="dir:top cross:center" v-if="dogList.length>0">
-            <dog-item v-for="item in dogList" :key="item.id" :dogData="item"></dog-item>
+            <dog-item v-for="item in dogList" :key="item.id" :dogData="item" :needClick="true"></dog-item>
         </div>
         <div class="no-data" v-else flex="dir:top cross:center main:center">
             <div class="no-data_icon"></div>

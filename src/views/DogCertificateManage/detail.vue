@@ -1,7 +1,7 @@
 <template>
     <div class="dog-detail-page">
         <page-header title="电子犬证"></page-header>
-        <dog-item :dogData="dogData"></dog-item>
+        <dog-item :dogData="dogData" :needClick="false"></dog-item>
         <div class="message-panel">
             <div class="row" flex="dir:left cross:center main:justify">
                 <div class="row_left">电子芯片：</div>
@@ -111,12 +111,15 @@
                         duration: 2000
                     });
                 }
+                else{
+                    this.$router.push('/dogCertificateManage/annual');
+                }
             },
             unBind(){
                 this.$router.push('/dogCertificateManage/unbind');
             },
             continuedApply(){
-
+                this.$router.push('/continuedApply');
             }
         }
     }
