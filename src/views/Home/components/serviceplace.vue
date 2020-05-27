@@ -2,7 +2,7 @@
     <div class="service-place">
         <div class="service-place-header" flex="dir:left cross:center main:justify">
             <span class="header-left">推荐服务点</span>
-            <span class="header-right" @click="gotoMorePointPage">更多<span class="icon iconfont">&#xe60f;</span><span class="icon iconfont pright">&#xe60f;</span></span>
+            <span class="header-right" @click="gotoMorePointPage">更多<span class="icon iconfont icon-youjiantou"></span></span>
         </div>
         <div class="service-place-body">
             <my-scroll>
@@ -41,7 +41,8 @@
         },
         methods:{
             gotoMorePointPage(){
-                Toast('还没开发');
+                //Toast('还没开发');
+                this.$router.push('/service');
             },
             gotoPointDetail(placeId){
                 console.log(`placeId: ${placeId}`);
@@ -71,8 +72,9 @@
             line-height: 56px;
             letter-spacing: 0px;
             color: #666666;
-            .pright{
-                margin-left: -15px;
+            .icon-youjiantou{
+                margin-left: 10px;
+                color: #999999;
             }
         }
     }
