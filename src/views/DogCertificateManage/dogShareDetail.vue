@@ -4,36 +4,38 @@
         <div class="share-page-main" flex="dir:top main:justify">
             <div class="share-page-main-content">
                 <div class="dog-img-bg">
-
+                    <div class="img-panel">
+                        <img :src="dogDetail.dogPhotoFront" />
+                    </div>
                 </div>
                 <div class="message-panel" flex="dir:left cross:center">
                     <div class="item">
                         <span class="item_title">犬名:</span>
-                        <span class="item_value">平平</span>
+                        <span class="item_value">{{dogDetail.dogName}}</span>
                     </div>
                     <div class="item">
                         <span class="item_title">性别:</span>
-                        <span class="item_value">公</span>
+                        <span class="item_value">{{dogDetail.dogSex}}</span>
                     </div>
                     <div class="item">
                         <span class="item_title">犬种:</span>
-                        <span class="item_value">金毛</span>
+                        <span class="item_value">{{dogDetail.breed}}</span>
                     </div>
                     <div class="item">
                         <span class="item_title">毛色:</span>
-                        <span class="item_value">土黄</span>
+                        <span class="item_value">{{dogDetail.hairColor}}</span>
                     </div>
                     <div class="item">
                         <span class="item_title">犬主姓名:</span>
-                        <span class="item_value">张*丰</span>
+                        <span class="item_value">{{dogDetail.ownerName}}</span>
                     </div>
                     <div class="item">
                         <span class="item_title">联系电话:</span>
-                        <span class="item_value">133****4598</span>
+                        <span class="item_value">{{dogDetail.phone}}</span>
                     </div>
                     <div class="item">
                         <span class="item_title">登记证号:</span>
-                        <span class="item_value">33010319880823M</span>
+                        <span class="item_value">{{dogDetail.dogCardNumber}}</span>
                     </div>
                 </div>
             </div>
@@ -44,6 +46,7 @@
 <script type="text/ecmascript-6">
     import { Button } from 'vant'
     import PageHeader from '@/components/pageHeader.vue';
+    import { getURLParameters } from '@/utils/index.js';
     export default {
         name: 'share',
         components:{
@@ -52,10 +55,42 @@
         },
         data(){
             return {
-
+                qrCode: '',
+                dogDetail:{
+                    dogName: '',
+                    dogPhotoFront: '',
+                    dogSex: '',
+                    breed: '',
+                    hairColor: '',
+                    ownerName: '',
+                    phone: '',
+                    dogCardNumber: ''
+                }
             }
         },
+        mounted(){
+            this.qrCode = getURLParameters('qrcode');
+            this.getShareData();
+        },
         methods:{
+            getShareData(){
+                console.log(`qrCode: ${this.qrCode}`);
+                this.dogDetail.dogName = '平平';
+                this.dogDetail.dogPhotoFront = 'http://220.191.224.215/upload/file/2020/05/27/20200527104810159847.jpg';
+                this.dogDetail.dogSex = '公';
+                this.dogDetail.breed = '金毛';
+                this.dogDetail.hairColor = '土黄';
+                let ownerName = '张三丰';
+                if(ownerName.length===2){
+                    this.dogDetail.ownerName = ownerName.substring(0,1) + '*';
+                }
+                else{
+                    this.dogDetail.ownerName = ownerName.substring(0,1) + '*' + ownerName.substring(ownerName.length-1);
+                }
+                let phone = '13356784598';
+                this.dogDetail.phone = phone.substring(0,3) + '****' + phone.substring(phone.length-4);
+                this.dogDetail.dogCardNumber = '33010319880823M';
+            },
             phoneToDogManageCenter(){
 
             }
@@ -83,6 +118,17 @@
                     margin: 40px auto 50px;
                     width: 412px;
                     height: 518px;
+                    @include bg-image("~assets/images/img_bg");
+                    background-size: 100% 100%;
+                    padding: 172px 66px 62px 66px;
+                    .img-panel{
+                        width: 100%;
+                        height: 100%;
+                        overflow: hidden;
+                        img{
+                            width: 100%;
+                        }
+                    }
                 }
                 .message-panel{
                     width: 100%;

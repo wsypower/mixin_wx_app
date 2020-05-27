@@ -64,8 +64,9 @@ export function throttle(func, wait, options = {}) {
  * @returns {Object} 参数对象
  */
 export function getURLParameters(prop) {
+    let qP = window.location.hash.indexOf('?')>=0 ? window.location.hash.substring(window.location.hash.indexOf('?')+1) : '';
     let params = {},
-        query = window.location.search.length > 0 ? window.location.search.substring(1) : '',
+        query = window.location.search.length > 0 ? window.location.search.substring(1) : qP,
         arr = query.split('&'),
         rt
     for (let i = 0, len = arr.length; i < len; i++) {

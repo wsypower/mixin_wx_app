@@ -3,6 +3,7 @@
         <page-header title="犬证注销"></page-header>
         <div class="unbind-page-main" flex="dir:top main:justify">
             <van-form>
+                <van-field v-model="submitData.phone" label="手机号码：" placeholder="请输入内容" input-align="right" readonly/>
                 <van-field v-model="submitData.verificationCode" label="验证码：" placeholder="请输入短信验证码" @blur="checkSms">
                     <template #button>
                         <van-button v-show="sendAuthCode" plain type="info" size="mini" @click="getAuthCode">获取验证码</van-button>
@@ -69,7 +70,7 @@
                 ReasonColumns: ['死亡','其他'],
                 submitData:{
                     userId: '',
-                    phone: '',
+                    phone: '14523651457',
                     verificationCode: '',
                     reasonName: '',
                     reason: 0,

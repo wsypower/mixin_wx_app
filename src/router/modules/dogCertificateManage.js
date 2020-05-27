@@ -24,7 +24,7 @@ const routes = [
         meta: { keepAlive:false }
     },
     {
-        path: '/dogShareDetail',
+        path: '/qrcodeResult',
         name: 'share',
         component: () => import(/* webpackChunkName: "dogCertificateManage" */ '@/views/DogCertificateManage/dogShareDetail.vue'),
         meta: { keepAlive:false }
