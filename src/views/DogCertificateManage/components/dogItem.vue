@@ -1,10 +1,14 @@
 <template>
     <div class="dog-item" flex="dir:top" @click="gotToDogDetailPage(dogData.id)">
-        <div flex="dir:left cross:center">
+        <div flex="dir:left cross:center" style="position: relative">
             <img class="dog-item-img" :src="dogData.dogPhotoFront">
             <div flex="dir:top" class="dog-item_mes">
                 <span class="dog-item_name">{{dogData.dogName}}</span>
-                <span class="dog-item_status" :class="{warning: dogData.statusId===1,wrong: dogData.statusId===2}">{{dogData.dogCarStatus}}</span>
+                <span class="dog-item_status" :class="{warning: dogData.statusId===1,wrong: dogData.statusId===2,gray: dogData.statusId===3}">{{dogData.dogCarStatus}}</span>
+            </div>
+            <div class="share_btn" flex="dir:left cross:center" @click.stop="share">
+                <span class="icon iconfont icon-fenxiang3"></span>
+                <span>分享</span>
             </div>
         </div>
         <div flex="dir:left main:justify cross:bottom">
@@ -29,6 +33,9 @@
             }
         },
         methods:{
+            share(){
+                Toast('还没开发分享');
+            },
             gotToDogDetailPage(dogId){
                 console.log(`dogId: ${dogId}`);
                 Toast('还没开发');
@@ -45,13 +52,29 @@
         border-radius: 10px;
         @include bg-image("~assets/images/home_bg");
         background-size: 100% 100%;
+        .share_btn{
+            width: 110px;
+            height: 40px;
+            border-radius: 20px;
+            border: solid 2px #ffffff;
+            position: absolute;
+            top: 0;
+            right: 0;
+            span{
+                font-family: PingFang-SC-Regular;
+                font-size: 26px;
+                color: #ffffff;
+            }
+            .icon-fenxiang3{
+                margin: 0px 6px 0px 10px;
+            }
+        }
         .dog-item-img{
             width: 110px;
             height: 110px;
             background-color: #ffffff;
             border: solid 3px #ffffff;
             border-radius: 110px;
-            //margin-top: 25px;
         }
         .dog-item_mes{
             margin-left: 30px;
@@ -80,6 +103,9 @@
                 }
                 &.wrong{
                     background-color: #e33232;
+                }
+                &.gray{
+                    background-color: #999999;
                 }
             }
         }
