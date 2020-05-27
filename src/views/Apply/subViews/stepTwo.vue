@@ -283,7 +283,7 @@
                 this.siteColumns = res.data.reduce((acc, item) => {
                     let temp = {
                         text: item.servicePointName,
-                        id: item.areaCode
+                        id: item.serviceCode
                     }
                     acc.push(temp);
                     return acc
