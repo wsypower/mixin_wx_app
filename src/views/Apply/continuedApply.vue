@@ -179,7 +179,6 @@
             //提交
             submit(){
                 console.log('submitData', this.submitData);
-                this.showDialog = true;
                 bidDogCard(this.submitData).then( res => {
                     console.log(res, res);
                     if(res.errno === 0){
