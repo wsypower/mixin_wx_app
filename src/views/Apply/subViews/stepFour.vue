@@ -12,11 +12,23 @@
             <div class="warn-note">（若未盖章，请在“添加其他材料项”中，上传“房产证/租房合同/居住证（三者任选一项）”信息。）</div>
             <van-divider class="large-line"></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
-                <upload-image textValue="添加信息登记表" uploadIconType="1" @changeImage="getResultImage" imageType="informationPic"></upload-image>
-                <upload-image textValue="添加养犬承诺书" uploadIconType="1" @changeImage="getResultImage" imageType="commitmentPic"></upload-image>
+                <upload-image textValue="添加信息登记表"
+                              uploadIconType="1"
+                              @changeImage="getResultImage"
+                              imageType="informationPic"
+                              :initImageUrl="submitData.informationPic"></upload-image>
+                <upload-image textValue="添加养犬承诺书"
+                              uploadIconType="1"
+                              @changeImage="getResultImage"
+                              imageType="commitmentPic"
+                              :initImageUrl="submitData.commitmentPic"></upload-image>
             </div>
             <div class="upload-img" flex="dir:left cross:center main:justify">
-                <upload-image textValue="添加其他材料" uploadIconType="1" @changeImage="getResultImage" imageType="otherFilePic"></upload-image>
+                <upload-image textValue="添加其他材料"
+                              uploadIconType="1"
+                              @changeImage="getResultImage"
+                              imageType="otherFilePic"
+                              :initImageUrl="submitData.otherFilePic"></upload-image>
             </div>
             <van-divider></van-divider>
             <div class="form-item-label">备注：</div>

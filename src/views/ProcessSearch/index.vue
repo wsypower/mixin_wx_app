@@ -178,7 +178,7 @@
                     });
                 }
                 else if(item.statusId === '3'){
-                    if(item.cardType===0){
+                    if(item.cardType==='新办'){
                         this.$router.push({
                             path:'/newApply',
                             query:{
@@ -193,7 +193,7 @@
                             path:'/continuedApply',
                             query:{
                                 currentStep: 5,
-                                orderId: this.orderInfo.orderId
+                                orderId: item.orderId
                             }
                         });
                     }

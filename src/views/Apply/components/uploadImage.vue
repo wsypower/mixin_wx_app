@@ -48,6 +48,10 @@
             imageType:{
                 type: String,
                 default: ''
+            },
+            initImageUrl:{
+                type: String,
+                default: ''
             }
         },
         data(){
@@ -63,6 +67,10 @@
         watch:{
             imgUrl: function(val){
                 this.$emit('changeImage',{imageType:this.imageType, url:val});
+            },
+            initImageUrl: function(val){
+                console.log(777);
+                this.imgUrl = val;
             }
         },
         methods:{

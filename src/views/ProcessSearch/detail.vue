@@ -33,7 +33,11 @@
                         <div class="log-item-left">{{item.operatorTime||item.createtime|timeFormatter}}</div>
                         <div class="log-item-right">
                             <div class="dot"></div>
-                            <div class="message" :class="{wrong: item.stepCode===25||item.stepCode===45||item.stepCode===85}">{{item.remark||item.stepName}}</div>
+                            <div class="message" :class="{wrong: item.stepCode==='25'||item.stepCode==='45'||item.stepCode==='85'}">
+                                <span>{{item.remark||item.stepName}}</span>
+                                <span v-if="item.stepCode==='20'">，请到服务点申领狗牌</span>
+                                <div v-if="item.stepCode==='20'" @click="goToPage">服务点：<span class="icon iconfont icon-dingwei"></span><span class="service">{{orderInfo.serviceName}}</span></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -79,6 +83,8 @@
                     dogName: '',
                     //宠物品种
                     breed: '',
+                    //服务点名称
+                    serviceName: '',
                     //申办进度
                     logList: []
                 },
@@ -105,6 +111,7 @@
                         this.orderInfo.ownerName = order.ownerName;
                         this.orderInfo.dogName = order.dogName;
                         this.orderInfo.breed = order.breed;
+                        this.orderInfo.serviceName = order.serviceName;
                         this.orderInfo.logList = res.data.list;
                         let temp = res.data.list[0];
                         let needKey = Object.keys(buttonObj).find(key => key.indexOf('-' + temp.stepCode + '-')>=0)
@@ -213,7 +220,7 @@
                     width: 100%;
                     .log-item{
                         width: 100%;
-                        height: 140px;
+                        /*height: 140px;*/
                         .log-item-left{
                             width: 190px;
                             text-align: center;
@@ -242,6 +249,7 @@
                             }
                             .message{
                                 margin-left: 56px;
+                                margin-bottom: 60px;
                                 width: 454px;
                                 background-color: #ffffff;
                                 box-shadow: 0px 4px 10px 0px rgba(48, 108, 231, 0.2);
@@ -256,6 +264,14 @@
                                 color: #424242;
                                 &.wrong{
                                     color: #ff0000;
+                                }
+                                .icon-dingwei{
+                                    font-size: 30px;
+                                    color: #306ce7;
+                                    margin-right: 10px;
+                                }
+                                .service{
+                                    color: #306ce7;
                                 }
                             }
                         }

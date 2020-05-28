@@ -83,8 +83,16 @@
             </van-popup>
             <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
-                <upload-image textValue="上传宠物正面照" uploadIconType="1" @changeImage="getResultImage" imageType="dogPhotoFront"></upload-image>
-                <upload-image textValue="上传宠物侧面照" uploadIconType="1" @changeImage="getResultImage" imageType="dogPhotoBack"></upload-image>
+                <upload-image textValue="上传宠物正面照"
+                              uploadIconType="1"
+                              @changeImage="getResultImage"
+                              imageType="dogPhotoFront"
+                              :initImageUrl="submitData.dogPhotoFront"></upload-image>
+                <upload-image textValue="上传宠物侧面照"
+                              uploadIconType="1"
+                              @changeImage="getResultImage"
+                              imageType="dogPhotoBack"
+                              :initImageUrl="submitData.dogPhotoBack"></upload-image>
             </div>
             <van-divider></van-divider>
         </van-form>
@@ -135,8 +143,16 @@
             </van-popup>
             <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
-                <upload-image textValue="添加免疫证首页" uploadIconType="1" @changeImage="getResultImage" imageType="immunePhotos"></upload-image>
-                <upload-image textValue="添加宠物免疫记录" uploadIconType="3" @changeImage="getResultImage" imageType="immuneRecord"></upload-image>
+                <upload-image textValue="添加免疫证首页"
+                              uploadIconType="1"
+                              @changeImage="getResultImage"
+                              imageType="immunePhotos"
+                              :initImageUrl="submitData.immunePhotos"></upload-image>
+                <upload-image textValue="添加宠物免疫记录"
+                              uploadIconType="3"
+                              @changeImage="getResultImage"
+                              imageType="immuneRecord"
+                              :initImageUrl="submitData.immuneRecord"></upload-image>
             </div>
         </van-form>
         <div class="step-module-header" flex="dir:left cross:center">

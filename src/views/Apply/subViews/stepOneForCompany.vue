@@ -22,12 +22,14 @@
                                    uploadIconType="1"
                                    @getMessage="getResultMessage"
                                    imageType="idCardFront"
-                                   @clearImage="clearImage"></photo-for-message>
+                                   @clearImage="clearImage"
+                                   :initImageUrl="submitData.idCardFront"></photo-for-message>
                 <photo-for-message textValue="拍摄身份证反面"
                                    uploadIconType="2"
                                    @getMessage="getResultMessage"
                                    imageType="idCardBack"
-                                   @clearImage="clearImage"></photo-for-message>
+                                   @clearImage="clearImage"
+                                   :initImageUrl="submitData.idCardBack"></photo-for-message>
             </div>
             <van-divider></van-divider>
             <van-field v-model="submitData.ownerName" label="犬主姓名：" placeholder="请输入" input-align="right"/>
@@ -113,7 +115,11 @@
             <van-field v-model="submitData.address" label="详细地址：" placeholder="请填写详细地址" input-align="right"/>
             <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
-                <upload-image textValue="上传单位营业执照" uploadIconType="1" @changeImage="getResultImage" imageType="businessLicense"></upload-image>
+                <upload-image textValue="上传单位营业执照"
+                              uploadIconType="1"
+                              @changeImage="getResultImage"
+                              imageType="businessLicense"
+                              :initImageUrl="submitData.businessLicense"></upload-image>
             </div>
         </van-form>
         <div class="btn-panel" flex="dir:top cross:center main:center">
