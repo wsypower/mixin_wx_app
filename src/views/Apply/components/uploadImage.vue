@@ -4,15 +4,15 @@
             <div class="img-panel" @click="previewImage">
                 <img :src="imgUrl" />
             </div>
+            <div v-if="loading" class="loading" flex="cross:center main:center">
+                <van-loading size="24" />
+            </div>
             <div class="close_btn" flex="cross:center main:center" @click="clearImage()">X</div>
         </div>
         <div v-else
              class="file_icon"
              :class="{zmIcon:uploadIconType==='1',jzzIcon:uploadIconType==='2',myjlIcon:uploadIconType==='3'}"
              @click="showMethodsPanel = true">
-            <div v-if="loading" class="loading" flex="cross:center main:center">
-                <van-loading size="24" />
-            </div>
             <!--<div v-if="loading" class="loading" flex="cross:center main:center">-->
                 <!--<van-loading size="24" />-->
             <!--</div>-->
@@ -69,20 +69,19 @@
                 this.$emit('changeImage',{imageType:this.imageType, url:val});
             },
             initImageUrl: function(val){
-                console.log(777);
                 this.imgUrl = val;
             }
         },
         methods:{
             getImage(method){
                 this.showMethodsPanel = false;
-                this.loading = true;
                 externalMethods.getImageUrl(method).then((res)=>{
+                    this.loading = true;
                     console.log('upload Image components 000000000000000000000',res);
                     this.imgUrl = res.pics[0].path;
                     setTimeout(() => {
                         this.loading = false;
-                    }, 200);
+                    }, 500);
                 }).catch((err)=>{
                     Toast(err);
                 })
@@ -111,14 +110,6 @@
             }
             &.myjlIcon{
                 @include bg-image("~assets/images/myjl");
-            }
-            .loading{
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0,0,0,0.5);
             }
         }
         .file-zm_text{
@@ -154,6 +145,15 @@
                 background-color: rgba(0,0,0,0.5);
                 font-size: 36px;
                 color: #ffffff;
+            }
+            .loading{
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 3;
+                background-color: rgba(0,0,0,0.5);
             }
         }
         .methods-panel{

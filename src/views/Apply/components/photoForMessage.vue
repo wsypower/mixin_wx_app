@@ -5,14 +5,14 @@
                 <img :src="imgUrl" />
             </div>
             <div class="close_btn" flex="cross:center main:center" @click="clearImage()">X</div>
+            <div v-if="loading" class="loading" flex="cross:center main:center">
+                <van-loading size="24" />
+            </div>
         </div>
         <div v-else
              class="file_icon"
              :class="{zmIcon:uploadIconType==='1',fmIcon:uploadIconType==='2'}"
              @click="getImageUrlAndMoreMessage">
-            <div v-if="loading" class="loading" flex="cross:center main:center">
-                <van-loading size="24" />
-            </div>
         </div>
         <div class="file-zm_text" v-if="textValue">{{textValue}}</div>
     </div>
@@ -62,13 +62,13 @@
                 this.loading = true;
                 externalMethods.getImageUrlAndMoreMessage(this.imageType).then(res => {
                     console.log('photo for message components: 9999999999999', res);
+                    this.loading = true;
                     this.imgUrl = res.imageUrl;
                     this.$emit('getMessage',{imageType:this.imageType, data:res});
                     setTimeout(() => {
                         this.loading = false;
-                    }, 200);
+                    }, 500);
                 }).catch(err => {
-                    this.loading = true;
                     Toast(err);
                 })
             },
@@ -94,14 +94,6 @@
             }
             &.fmIcon{
                 @include bg-image("~assets/images/sfz-fm");
-            }
-            .loading{
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0,0,0,0.5);
             }
         }
         .file-zm_text{
@@ -137,6 +129,15 @@
                 background-color: rgba(0,0,0,0.5);
                 font-size: 36px;
                 color: #ffffff;
+            }
+            .loading{
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.5);
+                z-index: 3;
             }
         }
     }
