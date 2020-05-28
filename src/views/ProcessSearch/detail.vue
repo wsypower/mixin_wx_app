@@ -34,6 +34,7 @@
                         <div class="log-item-right">
                             <div class="dot"></div>
                             <div class="message" :class="{wrong: item.stepCode==='25'||item.stepCode==='45'||item.stepCode==='85'}">
+                                <span v-if="item.stepCode==='25'||item.stepCode==='45'||item.stepCode==='85'">审核未通过，原因：</span>
                                 <span>{{item.remark||item.stepName}}</span>
                                 <span v-if="item.stepCode==='20'">，请到服务点申领狗牌</span>
                                 <div v-if="item.stepCode==='20'" @click="goToPage">服务点：<span class="icon iconfont icon-dingwei"></span><span class="service">{{orderInfo.serviceName}}</span></div>

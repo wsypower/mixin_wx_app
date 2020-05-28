@@ -23,7 +23,7 @@
                 </template>
             </van-field>
             <van-divider class="mini-line"></van-divider>
-            <template v-if="submitData.idType === 1">
+            <template v-show="submitData.idType === 1">
                 <div class="upload-img sfz-file" flex="dir:left cross:center main:justify">
                     <photo-for-message textValue="拍摄身份证人像面"
                                        uploadIconType="1"
@@ -42,8 +42,14 @@
                 <van-field v-model="submitData.ownerName" label="犬主姓名：" placeholder="请输入" input-align="right"/>
                 <van-divider></van-divider>
                 <van-field v-model="submitData.idCard" label="身份证号：" placeholder="请输入" input-align="right"/>
+                <van-divider></van-divider>
+                <van-field name="radio" label="性别：" input-align="right">
+                    <template #input>
+                        <my-radio-group :initValue="submitData.sex.toString()" :radioGroup="sexArray" @getRealValue="(name)=>{getRealValue('sex', name)}" style="width:unset"></my-radio-group>
+                    </template>
+                </van-field>
             </template>
-            <template v-if="submitData.idType === 2">
+            <template v-show="submitData.idType === 2">
                 <div class="upload-img" flex="dir:left cross:center main:justify">
                     <photo-for-message textValue="拍摄证件照片像面"
                                        uploadIconType="1"
@@ -56,8 +62,14 @@
                 <van-field v-model="submitData.ownerName" label="犬主姓名：" placeholder="请输入" input-align="right"/>
                 <van-divider></van-divider>
                 <van-field v-model="submitData.idCard" label="身份证号：" placeholder="请输入" input-align="right"/>
+                <van-divider></van-divider>
+                <van-field name="radio" label="性别：" input-align="right">
+                    <template #input>
+                        <my-radio-group :initValue="submitData.sex.toString()" :radioGroup="sexArray" @getRealValue="(name)=>{getRealValue('sex', name)}" style="width:unset"></my-radio-group>
+                    </template>
+                </van-field>
             </template>
-            <template v-if="submitData.idType === 3">
+            <template v-show="submitData.idType === 3">
                 <div class="upload-img" flex="dir:left cross:center main:justify">
                     <photo-for-message textValue="拍摄证件照片像面"
                                        uploadIconType="1"
@@ -288,6 +300,8 @@
                 this.submitData.dogOrderId = orderInfo.dogOrderId;
             }
             this.submitData.userType = 0;
+            //当前步骤为第一步，为防万一，设定一下
+            this.submitData.currentStep = 1;
             this.submitData.userId = this.$store.getters['userId'];
             //当前步骤为第一步，为防万一，设定一下
             this.submitData.currentStep = 1;
@@ -333,6 +347,7 @@
                     this.submitData.ownerName = data.data.name;
                     this.submitData.idCard = data.data.idCardNumber;
                     this.submitData.idCardFront = data.data.imageUrl;
+                    this.submitData.sex = data.data.sex;
                 }
                 else if(type === 'idCardBack'){
                     this.submitData.idCardBack = data.data.imageUrl;
@@ -341,6 +356,7 @@
                     this.submitData.ownerName = data.data.name;
                     this.submitData.idCard = data.data.idCardNumber;
                     this.submitData.idCardFront = data.data.imageUrl;
+                    this.submitData.sex = data.data.sex;
                 }
                 else{
                     this.submitData.idCardFront = data.data.imageUrl;
