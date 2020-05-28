@@ -69,11 +69,12 @@
         .header-right{
             font-family: PingFang-SC-Medium;
             font-size: 26px;
-            line-height: 56px;
+            //line-height: 56px;
             letter-spacing: 0px;
             color: #666666;
             .icon-youjiantou{
-                margin-left: 10px;
+                margin-left: 6px;
+                font-size: 26px;
                 color: #999999;
             }
         }
