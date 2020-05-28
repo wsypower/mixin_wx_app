@@ -119,13 +119,13 @@
                 let touch = e.touches[0]; //获取第一个触点
                 let y = Number(touch.pageY);
                 let panelHeight = this.$refs.hiddenPanel.offsetHeight;
-                if(this.startY - y >10){
+                if(this.startY - y >1){
                     if(panelHeight<585){
                         this.$refs.hiddenPanel.style.transition = 'unset';
                         this.$refs.hiddenPanel.style.height = (667 - y) + 'px';
                     }
                 }
-                if(y - this.startY >10){
+                if(y - this.startY >1){
                     if(panelHeight>50){
                         this.$refs.hiddenPanel.style.transition = 'unset';
                         this.$refs.hiddenPanel.style.height = (667 - y) + 'px';
@@ -138,11 +138,23 @@
                 let y = Number(touch.pageY);
                 console.log(this.startY - y);
                 let panelHeight = this.$refs.hiddenPanel.offsetHeight;
-                if(panelHeight<200 && this.startY - y >=0){
+                if(this.startY - y >0){
+                    this.$refs.hiddenPanel.style.transition = 'height 0.4s';
                     this.$refs.hiddenPanel.style.height = 585 + 'px';
                 }
-                if(panelHeight>200 && y - this.startY >=0){
+                else if(y - this.startY >0){
+                    this.$refs.hiddenPanel.style.transition = 'height 0.4s';
                     this.$refs.hiddenPanel.style.height = 50 + 'px';
+                }
+                else{
+                    if(panelHeight<100){
+                        this.$refs.hiddenPanel.style.transition = 'height 0.6s';
+                        this.$refs.hiddenPanel.style.height = 585 + 'px';
+                    }
+                    else{
+                        this.$refs.hiddenPanel.style.transition = 'height 0.6s';
+                        this.$refs.hiddenPanel.style.height = 50 + 'px';
+                    }
                 }
             },
         }
