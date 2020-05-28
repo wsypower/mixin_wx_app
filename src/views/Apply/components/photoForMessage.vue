@@ -39,6 +39,10 @@
                 type: String,
                 required: true,
                 default: 'idCardFront'
+            },
+            initImageUrl:{
+                type: String,
+                default: ''
             }
         },
         data(){
@@ -47,8 +51,11 @@
                 imgUrl: '',
             }
         },
-        mounted(){
-
+        watch:{
+            initImageUrl: function(val){
+                console.log(666);
+                this.imgUrl = val;
+            }
         },
         methods:{
             getImageUrlAndMoreMessage(){

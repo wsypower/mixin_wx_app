@@ -49,11 +49,23 @@
             </van-popup>
             <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
-                <upload-image textValue="添加免疫证首页" uploadIconType="1" @changeImage="getResultImage" imageType="immunePhotos"></upload-image>
-                <upload-image textValue="添加宠物免疫记录" uploadIconType="3" @changeImage="getResultImage" imageType="immuneRecord"></upload-image>
+                <upload-image textValue="添加免疫证首页"
+                              uploadIconType="1"
+                              @changeImage="getResultImage"
+                              imageType="immunePhotos"
+                              :initImageUrl="submitData.immunePhotos"></upload-image>
+                <upload-image textValue="添加宠物免疫记录"
+                              uploadIconType="3"
+                              @changeImage="getResultImage"
+                              imageType="immuneRecord"
+                              :initImageUrl="submitData.immuneRecord"></upload-image>
             </div>
             <div class="upload-img" flex="dir:left cross:center main:justify">
-                <upload-image textValue="添加其他材料" uploadIconType="1" @changeImage="getResultImage" imageType="otherFilePic"></upload-image>
+                <upload-image textValue="添加其他材料"
+                              uploadIconType="1"
+                              @changeImage="getResultImage"
+                              imageType="otherFilePic"
+                              :initImageUrl="submitData.otherFilePic"></upload-image>
             </div>
             <van-divider></van-divider>
             <div class="form-item-label">备注：</div>

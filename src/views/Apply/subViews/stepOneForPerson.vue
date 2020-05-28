@@ -29,12 +29,14 @@
                                        uploadIconType="1"
                                        @getMessage="getResultMessage"
                                        imageType="idCardFront"
-                                       @clearImage="clearImage"></photo-for-message>
+                                       @clearImage="clearImage"
+                                       :initImageUrl="submitData.idCardFront"></photo-for-message>
                     <photo-for-message textValue="拍摄身份证反面"
                                        uploadIconType="2"
                                        @getMessage="getResultMessage"
                                        imageType="idCardBack"
-                                       @clearImage="clearImage"></photo-for-message>
+                                       @clearImage="clearImage"
+                                       :initImageUrl="submitData.idCardBack"></photo-for-message>
                 </div>
                 <van-divider></van-divider>
                 <van-field v-model="submitData.ownerName" label="犬主姓名：" placeholder="请输入" input-align="right"/>
@@ -47,7 +49,8 @@
                                        uploadIconType="1"
                                        @getMessage="getResultMessage"
                                        imageType="driverLicense"
-                                       @clearImage="clearImage"></photo-for-message>
+                                       @clearImage="clearImage"
+                                       :initImageUrl="submitData.idCardFront"></photo-for-message>
                 </div>
                 <van-divider></van-divider>
                 <van-field v-model="submitData.ownerName" label="犬主姓名：" placeholder="请输入" input-align="right"/>
@@ -60,7 +63,8 @@
                                        uploadIconType="1"
                                        @getMessage="getResultMessage"
                                        imageType="passport"
-                                       @clearImage="clearImage"></photo-for-message>
+                                       @clearImage="clearImage"
+                                       :initImageUrl="submitData.idCardFront"></photo-for-message>
                 </div>
                 <van-divider></van-divider>
                 <van-field v-model="submitData.firstName" label="First name：" placeholder="请输入内容" input-align="right"/>
@@ -157,8 +161,16 @@
             <van-field v-model="submitData.address" label="详细地址：" placeholder="请填写详细地址" input-align="right"/>
             <van-divider></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
-                <upload-image textValue="上传居住证明" uploadIconType="1" @changeImage="getResultImage" imageType="residencyProofFront"></upload-image>
-                <upload-image textValue="上传居住证明" uploadIconType="2" @changeImage="getResultImage" imageType="residencyProofBack"></upload-image>
+                <upload-image textValue="上传居住证明"
+                              uploadIconType="1"
+                              @changeImage="getResultImage"
+                              imageType="residencyProofFront"
+                              :initImageUrl="submitData.residencyProofFront"></upload-image>
+                <upload-image textValue="上传居住证明"
+                              uploadIconType="2"
+                              @changeImage="getResultImage"
+                              imageType="residencyProofBack"
+                              :initImageUrl="submitData.residencyProofBack"></upload-image>
             </div>
         </van-form>
         <div class="btn-panel" flex="dir:top cross:center main:center">
@@ -268,6 +280,7 @@
         mounted(){
             //从缓存中读入素有orderInfo数据，适用于新建与编辑
             const orderInfo = this.$store.getters['order/orderInfo'];
+            console.log('orderInfo', orderInfo);
             Object.keys(this.submitData).forEach(key=>{
                 this.submitData[key] = orderInfo[key]
             })

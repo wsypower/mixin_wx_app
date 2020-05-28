@@ -37,8 +37,19 @@
             next(vm => {
                 //只有编辑的时候进入这个判断语句
                 if(to.query.currentStep){
+                    let _link = '';
                     vm.preStep = to.query.currentStep-1;
-                    let _link = routerArr[vm.preStep];
+                    if(vm.preStep===0){
+                        if(to.query.userType===0){
+                            _link = routerArr[vm.preStep] + 'ForPerson';
+                        }
+                        else{
+                            _link = routerArr[vm.preStep] + 'ForCompany';
+                        }
+                    }
+                    else{
+                        _link = routerArr[vm.preStep];
+                    }
                     let params = {
                         userId : vm.$store.getters['userId'],
                         orderId: to.query.orderId
