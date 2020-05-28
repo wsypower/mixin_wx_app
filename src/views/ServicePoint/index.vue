@@ -10,8 +10,11 @@
             <div class="text-panel"><span>地址：</span><span>{{firstPlace.address}}</span></div>
             <div class="text-panel"><span>服务时间：</span><span>{{firstPlace.serviceTime}}</span></div>
         </div>
-        <div class="hidden-place">
-            <div class="hidden-place-header" flex="dir:top cross:center main:center">
+        <div class="hidden-place" :class="{h1170: showAll}" ref="hiddenPanel">
+            <div class="hidden-place-header" flex="dir:top cross:center main:center"
+                 @touchstart.stop.prevent="touchStart"
+                 @touchmove.stop.prevent="touchMove"
+                 @touchend.stop.prevent="touchEnd">
                 <div class="line"></div>
                 <div class="header-text">已显示20个结果</div>
             </div>
@@ -26,7 +29,6 @@
                 </div>
             </div>
         </div>
-        <!--<van-popup v-model="show" round position="bottom" :style="{ height: '100px' }" />-->
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -40,13 +42,22 @@
         },
         data(){
             return {
-                show: true,
-                placeList: []
+                showAll: false,
+                placeList: [],
+                startY: 0,
+                screenY: 667
             }
         },
         computed:{
             firstPlace: function(){
-                return this.placeList[0]
+                const initData = {
+                    id: 0,
+                    servicePointName: '',
+                    distance: 0,
+                    address: '',
+                    serviceTime: ''
+                }
+                return this.placeList[0]? this.placeList[0] : initData;
             }
         },
         mounted(){
@@ -55,30 +66,35 @@
         methods:{
             getPlaceListData(){
                 let temp1 = {
+                    id: 1,
                     servicePointName: '八公宠物医院1',
                     distance: 124950,
                     address: '绍兴市越城区xx路xx号',
                     serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
                 }
                 let temp2 = {
+                    id: 2,
                     servicePointName: '八公宠物医院2',
                     distance: 24950,
                     address: '绍兴市越城区xx路xx号',
                     serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
                 }
                 let temp3 = {
+                    id: 3,
                     servicePointName: '八公宠物医院3',
                     distance: 20950,
                     address: '绍兴市越城区xx路xx号',
                     serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
                 }
                 let temp4 = {
+                    id: 4,
                     servicePointName: '八公宠物医院4',
                     distance: 10495,
                     address: '绍兴市越城区xx路xx号',
                     serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
                 }
                 let temp5 = {
+                    id: 5,
                     servicePointName: '八公宠物医院5',
                     distance: 11049,
                     address: '绍兴市越城区xx路xx号',
@@ -89,7 +105,46 @@
                 this.placeList.push(temp3);
                 this.placeList.push(temp4);
                 this.placeList.push(temp5);
-            }
+            },
+            // showAllPlace(){
+            //     this.showAll = !this.showAll;
+            // },
+            touchStart(e){
+                console.log('touchStart', e);
+                let touch = e.touches[0]; //获取第一个触点
+                this.startY = Number(touch.pageY);
+            },
+            touchMove(e){
+                console.log('touchMove', e);
+                let touch = e.touches[0]; //获取第一个触点
+                let y = Number(touch.pageY);
+                let panelHeight = this.$refs.hiddenPanel.offsetHeight;
+                if(this.startY - y >10){
+                    if(panelHeight<585){
+                        this.$refs.hiddenPanel.style.transition = 'unset';
+                        this.$refs.hiddenPanel.style.height = (667 - y) + 'px';
+                    }
+                }
+                if(y - this.startY >10){
+                    if(panelHeight>50){
+                        this.$refs.hiddenPanel.style.transition = 'unset';
+                        this.$refs.hiddenPanel.style.height = (667 - y) + 'px';
+                    }
+                }
+            },
+            touchEnd(e){
+                console.log('touchEnd', e);
+                let touch = e.changedTouches[0]; //获取最后一个触点
+                let y = Number(touch.pageY);
+                console.log(this.startY - y);
+                let panelHeight = this.$refs.hiddenPanel.offsetHeight;
+                if(panelHeight<200 && this.startY - y >=0){
+                    this.$refs.hiddenPanel.style.height = 585 + 'px';
+                }
+                if(panelHeight>200 && y - this.startY >=0){
+                    this.$refs.hiddenPanel.style.height = 50 + 'px';
+                }
+            },
         }
     }
 </script>
@@ -160,11 +215,16 @@
             bottom: 0px;
             left: 0px;
             right: 0px;
-            height: 950px;
+            /*height: 1170px;*/
+            height: 100px;
             z-index: 5;
             background-color: #f0f1f8;
             box-shadow: 0px 10px 18px 2px rgba(0, 0, 0, 0.8);
             border-radius: 20px 20px 0px 0px;
+            transition: height 0.5s;
+            &.h1170{
+                height: 1170px;
+            }
             .hidden-place-header{
                 width: 100%;
                 height: 100px;
