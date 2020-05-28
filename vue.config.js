@@ -189,11 +189,11 @@ module.exports = {
             ecma: undefined,
             warnings: false,
             parse: {},
-            // compress: {
-            //   drop_debugger: false,
-            //   drop_console: true,
-            //   pure_funcs: ["console.log"],
-            // },
+            compress: {
+              drop_debugger: false,
+              drop_console: true,
+              pure_funcs: ["console.log"],
+            },
             mangle: true, // 注意`mangle.properties`默认为`false`。
             module: false,
             output: null,
