@@ -223,6 +223,7 @@
                 this.submitData.dogOrderId = orderInfo.dogOrderId;
             }
             this.submitData.userType = 1;
+            //当前步骤为第一步，为防万一，设定一下
             this.submitData.currentStep = 1;
             this.submitData.userId = this.$store.getters['userId'];
             this.getAddressData('3306','1');

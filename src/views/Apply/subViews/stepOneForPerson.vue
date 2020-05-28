@@ -287,6 +287,9 @@
             if(orderInfo.dogOrderId){
                 this.submitData.dogOrderId = orderInfo.dogOrderId;
             }
+            this.submitData.userType = 0;
+            //当前步骤为第一步，为防万一，设定一下
+            this.submitData.currentStep = 1;
             this.submitData.userId = this.$store.getters['userId'];
             this.getAddressData('3306','1');
             //编辑时，根据已有的区县Id获取街道选项数据
