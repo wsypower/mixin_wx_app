@@ -19,6 +19,7 @@
     "vant": "^2.8.0",
     "vconsole": "^3.3.4",
     "vue": "^2.6.10",
+    "vue-baidu-map": "^0.21.22",
     "vue-pdf": "^4.0.8",
     "vue-content-loader": "^0.2.3",
     "vue-router": "^3.0.3",

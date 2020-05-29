@@ -2,6 +2,13 @@
     <div class="service-point-page">
         <page-header title="服务点"></page-header>
         <div class="map-panel">
+            <baidu-map class="bm-view" ak="fyqKIIAp1Vg3BN5KGd4ZBbhpUeuYhZW7" :center="center" :zoom="zoom" @ready="mapReadyHandler">
+                <bm-marker :position="{lng: firstPlace.originLon, lat: firstPlace.originLat}" :dragging="true" animation="BMAP_ANIMATION_BOUNCE">
+                    <bm-label :content="firstPlace.servicePointName"
+                              :labelStyle="{color: '#ffffff', fontSize : '14px',borderColor:'#306ce7',backgroundColor:'#306ce7',borderRadius:'5px',padding: '0px 10px' }"
+                              :offset="{width: -30, height: 30}"/>
+                </bm-marker>
+            </baidu-map>
         </div>
         <div class="show-place">
             <div class="show-place-header" flex="dir:left cross:center main:justify">
@@ -42,15 +49,26 @@
 <script type="text/ecmascript-6">
     import { List } from 'vant';
     import PageHeader from '@/components/pageHeader.vue';
+    import BaiduMap from 'vue-baidu-map/components/map/Map.vue';
+    import bmMarker from 'vue-baidu-map/components/overlays/Marker.vue'
+    import bmLabel from 'vue-baidu-map/components/overlays/Label.vue'
     export default {
         name: 'servicePoint',
         components:{
             [List.name]: List,
-            PageHeader
+            PageHeader,
+            BaiduMap,
+            bmMarker,
+            bmLabel
         },
         data(){
             return {
+                //地图使用参数
+                center: {lng: 0, lat: 0},
+                zoom: 3,
+
                 showAll: false,
+                firstPlace: {},
                 placeList: [],
                 loading: false,
                 finished: false,
@@ -59,26 +77,34 @@
             }
         },
         computed:{
-            firstPlace: function(){
-                const initData = {
-                    id: 0,
-                    servicePointName: '',
-                    distance: 0,
-                    address: '',
-                    serviceTime: ''
-                }
-                return this.placeList[0]? this.placeList[0] : initData;
-            },
+            // firstPlace: function(){
+            //     const initData = {
+            //         id: 0,
+            //         servicePointName: '',
+            //         distance: 0,
+            //         address: '',
+            //         serviceTime: ''
+            //     }
+            //     return this.placeList[0]? this.placeList[0] : initData;
+            // },
             totalSize: function(){
                 return this.placeList.length;
             }
         },
         mounted(){
+            this.firstPlace = this.$store.getters['service/pointInfo'];
             this.clientHeight = `${document.documentElement.clientHeight}`;
             //this.getPlaceListData();
             //this.onLoad();
         },
         methods:{
+            mapReadyHandler({BMap, map}) {
+                console.log(BMap, map)
+
+                this.center.lng = this.firstPlace.originLon;
+                this.center.lat = this.firstPlace.originLat;
+                this.zoom = 15
+            },
             onLoad() {
                 console.log('777777777777777777777777');
                 // 异步更新数据
@@ -251,6 +277,10 @@
         .map-panel{
             width: 100%;
             height: 100%;
+            .bm-view{
+                width: 100%;
+                height: 100%;
+            }
         }
         .show-place{
             position: fixed;

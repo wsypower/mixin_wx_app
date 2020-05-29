@@ -6,7 +6,7 @@
         </div>
         <div class="service-place-body">
             <my-scroll>
-                <div class="place-item" v-for="item in placeList" :key="item.id" @click="gotoPointDetail(item.id)">
+                <div class="place-item" v-for="item in placeList" :key="item.id" @click="gotoPointDetail(item)">
                     <div class="first" flex="dir:left cross:center main:justify">
                         <span class="place-item-name">{{item.servicePointName}}</span>
                         <span class="place-item-point"><span class="icon iconfont icon-dingwei point"></span>{{(item.distance/1000).toFixed(2)}}km</span>
@@ -44,9 +44,19 @@
                 //Toast('还没开发');
                 this.$router.push('/service');
             },
-            gotoPointDetail(placeId){
-                console.log(`placeId: ${placeId}`);
-                Toast('还没开发');
+            gotoPointDetail(place){
+                //console.log(`placeId: ${placeId}`);
+                //Toast('还没开发');
+                let pointInfo = {
+                    servicePointName: place.servicePointName,
+                    distance: place.distance,
+                    address: place.address,
+                    serviceTime: place.serviceTime,
+                    originLon: place.longitude,
+                    originLat: place.latitude,
+                }
+                this.$store.commit('service/updatePointInfo',pointInfo);
+                this.$router.push('/service');
             }
         }
     }
