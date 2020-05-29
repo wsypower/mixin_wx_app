@@ -1,7 +1,8 @@
 <template>
     <div class="service-point-page">
         <page-header title="服务点"></page-header>
-        <div class="map-panel"></div>
+        <div class="map-panel">
+        </div>
         <div class="show-place">
             <div class="show-place-header" flex="dir:left cross:center main:justify">
                 <span class="show-place-name">{{firstPlace.servicePointName}}</span>
@@ -10,7 +11,7 @@
             <div class="text-panel"><span>地址：</span><span>{{firstPlace.address}}</span></div>
             <div class="text-panel"><span>服务时间：</span><span>{{firstPlace.serviceTime}}</span></div>
         </div>
-        <div class="hidden-place" ref="hiddenPanel">
+        <div class="hidden-place" ref="hiddenPanel" :class="{h1170:showAll}">
             <div class="hidden-place-header" flex="dir:top cross:center main:center"
                  @touchstart.stop.prevent="touchStart"
                  @touchmove.stop.prevent="touchMove"
@@ -19,21 +20,21 @@
                 <div class="header-text">已显示{{totalSize}}个结果</div>
             </div>
             <div class="hidden-place-body">
-                <van-list
+                    <van-list
                         v-model="loading"
                         :finished="finished"
                         finished-text="没有更多了"
                         @load="onLoad"
-                >
-                    <div class="place-item" v-for="item in placeList" :key="item.id">
-                        <div class="first" flex="dir:left cross:center main:justify">
-                            <span class="place-item-name">{{item.servicePointName}}</span>
-                            <span class="place-item-point"><span class="icon iconfont point">&#xe63e;</span>{{(item.distance/1000).toFixed(2)}}km</span>
+                    >
+                        <div class="place-item" v-for="item in placeList" :key="item.id">
+                            <div class="first" flex="dir:left cross:center main:justify">
+                                <span class="place-item-name">{{item.servicePointName}}</span>
+                                <span class="place-item-point"><span class="icon iconfont point">&#xe63e;</span>{{(item.distance/1000).toFixed(2)}}km</span>
+                            </div>
+                            <div class="text-panel"><span>地址：</span><span>{{item.address}}</span></div>
+                            <div class="text-panel"><span>服务时间：</span><span>{{item.serviceTime}}</span></div>
                         </div>
-                        <div class="text-panel"><span>地址：</span><span>{{item.address}}</span></div>
-                        <div class="text-panel"><span>服务时间：</span><span>{{item.serviceTime}}</span></div>
-                    </div>
-                </van-list>
+                    </van-list>
             </div>
         </div>
     </div>
@@ -49,6 +50,7 @@
         },
         data(){
             return {
+                showAll: false,
                 placeList: [],
                 loading: false,
                 finished: false,
@@ -73,10 +75,12 @@
         },
         mounted(){
             this.clientHeight = `${document.documentElement.clientHeight}`;
-            this.getPlaceListData();
+            //this.getPlaceListData();
+            //this.onLoad();
         },
         methods:{
             onLoad() {
+                console.log('777777777777777777777777');
                 // 异步更新数据
                 // setTimeout 仅做示例，真实场景中一般为 ajax 请求
                 setTimeout(() => {
@@ -181,6 +185,7 @@
                 this.placeList.push(temp8);
                 this.placeList.push(temp9);
                 this.placeList.push(temp10);
+                this.loading = true;
             },
             touchStart(e){
                 console.log('touchStart', e);
@@ -188,22 +193,22 @@
                 this.startY = Number(touch.pageY);
             },
             touchMove(e){
-                console.log('touchMove', e);
-                let touch = e.touches[0]; //获取第一个触点
-                let y = Number(touch.pageY);
-                let panelHeight = this.$refs.hiddenPanel.offsetHeight;
-                if(this.startY - y >1){
-                    if(panelHeight<585){
-                        this.$refs.hiddenPanel.style.transition = 'unset';
-                        this.$refs.hiddenPanel.style.height = (this.clientHeight - y) + 'px';
-                    }
-                }
-                if(y - this.startY >1){
-                    if(panelHeight>50){
-                        this.$refs.hiddenPanel.style.transition = 'unset';
-                        this.$refs.hiddenPanel.style.height = (this.clientHeight - y) + 'px';
-                    }
-                }
+                // console.log('touchMove', e);
+                // let touch = e.touches[0]; //获取第一个触点
+                // let y = Number(touch.pageY);
+                // let panelHeight = this.$refs.hiddenPanel.offsetHeight;
+                // if(this.startY - y >1){
+                //     if(panelHeight<585){
+                //         this.$refs.hiddenPanel.style.transition = 'unset';
+                //         this.$refs.hiddenPanel.style.height = (this.clientHeight - y) + 'px';
+                //     }
+                // }
+                // if(y - this.startY >1){
+                //     if(panelHeight>50){
+                //         this.$refs.hiddenPanel.style.transition = 'unset';
+                //         this.$refs.hiddenPanel.style.height = (this.clientHeight - y) + 'px';
+                //     }
+                // }
             },
             touchEnd(e){
                 console.log('touchEnd', e);
@@ -212,21 +217,25 @@
                 console.log(this.startY - y);
                 let panelHeight = this.$refs.hiddenPanel.offsetHeight;
                 if(this.startY - y >0){
-                    this.$refs.hiddenPanel.style.transition = 'height 0.4s';
-                    this.$refs.hiddenPanel.style.height = 585 + 'px';
+                    // this.$refs.hiddenPanel.style.transition = 'height 0.4s';
+                    // this.$refs.hiddenPanel.style.height = 585 + 'px';
+                    this.showAll = true;
                 }
                 else if(y - this.startY >0){
-                    this.$refs.hiddenPanel.style.transition = 'height 0.4s';
-                    this.$refs.hiddenPanel.style.height = 50 + 'px';
+                    // this.$refs.hiddenPanel.style.transition = 'height 0.4s';
+                    // this.$refs.hiddenPanel.style.height = 50 + 'px';
+                    this.showAll = false;
                 }
                 else{
                     if(panelHeight<100){
-                        this.$refs.hiddenPanel.style.transition = 'height 0.6s';
-                        this.$refs.hiddenPanel.style.height = 585 + 'px';
+                        // this.$refs.hiddenPanel.style.transition = 'height 0.6s';
+                        // this.$refs.hiddenPanel.style.height = 585 + 'px';
+                        this.showAll = true;
                     }
                     else{
-                        this.$refs.hiddenPanel.style.transition = 'height 0.6s';
-                        this.$refs.hiddenPanel.style.height = 50 + 'px';
+                        // this.$refs.hiddenPanel.style.transition = 'height 0.6s';
+                        // this.$refs.hiddenPanel.style.height = 50 + 'px';
+                        this.showAll = false;
                     }
                 }
             },
@@ -328,7 +337,9 @@
             }
             .hidden-place-body{
                 width: 100%;
+                height: 1070px;
                 padding: 0px 24px;
+                overflow-y: auto;
                 .place-item{
                     width: 100%;
                     min-height: 190px;
