@@ -10,42 +10,50 @@
             <div class="text-panel"><span>地址：</span><span>{{firstPlace.address}}</span></div>
             <div class="text-panel"><span>服务时间：</span><span>{{firstPlace.serviceTime}}</span></div>
         </div>
-        <div class="hidden-place" :class="{h1170: showAll}" ref="hiddenPanel">
+        <div class="hidden-place" ref="hiddenPanel">
             <div class="hidden-place-header" flex="dir:top cross:center main:center"
                  @touchstart.stop.prevent="touchStart"
                  @touchmove.stop.prevent="touchMove"
                  @touchend.stop.prevent="touchEnd">
                 <div class="line"></div>
-                <div class="header-text">已显示20个结果</div>
+                <div class="header-text">已显示{{totalSize}}个结果</div>
             </div>
             <div class="hidden-place-body">
-                <div class="place-item" v-for="item in placeList" :key="item.id">
-                    <div class="first" flex="dir:left cross:center main:justify">
-                        <span class="place-item-name">{{item.servicePointName}}</span>
-                        <span class="place-item-point"><span class="icon iconfont point">&#xe63e;</span>{{(item.distance/1000).toFixed(2)}}km</span>
+                <van-list
+                        v-model="loading"
+                        :finished="finished"
+                        finished-text="没有更多了"
+                        @load="onLoad"
+                >
+                    <div class="place-item" v-for="item in placeList" :key="item.id">
+                        <div class="first" flex="dir:left cross:center main:justify">
+                            <span class="place-item-name">{{item.servicePointName}}</span>
+                            <span class="place-item-point"><span class="icon iconfont point">&#xe63e;</span>{{(item.distance/1000).toFixed(2)}}km</span>
+                        </div>
+                        <div class="text-panel"><span>地址：</span><span>{{item.address}}</span></div>
+                        <div class="text-panel"><span>服务时间：</span><span>{{item.serviceTime}}</span></div>
                     </div>
-                    <div class="text-panel"><span>地址：</span><span>{{item.address}}</span></div>
-                    <div class="text-panel"><span>服务时间：</span><span>{{item.serviceTime}}</span></div>
-                </div>
+                </van-list>
             </div>
         </div>
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Popup } from 'vant';
+    import { List } from 'vant';
     import PageHeader from '@/components/pageHeader.vue';
     export default {
         name: 'servicePoint',
         components:{
-            [Popup.name]: Popup,
+            [List.name]: List,
             PageHeader
         },
         data(){
             return {
-                showAll: false,
                 placeList: [],
+                loading: false,
+                finished: false,
                 startY: 0,
-                screenY: 667
+                clientHeight: 0
             }
         },
         computed:{
@@ -58,12 +66,40 @@
                     serviceTime: ''
                 }
                 return this.placeList[0]? this.placeList[0] : initData;
+            },
+            totalSize: function(){
+                return this.placeList.length;
             }
         },
         mounted(){
+            this.clientHeight = `${document.documentElement.clientHeight}`;
             this.getPlaceListData();
         },
         methods:{
+            onLoad() {
+                // 异步更新数据
+                // setTimeout 仅做示例，真实场景中一般为 ajax 请求
+                setTimeout(() => {
+                    for (let i = 0; i < 10; i++) {
+                        let initData = {
+                            id: this.placeList.length+1,
+                            servicePointName: '八公宠物园' + (this.placeList.length+1) ,
+                            distance: 0,
+                            address: '',
+                            serviceTime: ''
+                        }
+                        this.placeList.push(initData);
+                    }
+
+                    // 加载状态结束
+                    this.loading = false;
+
+                    // 数据全部加载完成
+                    if (this.placeList.length >= 40) {
+                        this.finished = true;
+                    }
+                }, 1000);
+            },
             getPlaceListData(){
                 let temp1 = {
                     id: 1,
@@ -100,15 +136,52 @@
                     address: '绍兴市越城区xx路xx号',
                     serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
                 }
+                let temp6 = {
+                    id: 6,
+                    servicePointName: '八公宠物医院6',
+                    distance: 11049,
+                    address: '绍兴市越城区xx路xx号',
+                    serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
+                }
+                let temp7 = {
+                    id: 7,
+                    servicePointName: '八公宠物医院7',
+                    distance: 11049,
+                    address: '绍兴市越城区xx路xx号',
+                    serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
+                }
+                let temp8 = {
+                    id: 8,
+                    servicePointName: '八公宠物医院8',
+                    distance: 11049,
+                    address: '绍兴市越城区xx路xx号',
+                    serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
+                }
+                let temp9 = {
+                    id: 9,
+                    servicePointName: '八公宠物医院9',
+                    distance: 11049,
+                    address: '绍兴市越城区xx路xx号',
+                    serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
+                }
+                let temp10 = {
+                    id: 10,
+                    servicePointName: '八公宠物医院10',
+                    distance: 11049,
+                    address: '绍兴市越城区xx路xx号',
+                    serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
+                }
                 this.placeList.push(temp1);
                 this.placeList.push(temp2);
                 this.placeList.push(temp3);
                 this.placeList.push(temp4);
                 this.placeList.push(temp5);
+                this.placeList.push(temp6);
+                this.placeList.push(temp7);
+                this.placeList.push(temp8);
+                this.placeList.push(temp9);
+                this.placeList.push(temp10);
             },
-            // showAllPlace(){
-            //     this.showAll = !this.showAll;
-            // },
             touchStart(e){
                 console.log('touchStart', e);
                 let touch = e.touches[0]; //获取第一个触点
@@ -122,13 +195,13 @@
                 if(this.startY - y >1){
                     if(panelHeight<585){
                         this.$refs.hiddenPanel.style.transition = 'unset';
-                        this.$refs.hiddenPanel.style.height = (667 - y) + 'px';
+                        this.$refs.hiddenPanel.style.height = (this.clientHeight - y) + 'px';
                     }
                 }
                 if(y - this.startY >1){
                     if(panelHeight>50){
                         this.$refs.hiddenPanel.style.transition = 'unset';
-                        this.$refs.hiddenPanel.style.height = (667 - y) + 'px';
+                        this.$refs.hiddenPanel.style.height = (this.clientHeight - y) + 'px';
                     }
                 }
             },
@@ -227,7 +300,6 @@
             bottom: 0px;
             left: 0px;
             right: 0px;
-            /*height: 1170px;*/
             height: 100px;
             z-index: 5;
             background-color: #f0f1f8;
