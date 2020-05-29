@@ -104,7 +104,7 @@ const orderInitInfo = {
     //养犬承诺书
     commitmentPic: '',
     //其他材料
-    otherFilePic: '',
+    otherPic: '',
     //备注
     remark: ''
 }
