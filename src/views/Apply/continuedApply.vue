@@ -64,8 +64,8 @@
                 <upload-image textValue="添加其他材料"
                               uploadIconType="1"
                               @changeImage="getResultImage"
-                              imageType="otherFilePic"
-                              :initImageUrl="submitData.otherFilePic"></upload-image>
+                              imageType="otherPic"
+                              :initImageUrl="submitData.otherPic"></upload-image>
             </div>
             <van-divider></van-divider>
             <div class="form-item-label">备注：</div>
@@ -139,7 +139,7 @@
                     //免疫记录照片
                     immuneRecord: '',
                     //其他材料
-                    otherFilePic: '',
+                    otherPic: '',
                     // 备注
                     remark: ''
                 },
