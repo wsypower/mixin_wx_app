@@ -197,7 +197,7 @@
             }
         }
         .log-panel{
-            height: calc(100% - 340px);
+            //height: calc(100% - 340px);
             .log-header{
                 height: 90px;
                 padding-left: 24px;
