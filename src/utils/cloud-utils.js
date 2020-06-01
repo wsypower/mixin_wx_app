@@ -302,7 +302,7 @@ export function encrypt(params) {
   var keys = Object.keys(params).sort();
   var str = [];
 
-  keys.forEach(function (p) {
+  keys.forEach(function(p) {
     str.push(p + "=" + params[p]);
   });
 
@@ -707,7 +707,7 @@ export function getUrlNames(name) {
  */
 export function generateGUID() {
   var d = Date.now();
-  var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (
+  var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(
     c
   ) {
     var r = (d + Math.random() * 16) % 16 | 0;
@@ -1027,7 +1027,7 @@ export function isValidURI(url) {
   var domainType = [protocols, userInfo, domain, port, address];
   var ipType = [protocols, userInfo, ip, port, address];
 
-  var verify = function (type) {
+  var verify = function(type) {
     return new RegExp("^" + type.join("") + "$", "i").test(url);
   };
 
@@ -1240,7 +1240,10 @@ export function getDevice() {
   // iOS 8+ changed UA
   if (device.ios && device.osVersion && ua.indexOf("Version/") >= 0) {
     if (device.osVersion.split(".")[0] === "10") {
-      device.osVersion = ua.toLowerCase().split("version/")[1].split(" ")[0];
+      device.osVersion = ua
+        .toLowerCase()
+        .split("version/")[1]
+        .split(" ")[0];
     }
   }
 
@@ -1264,7 +1267,7 @@ export function getBrowser() {
   var ua = navigator.userAgent.toLowerCase();
   var type = "UNKNOW";
   var v;
-  var check = function (regex) {
+  var check = function(regex) {
     return regex.test(ua);
   };
 
@@ -1385,7 +1388,7 @@ export function addClass(el, cls) {
   }
 }
 
-var trim = function (string) {
+var trim = function(string) {
   return (string || "").replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, "");
 };
 
@@ -1439,7 +1442,7 @@ export function removeClass(el, cls) {
  * // => getAccountList
  */
 export function toCamelCaseVar(variable) {
-  return variable.replace(/_+[a-zA-Z]/g, function (str, index) {
+  return variable.replace(/_+[a-zA-Z]/g, function(str, index) {
     return index ? str.substr(-1).toUpperCase() : str;
   });
 }
@@ -1475,7 +1478,7 @@ export function formatNumber(
   var dec = typeof decPoint === "undefined" ? "." : decPoint;
   var re = /(-?\d+)(\d{3})/;
   var s = "";
-  var toFixedFix = function (n, prec) {
+  var toFixedFix = function(n, prec) {
     var k = Math.pow(10, prec);
     return (
       "" +
@@ -1554,7 +1557,7 @@ export function compareVersion(oldVersion, newVersion, containEqual) {
  * // => test
  */
 export function getIn(p, o) {
-  return p.reduce(function (xs, x) {
+  return p.reduce(function(xs, x) {
     return xs && xs[x] ? xs[x] : null;
   }, o);
 }
@@ -1589,7 +1592,7 @@ export function rgbToHex(r, g, b) {
 export function hexToRgb(hex) {
   // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
   var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-  hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+  hex = hex.replace(shorthandRegex, function(m, r, g, b) {
     return r + r + g + g + b + b;
   });
 
@@ -1620,9 +1623,9 @@ export function anagrams(str) {
     return str.length === 2 ? [str, str[1] + str[0]] : [str];
   }
 
-  return str.split("").reduce(function (acc, letter, i) {
+  return str.split("").reduce(function(acc, letter, i) {
     return acc.concat(
-      anagrams(str.slice(0, i) + str.slice(i + 1)).map(function (val) {
+      anagrams(str.slice(0, i) + str.slice(i + 1)).map(function(val) {
         return letter + val;
       })
     );
@@ -1641,7 +1644,7 @@ export function anagrams(str) {
  * // => 'Hello World!'
  */
 export function capitalizeEveryWord(str) {
-  return str.replace(/\b[a-z]/g, function (char) {
+  return str.replace(/\b[a-z]/g, function(char) {
     return char.toUpperCase();
   });
 }
@@ -1661,7 +1664,7 @@ export function capitalizeEveryWord(str) {
 export function fibonacci(num) {
   return Array(num)
     .fill(0)
-    .reduce(function (acc, val, i) {
+    .reduce(function(acc, val, i) {
       return acc.concat(i > 1 ? acc[i - 1] + acc[i - 2] : i);
     }, []);
 }
@@ -1738,7 +1741,7 @@ export function timeTaken(callback) {
 export function objectFromPairs(array) {
   return (
     Array.isArray(array) &&
-    array.reduce(function (a, v) {
+    array.reduce(function(a, v) {
       return (a[v[0]] = v[1]), a;
     }, {})
   );

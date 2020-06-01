@@ -17,6 +17,9 @@ import service from "./request/index";
 // 淘宝的flexbile 增加一个修正字体字号大小的影响
 import "./flexbile/index";
 
+// 环境判断
+import "./environment/index";
+
 export default {
   install(Vue) {
     // 设置为 false 以阻止 vue 在启动时生成生产提示
