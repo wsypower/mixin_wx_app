@@ -15,7 +15,7 @@
                         readonly
                         clickable
                         name="picker"
-                        :value="submitData.reasonName"
+                        :value="submitData.cancelReason"
                         label="注册原因："
                         placeholder="死亡/其他"
                         @click="showReasonPicker = true"
@@ -51,6 +51,8 @@
 <script type="text/ecmascript-6">
     import { Form, Field, Button, Popup, Picker, Toast } from 'vant';
     import PageHeader from '@/components/pageHeader.vue'
+    import { sendSms, checkSms} from '@/api/common.js';
+    import { dogCardCancelApply } from '@/api/dogManage.js'
     export default {
         name: 'unbind',
         components: {
@@ -66,20 +68,23 @@
             return {
                 auth_time: 60,
                 sendAuthCode: true,
+                isCheckSms: false,
                 showReasonPicker: false,
                 ReasonColumns: ['死亡','其他'],
                 submitData:{
                     userId: '',
-                    phone: '14523651457',
+                    phone: '',
                     verificationCode: '',
-                    reasonName: '',
-                    reason: 0,
+                    dogCardId: '',
+                    cancelReason: '',
                     remark: ''
                 }
             }
         },
         mounted(){
-
+            this.submitData.userId = this.$store.getters['userId'];
+            this.submitData.phone = this.$store.getters['dog/dogInfo'].phone;
+            this.submitData.dogCardId = this.$store.getters['dog/dogInfo'].dogId;
         },
         methods:{
             //获取手机验证码，60s之后可再次请求
@@ -90,11 +95,11 @@
                         userId: this.submitData.userId,
                         phoneNumber: this.submitData.phone
                     }
-                    // sendSms(params).then( res => {
-                    //     if(res.errno!==0){
-                    //         Toast.fail({message: res.errmsg});
-                    //     }
-                    // })
+                    sendSms(params).then( res => {
+                        if(res.errno!==0){
+                            Toast.fail({message: res.errmsg});
+                        }
+                    });
                     this.auth_time = 60;
                     var auth_timetimer =  setInterval(()=>{
                         this.auth_time--;
@@ -115,23 +120,38 @@
                     phoneNumber: this.submitData.phone,
                     smsCode:  this.submitData.verificationCode
                 }
-                // checkSms(params).then( res => {
-                //     if(res.errno===0){
-                //         this.isCheckSms = true;
-                //     }
-                //     else{
-                //         Toast.fail({message: res.errmsg});
-                //     }
-                // });
+                checkSms(params).then( res => {
+                    if(res.errno===0){
+                        this.isCheckSms = true;
+                    }
+                    else{
+                        Toast.fail({message: res.errmsg});
+                    }
+                });
             },
             onReasonConfirm(value){
                 console.log(`当前选中值：`, value);
-                this.submitData.reasonName = value;
-                this.submitData.reason = this.ReasonColumns.findIndex(e => e === value);
+                this.submitData.cancelReason = value;
+                //this.submitData.reason = this.ReasonColumns.findIndex(e => e === value);
                 this.showReasonPicker = false;
             },
             unbindSubmit(){
-
+                console.log('unbindSubmit', this.submitData)
+                if( this.isCheckSms){
+                    dogCardCancelApply(this.submitData).then( res => {
+                        console.log(res, res);
+                        if(res.errno === 0){
+                            Toast.success({message: '注销成功'});
+                            this.$router.push('/');
+                        }
+                        else{
+                            Toast.fail({message: res.errmsg,duration: 3000});
+                        }
+                    });
+                }
+                else{
+                    Toast.fail({message: '短信验证未通过'});
+                }
             }
         }
     }

@@ -23,7 +23,7 @@
                 </template>
             </van-field>
             <van-divider class="mini-line"></van-divider>
-            <template v-show="submitData.idType === 1">
+            <div v-show="submitData.idType === 1">
                 <div class="upload-img sfz-file" flex="dir:left cross:center main:justify">
                     <photo-for-message textValue="拍摄身份证人像面"
                                        uploadIconType="1"
@@ -48,8 +48,8 @@
                         <my-radio-group :initValue="submitData.sex.toString()" :radioGroup="sexArray" @getRealValue="(name)=>{getRealValue('sex', name)}" style="width:unset"></my-radio-group>
                     </template>
                 </van-field>
-            </template>
-            <template v-show="submitData.idType === 2">
+            </div>
+            <div v-show="submitData.idType === 2">
                 <div class="upload-img" flex="dir:left cross:center main:justify">
                     <photo-for-message textValue="拍摄证件照片像面"
                                        uploadIconType="1"
@@ -68,8 +68,8 @@
                         <my-radio-group :initValue="submitData.sex.toString()" :radioGroup="sexArray" @getRealValue="(name)=>{getRealValue('sex', name)}" style="width:unset"></my-radio-group>
                     </template>
                 </van-field>
-            </template>
-            <template v-show="submitData.idType === 3">
+            </div>
+            <div v-show="submitData.idType === 3">
                 <div class="upload-img" flex="dir:left cross:center main:justify">
                     <photo-for-message textValue="拍摄证件照片像面"
                                        uploadIconType="1"
@@ -92,7 +92,7 @@
                         <my-radio-group :initValue="submitData.sex.toString()" :radioGroup="sexArray" @getRealValue="(name)=>{getRealValue('sex', name)}" style="width:unset"></my-radio-group>
                     </template>
                 </van-field>
-            </template>
+            </div>
             <van-divider></van-divider>
             <van-field v-model="submitData.phone" type="number" label="联系电话：" placeholder="请输入" input-align="right"/>
             <van-divider></van-divider>

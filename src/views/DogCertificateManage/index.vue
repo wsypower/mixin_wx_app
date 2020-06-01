@@ -13,7 +13,7 @@
 <script type="text/ecmascript-6">
     import PageHeader from '@/components/pageHeader.vue';
     import DogItem from './components/dogItem.vue';
-    import { queryDogCard } from '@/api/home.js'
+    import { queryDogCard } from '@/api/dogManage.js'
     const statusArr = ["有效","即将到期","已到期","已注销"];
     export default {
         name: 'dogCertificateManage',
@@ -33,7 +33,19 @@
             getListData(){
                 queryDogCard({userId: this.$store.getters['userId']}).then( res => {
                     this.dogList = res.data.map(item =>{
-                        item.statusId = statusArr.findIndex(it => it===item.dogCarStatus)
+                        item.statusId = statusArr.findIndex(it => it===item.dogCarStatus);
+                        if(item.statusId===0){
+                            item.backgroundImage = 'url(' + item.qRCodePath + '),linear-gradient(#0f0, #0f0)';
+                        }
+                        else if(item.statusId===1){
+                            item.backgroundImage = 'url(' + item.qRCodePath + '),linear-gradient(#ffa200, #ffa200)';
+                        }
+                        else if(item.statusId===2){
+                            item.backgroundImage = 'url(' + item.qRCodePath + '),linear-gradient(#f00, #f00)';
+                        }
+                        else {
+                            item.backgroundImage = 'url(' + item.qRCodePath + '),linear-gradient(#847e74, #847e74)';
+                        }
                         return item
                     });
                 });

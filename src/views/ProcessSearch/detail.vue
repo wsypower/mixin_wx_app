@@ -55,7 +55,7 @@
     import { queryOrderDetail } from '@/api/process.js'
 
     const buttonObj = {
-        '-20-': { name:'查看服务点',path: ''},
+        '-20-': { name:'查看服务点',path: 'service'},
         '-25-45-85-': {name:'修改信息',path:'applyPage'},
         '-40-80-': {name:'查看犬证',path: ''}
     }
@@ -86,9 +86,12 @@
                     breed: '',
                     //服务点名称
                     serviceName: '',
+                    //服务点Code
+                    serviceCode: '',
                     //申办进度
                     logList: []
                 },
+                pointInfo:{}
             }
         },
         mounted(){
@@ -99,6 +102,8 @@
             getDetailData(){
                 let params = {
                     userId: this.$store.getters['userId'],
+                    originLon: this.$store.getters['originLon'],
+                    originLat: this.$store.getters['originLat'],
                     orderNo: this.$route.params.orderNo
                 }
                 queryOrderDetail(params).then( res => {
@@ -113,8 +118,19 @@
                         this.orderInfo.dogName = order.dogName;
                         this.orderInfo.breed = order.breed;
                         this.orderInfo.serviceName = order.serviceName;
+                        this.orderInfo.serviceCode = order.serviceCode;
                         this.orderInfo.logList = res.data.list;
                         let temp = res.data.list[0];
+                        let pointInfo = {
+                            id: temp.dogServicePoint.id,
+                            servicePointName: temp.dogServicePoint.servicePointName,
+                            distance: temp.dogServicePoint.distance,
+                            address: temp.dogServicePoint.address,
+                            serviceTime: temp.dogServicePoint.serviceTime,
+                            originLon: temp.dogServicePoint.longitude,
+                            originLat: temp.dogServicePoint.latitude,
+                        }
+                        this.$store.commit('service/updatePointInfo',pointInfo);
                         let needKey = Object.keys(buttonObj).find(key => key.indexOf('-' + temp.stepCode + '-')>=0)
                         if(needKey){
                             this.showButton = true;
@@ -133,6 +149,9 @@
             goToPage(){
                 if(this.pagePath===''){
                     Toast('还未开发');
+                }
+                else if(this.pagePath==='service'){
+                    this.$router.push('/service');
                 }
                 else{
                     if(this.orderInfo.cardType==='新办'){

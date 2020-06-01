@@ -21,7 +21,7 @@
     import { getURLParameters } from '@/utils/index';
     import externalMethods from '@/utils/externalMethods/index.js'
     import { AccountLogin } from '@/api/account/login.js';
-    import { queryDogCard } from '@/api/home.js'
+    import { queryDogCard } from '@/api/dogManage.js'
     export default {
         name: 'home',
         components:{
@@ -39,18 +39,18 @@
             }
         },
         mounted(){
-            // externalMethods.getPosition().then(res =>{
-            //     console.log('position', res)
-            //     this.areaName = res.district;
-            //     this.$store.commit('updateOriginLat',res.latitude);
-            //     this.$store.commit('updateOriginLon',res.longitude);
-            //     this.$store.commit('updateAreaCode',res.adcode);
-            //     this.getData();
-            // }).catch(err => {
-            //     console.log('getPosition', err);
-            //     this.getData();
-            // });
-            this.getData();
+            externalMethods.getPosition().then(res =>{
+                console.log('position', res)
+                this.areaName = res.district;
+                this.$store.commit('updateOriginLat',res.latitude);
+                this.$store.commit('updateOriginLon',res.longitude);
+                this.$store.commit('updateAreaCode',res.adcode);
+                this.getData();
+            }).catch(err => {
+                console.log('getPosition', err);
+                this.getData();
+            });
+            // this.getData();
             // this.cycleTime();
         },
 

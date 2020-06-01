@@ -6,14 +6,14 @@
             <div class="row" flex="dir:left cross:center main:justify">
                 <div class="row_left">电子芯片：</div>
                 <div class="row_right" flex="dir:left cross:center">
-                    <span>3213214124124</span>
+                    <span>{{dogData.chipNumber}}</span>
                     <span class="sep"></span>
-                    <span class="text_btn copyCode" :data-clipboard-text="code" @click="copyCode">复制</span>
+                    <span class="text_btn copyCode" :data-clipboard-text="dogData.chipNumber" @click="copyCode">复制</span>
                 </div>
             </div>
             <div class="row" flex="dir:left cross:center main:justify">
                 <div class="row_left">办理时间：</div>
-                <div class="row_right">2020-12-26</div>
+                <div class="row_right">{{dogData.makeTime|timeFormatter('YYYY-MM-DD')}}</div>
             </div>
             <div class="row" flex="dir:left cross:center main:justify">
                 <div class="row_left">年审记录：</div>
@@ -51,8 +51,7 @@
         },
         data(){
             return {
-                dogData: {},
-                code: 3213214124124
+                dogData: {}
             }
         },
         mounted(){
@@ -60,34 +59,7 @@
         },
         methods:{
             getDogDetail(){
-                this.dogData = {
-                    address: null,
-                    businessLicense: null,
-                    chipNumber: "121212",
-                    company: null,
-                    createtime: null,
-                    dogCarStatus: "已到期",
-                    statusId: 2,
-                    dogCardNumber: "32323232",
-                    dogId: 105,
-                    dogName: "米朵",
-                    dogPhotoFront: "http://220.191.224.215/upload/file/2020/05/21/20200521184255564113.jpg",
-                    id: 4,
-                    isRecord: 1,
-                    makeTime: 1590058337795,
-                    ownerId: 44,
-                    ownerName: "颜碧莲",
-                    phone: "13306511009",
-                    qRCodePath: null,
-                    sort: null,
-                    state: "1",
-                    status: null,
-                    updateTime: null,
-                    userId: 44,
-                    userType: 0,
-                    validityEnd: 1590461053000,
-                    validityStart: 1590058337795
-                }
+                this.dogData = this.$store.getters['dog/dogInfo'];
             },
             //复制pdf链接
             copyCode(){

@@ -100,6 +100,7 @@
         mounted(){
             this.firstPlace = this.$store.getters['service/pointInfo'];
             this.firstPlace.zIndex = 10;
+            console.log('firstPlace',this.firstPlace);
             this.clientHeight = `${document.documentElement.clientHeight}`;
         },
         watch:{

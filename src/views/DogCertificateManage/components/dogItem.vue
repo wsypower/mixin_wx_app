@@ -16,7 +16,7 @@
                 <div>有效期：{{dogData.validityStart|timeFormatter('YYYY-MM-DD')}}至{{dogData.validityEnd|timeFormatter('YYYY-MM-DD')}}</div>
                 <div>登记证号：{{dogData.dogCardNumber}}</div>
             </div>
-            <img class="dog-item-qr" :src="dogData.qRCodePath">
+            <div class="dog-item-qr" :style="{ backgroundImage: dogData.backgroundImage }"></div>
         </div>
     </div>
 </template>
@@ -47,6 +47,7 @@
                 if(this.needClick){
                     console.log(`dogId: ${dogId}`);
                     //Toast('还没开发');
+                    this.$store.commit('dog/updateDogInfo', this.dogData);
                     this.$router.push('/dogCertificateManage/detail');
                 }
             }
@@ -134,8 +135,10 @@
             }
         }
         .dog-item-qr{
-            width: 83px;
-            height: 83px;
+            width: 84px;
+            height: 84px;
+            background-blend-mode: lighten;
+            background-size: contain;
         }
     }
 </style>

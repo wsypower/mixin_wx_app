@@ -6,7 +6,7 @@
         </div>
         <van-swipe v-else class="dog-swipe" indicator-color="white">
             <van-swipe-item v-for="item in dogList" :key="item.id">
-                <div class="dog-item" flex="dir:top" @click="gotoDogDetailPage(item.id)">
+                <div class="dog-item" flex="dir:top" @click="gotoDogDetailPage(item)">
                     <div flex="dir:left cross:center">
                         <img class="dog-item-img" :src="item.dogPhotoFront">
                         <div flex="dir:top" class="dog-item_mes">
@@ -19,7 +19,7 @@
                             <div>有效期：{{item.validityStart|timeFormatter('YYYY-MM-DD')}}至{{item.validityEnd|timeFormatter('YYYY-MM-DD')}}</div>
                             <div>登记证号：{{item.dogCardNumber}}</div>
                         </div>
-                        <img class="dog-item-qr" :src="item.qRCodePath">
+                        <div class="dog-item-qr" :style="{ backgroundImage: item.backgroundImage }"></div>
                     </div>
                 </div>
             </van-swipe-item>
@@ -28,7 +28,7 @@
 </template>
 <script type="text/ecmascript-6">
     import { Swipe, SwipeItem, Toast } from 'vant';
-    const statusArr = ["有效","即将到期","已到期"];
+    const statusArr = ["有效","即将到期","已到期","注销"];
     export default {
         name: 'top',
         components: {
@@ -57,13 +57,27 @@
                 this.dogList = JSON.parse(JSON.stringify(val));
                 this.dogList.forEach(item => {
                     item.statusId = statusArr.findIndex(it=>it===item.dogCarStatus);
+                    if(item.statusId===0){
+                        item.backgroundImage = 'url(' + item.qRCodePath + '),linear-gradient(#0f0, #0f0)';
+                    }
+                    else if(item.statusId===1){
+                        item.backgroundImage = 'url(' + item.qRCodePath + '),linear-gradient(#ffa200, #ffa200)';
+                    }
+                    else if(item.statusId===2){
+                        item.backgroundImage = 'url(' + item.qRCodePath + '),linear-gradient(#f00, #f00)';
+                    }
+                    else {
+                        item.backgroundImage = 'url(' + item.qRCodePath + '),linear-gradient(#847e74, #847e74)';
+                    }
                 })
             }
         },
         methods:{
-            gotoDogDetailPage(dogId){
-                console.log(`dogId: ${dogId}`);
+            gotoDogDetailPage(dogInfo){
+                console.log(`dogInfo:`, dogInfo);
                 Toast('还没开发');
+                this.$store.commit('dog/updateDogInfo', dogInfo);
+                // this.$router.push('/dogCertificateManage/detail');
             }
         }
     }
@@ -149,8 +163,10 @@
                 }
             }
             .dog-item-qr{
-                width: 83px;
-                height: 83px;
+                width: 84px;
+                height: 84px;
+                background-blend-mode: lighten;
+                background-size: contain;
             }
         }
     }
