@@ -3,6 +3,7 @@ export default {
     namespaced: true,
     state: {
         pointInfo:{
+            id: '',
             servicePointName: '',
             distance: 0,
             address: '',
@@ -17,7 +18,7 @@ export default {
         }
     },
     mutations: {
-        // 更新订单ID
+        // 更新服务点
         updatePointInfo(state, pointInfo) {
             state.pointInfo = Object.assign({},state.pointInfo ,pointInfo);
         },

@@ -3,11 +3,23 @@
         <page-header title="服务点"></page-header>
         <div class="map-panel">
             <baidu-map class="bm-view" ak="fyqKIIAp1Vg3BN5KGd4ZBbhpUeuYhZW7" :center="center" :zoom="zoom" @ready="mapReadyHandler">
-                <bm-marker :position="{lng: firstPlace.originLon, lat: firstPlace.originLat}" :dragging="true" animation="BMAP_ANIMATION_BOUNCE">
-                    <bm-label :content="firstPlace.servicePointName"
-                              :labelStyle="{color: '#ffffff', fontSize : '14px',borderColor:'#306ce7',backgroundColor:'#306ce7',borderRadius:'5px',padding: '0px 10px' }"
-                              :offset="{width: -30, height: 30}"/>
-                </bm-marker>
+                <template v-for="place in mapMaskerList">
+                    <bm-marker v-if="!place.active"
+                               :key="place.id"
+                               :position="{lng: place.originLon, lat: place.originLat}"
+                               :icon="{url: require('@/assets/images/position@2x.png'), size: {width: 30, height: 30}}" @click="toPoint(place)"
+                                ref="bmMarker">
+                    </bm-marker>
+                    <bm-marker v-else :key="place.id"
+                               :position="{lng: firstPlace.originLon, lat: firstPlace.originLat}"
+                               :icon="{url: require('@/assets/images/position_active@2x.png'), size: {width: 40, height: 40}}"
+                               ref="bmMarker"
+                                :zIndex="10">
+                        <bm-label :content="firstPlace.servicePointName"
+                                  :labelStyle="{color: '#ffffff', fontSize : '14px',borderColor:'#306ce7',backgroundColor:'#306ce7',borderRadius:'5px',padding: '0px 10px' }"
+                                  :offset="{width: -22, height: 45}"/>
+                    </bm-marker>
+                </template>
             </baidu-map>
         </div>
         <div class="show-place">
@@ -24,7 +36,7 @@
                  @touchmove.stop.prevent="touchMove"
                  @touchend.stop.prevent="touchEnd">
                 <div class="line"></div>
-                <div class="header-text">已显示{{totalSize}}个结果</div>
+                <div class="header-text">已显示{{totalShowSize}}个结果</div>
             </div>
             <div class="hidden-place-body">
                     <van-list
@@ -33,7 +45,7 @@
                         finished-text="没有更多了"
                         @load="onLoad"
                     >
-                        <div class="place-item" v-for="item in placeList" :key="item.id">
+                        <div class="place-item" v-for="item in placeList" :key="item.id" @click="toPoint(item)">
                             <div class="first" flex="dir:left cross:center main:justify">
                                 <span class="place-item-name">{{item.servicePointName}}</span>
                                 <span class="place-item-point"><span class="icon iconfont point">&#xe63e;</span>{{(item.distance/1000).toFixed(2)}}km</span>
@@ -52,6 +64,7 @@
     import BaiduMap from 'vue-baidu-map/components/map/Map.vue';
     import bmMarker from 'vue-baidu-map/components/overlays/Marker.vue'
     import bmLabel from 'vue-baidu-map/components/overlays/Label.vue'
+    import { queryDogServicePoint } from '@/api/home.js'
     export default {
         name: 'servicePoint',
         components:{
@@ -66,152 +79,130 @@
                 //地图使用参数
                 center: {lng: 0, lat: 0},
                 zoom: 3,
-
                 showAll: false,
                 firstPlace: {},
                 placeList: [],
+                mapMaskerList: [],
                 loading: false,
                 finished: false,
+                pageSize: 10,
+                currentPage: 0,
+                totalSize: 0,
                 startY: 0,
                 clientHeight: 0
             }
         },
         computed:{
-            // firstPlace: function(){
-            //     const initData = {
-            //         id: 0,
-            //         servicePointName: '',
-            //         distance: 0,
-            //         address: '',
-            //         serviceTime: ''
-            //     }
-            //     return this.placeList[0]? this.placeList[0] : initData;
-            // },
-            totalSize: function(){
+            totalShowSize: function(){
                 return this.placeList.length;
             }
         },
         mounted(){
             this.firstPlace = this.$store.getters['service/pointInfo'];
+            this.firstPlace.zIndex = 10;
             this.clientHeight = `${document.documentElement.clientHeight}`;
-            //this.getPlaceListData();
-            //this.onLoad();
+        },
+        watch:{
+            'firstPlace.id': function(newValue){
+                let tempArr = JSON.parse(JSON.stringify(this.mapMaskerList));
+                this.mapMaskerList = tempArr.reduce((acc,item) => {
+                    if(item.id !== newValue){
+                        item.active = false;
+                        item.zIndex = 0;
+                    }
+                    else{
+                        item.active = true;
+                        item.zIndex = 10;
+                    }
+                    acc.push(item);
+                    return acc
+                }, []);
+                console.log('mapMaskerList', this.mapMaskerList);
+            }
         },
         methods:{
+            //地图ready之后操作
             mapReadyHandler({BMap, map}) {
-                console.log(BMap, map)
-
+                console.log(BMap, map);
                 this.center.lng = this.firstPlace.originLon;
                 this.center.lat = this.firstPlace.originLat;
                 this.zoom = 15
             },
+            //list加载数据
             onLoad() {
                 console.log('777777777777777777777777');
-                // 异步更新数据
-                // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-                setTimeout(() => {
-                    for (let i = 0; i < 10; i++) {
-                        let initData = {
-                            id: this.placeList.length+1,
-                            servicePointName: '八公宠物园' + (this.placeList.length+1) ,
-                            distance: 0,
-                            address: '',
-                            serviceTime: ''
+                // let Bmap = this.BMap;
+                //获取范围内的服务点
+                let originLon = this.$store.getters['originLon'];
+                let originLat = this.$store.getters['originLat'];
+                let areaCode = this.$store.getters['areaCode'];
+                let userId = this.$store.getters['userId'];
+                let params = {
+                    userId,
+                    originLon,
+                    originLat,
+                    areaCode,
+                    currentPage: ++this.currentPage,
+                    pageSize: this.pageSize
+                }
+                queryDogServicePoint(params).then( res => {
+                    this.totalSize = res.data.totalCount;
+                    this.placeList = res.data.list.reduce((acc,item) => {
+                        let temp = {
+                            id: item.id,
+                            servicePointName: item.servicePointName,
+                            originLat: item.latitude,
+                            originLon: item.longitude,
+                            distance: item.distance,
+                            address: item.address,
+                            serviceTime: item.serviceTime
                         }
-                        this.placeList.push(initData);
-                    }
-
+                        acc.push(temp);
+                        return acc
+                    },this.placeList);
+                    this.mapMaskerList = res.data.list.reduce((acc,item) => {
+                        let temp = {
+                            id: item.id,
+                            servicePointName: item.servicePointName,
+                            originLat: item.latitude,
+                            originLon: item.longitude,
+                            distance: item.distance,
+                            address: item.address,
+                            serviceTime: item.serviceTime
+                        }
+                        if(item.id !== this.firstPlace.id){
+                            temp.active = false;
+                            temp.zIndex = 0;
+                        }
+                        else{
+                            temp.active = true;
+                            temp.zIndex = 10;
+                        }
+                        acc.push(temp);
+                        return acc
+                    },this.mapMaskerList);
                     // 加载状态结束
                     this.loading = false;
-
                     // 数据全部加载完成
-                    if (this.placeList.length >= 40) {
+                    if (this.placeList.length >= this.totalSize) {
                         this.finished = true;
                     }
-                }, 1000);
+                });
             },
-            getPlaceListData(){
-                let temp1 = {
-                    id: 1,
-                    servicePointName: '八公宠物医院1',
-                    distance: 124950,
-                    address: '绍兴市越城区xx路xx号',
-                    serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
-                }
-                let temp2 = {
-                    id: 2,
-                    servicePointName: '八公宠物医院2',
-                    distance: 24950,
-                    address: '绍兴市越城区xx路xx号',
-                    serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
-                }
-                let temp3 = {
-                    id: 3,
-                    servicePointName: '八公宠物医院3',
-                    distance: 20950,
-                    address: '绍兴市越城区xx路xx号',
-                    serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
-                }
-                let temp4 = {
-                    id: 4,
-                    servicePointName: '八公宠物医院4',
-                    distance: 10495,
-                    address: '绍兴市越城区xx路xx号',
-                    serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
-                }
-                let temp5 = {
-                    id: 5,
-                    servicePointName: '八公宠物医院5',
-                    distance: 11049,
-                    address: '绍兴市越城区xx路xx号',
-                    serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
-                }
-                let temp6 = {
-                    id: 6,
-                    servicePointName: '八公宠物医院6',
-                    distance: 11049,
-                    address: '绍兴市越城区xx路xx号',
-                    serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
-                }
-                let temp7 = {
-                    id: 7,
-                    servicePointName: '八公宠物医院7',
-                    distance: 11049,
-                    address: '绍兴市越城区xx路xx号',
-                    serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
-                }
-                let temp8 = {
-                    id: 8,
-                    servicePointName: '八公宠物医院8',
-                    distance: 11049,
-                    address: '绍兴市越城区xx路xx号',
-                    serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
-                }
-                let temp9 = {
-                    id: 9,
-                    servicePointName: '八公宠物医院9',
-                    distance: 11049,
-                    address: '绍兴市越城区xx路xx号',
-                    serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
-                }
-                let temp10 = {
-                    id: 10,
-                    servicePointName: '八公宠物医院10',
-                    distance: 11049,
-                    address: '绍兴市越城区xx路xx号',
-                    serviceTime: '周一至周五   8:30-11:00 ；13:30-17:00 '
-                }
-                this.placeList.push(temp1);
-                this.placeList.push(temp2);
-                this.placeList.push(temp3);
-                this.placeList.push(temp4);
-                this.placeList.push(temp5);
-                this.placeList.push(temp6);
-                this.placeList.push(temp7);
-                this.placeList.push(temp8);
-                this.placeList.push(temp9);
-                this.placeList.push(temp10);
-                this.loading = true;
+            toPoint(point){
+                console.log('to point',this.$refs.bmMarker);
+                this.firstPlace = point;
+                //this.$refs.bmMarker
+                // let size = document.querySelectorAll('.BMap_Marker').length/2;
+                // this.mapMaskerList.forEach((item,index) => {
+                //     if(item.id === point.id){
+                //         document.querySelectorAll('.BMap_Marker')[size+index].style.zIndex = 10;
+                //     }
+                //     else{
+                //         document.querySelectorAll('.BMap_Marker')[size+index].style.zIndex = 0;
+                //     }
+                // })
+                this.showAll = false;
             },
             touchStart(e){
                 console.log('touchStart', e);
@@ -420,6 +411,13 @@
                     }
                 }
             }
+        }
+    }
+</style>
+<style lang="scss">
+    .BMap_Marker{
+        img{
+            height: 100%;
         }
     }
 </style>

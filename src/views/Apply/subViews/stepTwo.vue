@@ -288,7 +288,9 @@
                 userId,
                 originLon,
                 originLat,
-                areaCode
+                areaCode,
+                currentPage: -1,
+                pageSize: -1
             }
             //获取免疫点数据
             queryImmuneSite(params).then( res => {

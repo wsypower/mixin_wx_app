@@ -9,7 +9,7 @@
         <div class="main" flex="dir:top cross:center">
             <top :dogCards="dogCards"></top>
             <operate></operate>
-            <service-place :servePlaces="servePlaceList"></service-place>
+            <service-place></service-place>
         </div>
     </div>
 </template>
@@ -21,7 +21,7 @@
     import { getURLParameters } from '@/utils/index';
     import externalMethods from '@/utils/externalMethods/index.js'
     import { AccountLogin } from '@/api/account/login.js';
-    import { queryDogCard, queryDogServicePoint } from '@/api/home.js'
+    import { queryDogCard } from '@/api/home.js'
     export default {
         name: 'home',
         components:{
@@ -71,20 +71,6 @@
                 const userId = await this.getUserId();
                 console.log(`userId: ${userId}`);
                 this.getDogCard(userId);
-                //获取范围内的服务点
-                let originLon = this.$store.getters['originLon'];
-                let originLat = this.$store.getters['originLat'];
-                let areaCode = this.$store.getters['areaCode'];
-                let params = {
-                    userId,
-                    originLon,
-                    originLat,
-                    areaCode
-                }
-                queryDogServicePoint(params).then( res => {
-                    console.log('queryDogServicePoint',res.data);
-                    this.servePlaceList = res.data;
-                });
             },
             getDogCard(userId){
                 //获取已有的犬证

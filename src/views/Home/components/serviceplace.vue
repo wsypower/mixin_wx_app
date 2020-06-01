@@ -2,10 +2,15 @@
     <div class="service-place">
         <div class="service-place-header" flex="dir:left cross:center main:justify">
             <span class="header-left">推荐服务点</span>
-            <span class="header-right" @click="gotoMorePointPage">更多<span class="icon iconfont icon-youjiantou"></span></span>
+            <!--<span class="header-right" @click="gotoMorePointPage">更多<span class="icon iconfont icon-youjiantou"></span></span>-->
         </div>
         <div class="service-place-body">
-            <my-scroll>
+            <van-list
+                    v-model="loading"
+                    :finished="finished"
+                    finished-text="没有更多了"
+                    @load="onLoad"
+            >
                 <div class="place-item" v-for="item in placeList" :key="item.id" @click="gotoPointDetail(item)">
                     <div class="first" flex="dir:left cross:center main:justify">
                         <span class="place-item-name">{{item.servicePointName}}</span>
@@ -14,46 +19,100 @@
                     <div class="text-panel"><span>地址：</span><span>{{item.address}}</span></div>
                     <div class="text-panel"><span>服务时间：</span><span>{{item.serviceTime}}</span></div>
                 </div>
-            </my-scroll>
+            </van-list>
         </div>
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Toast } from 'vant'
+    import { List, Toast } from 'vant'
+    import { queryDogServicePoint } from '@/api/home.js'
     export default {
         name: 'servicePlace',
-        components: {},
-        props: {
-            servePlaces:{
-                type: Array,
-                default(){
-                    return []
+        components: {
+            [List.name]: List
+        },
+        data(){
+            return {
+                placeList: [],
+                loading: false,
+                finished: false,
+                pageSize: 5,
+                currentPage: 0,
+                totalSize: 0,
+            }
+        },
+        computed:{
+            userId: function(){
+                return this.$store.getters['userId'];
+            },
+            originLon: function(){
+                return this.$store.getters['originLon'];
+            },
+            originLat: function(){
+                return this.$store.getters['originLat'];
+            },
+            areaCode: function(){
+                return this.$store.getters['areaCode'];
+            },
+        },
+        watch:{
+            userId: function(newValue){
+                if(newValue!=='xxx'){
+                    this.onLoad();
                 }
             }
         },
-        data(){
-            return {}
-        },
-        computed:{
-            placeList: function(){
-                return JSON.parse(JSON.stringify(this.servePlaces))
-            }
-        },
         methods:{
-            gotoMorePointPage(){
-                //Toast('还没开发');
-                this.$router.push('/service');
+            onLoad() {
+                console.log('home get service');
+                if(this.userId === 'xxx'){
+                    // 加载状态结束
+                    this.loading = false;
+                    return
+                }
+                //获取范围内的服务点
+                let params = {
+                    userId: this.userId,
+                    originLon: this.originLon,
+                    originLat: this.originLat,
+                    areaCode: this.areaCode,
+                    currentPage: ++this.currentPage,
+                    pageSize: this.pageSize
+                }
+                queryDogServicePoint(params).then( res => {
+                    console.log('queryDogServicePoint',res.data);
+                    this.totalSize = res.data.totalCount;
+                    this.placeList = res.data.list.reduce((acc,item) => {
+                        let temp = {
+                            id: item.id,
+                            servicePointName: item.servicePointName,
+                            originLat: item.latitude,
+                            originLon: item.longitude,
+                            distance: item.distance,
+                            address: item.address,
+                            serviceTime: item.serviceTime
+                        }
+                        acc.push(temp);
+                        return acc
+                    },this.placeList);
+                    // 加载状态结束
+                    this.loading = false;
+                    // 数据全部加载完成
+                    if (this.placeList.length >= this.totalSize) {
+                        this.finished = true;
+                    }
+                });
             },
             gotoPointDetail(place){
-                //console.log(`placeId: ${placeId}`);
                 //Toast('还没开发');
                 let pointInfo = {
+                    id: place.id,
                     servicePointName: place.servicePointName,
                     distance: place.distance,
                     address: place.address,
                     serviceTime: place.serviceTime,
-                    originLon: place.longitude,
-                    originLat: place.latitude,
+                    originLon: place.originLon,
+                    originLat: place.originLat,
                 }
                 this.$store.commit('service/updatePointInfo',pointInfo);
                 this.$router.push('/service');
@@ -91,7 +150,7 @@
     }
     .service-place-body{
         width: 100%;
-        height: calc(100% - 90px);
+        min-height: calc(100% - 90px);
         .place-item{
             width: 100%;
             min-height: 190px;
@@ -99,9 +158,7 @@
             box-shadow: 0px 3px 7px 0px rgba(192, 192, 192, 0.35);
             border-radius: 10px;
             padding: 20px;
-            &:nth-child(n+3){
-                margin-top: 20px;
-            }
+            margin-bottom: 20px;
             .first{
                 .place-item-name{
                     font-family: PingFang-SC-Bold;
