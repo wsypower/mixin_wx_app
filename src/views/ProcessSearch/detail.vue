@@ -37,7 +37,7 @@
                                 <span v-if="item.stepCode==='25'||item.stepCode==='45'||item.stepCode==='85'">审核未通过，原因：</span>
                                 <span>{{item.remark||item.stepName}}</span>
                                 <span v-if="item.stepCode==='20'">，请到服务点申领狗牌</span>
-                                <div v-if="item.stepCode==='20'" @click="goToPage">服务点：<span class="icon iconfont icon-dingwei"></span><span class="service">{{orderInfo.serviceName}}</span></div>
+                                <div v-if="item.stepCode==='20'" @click="goToServicePage">服务点：<span class="icon iconfont icon-dingwei"></span><span class="service">{{orderInfo.serviceName}}</span></div>
                             </div>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
 
     const buttonObj = {
         '-20-': { name:'查看服务点',path: 'service'},
-        '-25-45-85-': {name:'修改信息',path:'applyPage'},
+        '-25-85-': {name:'修改信息',path:'applyPage'},
         '-40-80-': {name:'查看犬证',path: ''}
     }
     export default {
@@ -145,6 +145,10 @@
                         Toast.fail({message:res.errmsg});
                     }
                 });
+            },
+            goToServicePage(){
+                this.pagePath = 'service';
+                this.$router.push('/service');
             },
             goToPage(){
                 if(this.pagePath===''){

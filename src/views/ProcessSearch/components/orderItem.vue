@@ -3,7 +3,7 @@
         <div class="item-row" flex="dir:left cross:center main:justify">
             <div class="item-row-left">预约单号：{{cardInfo.orderCode}}</div>
             <div class="item-row-right status"
-                 :class="{gray:cardInfo.statusId==='0',yellow:cardInfo.statusId==='1',blue:cardInfo.statusId==='2',red:cardInfo.statusId==='3',green:cardInfo.statusId==='4'}">
+                 :class="{gray:cardInfo.statusId==='0',yellow:cardInfo.statusId==='1',blue:cardInfo.statusId==='2',red:cardInfo.statusId==='3'||cardInfo.statusId==='5',green:cardInfo.statusId==='4'}">
                 {{cardInfo.statusName}}
             </div>
         </div>
@@ -36,7 +36,8 @@
         '1': 1,
         '2': 2,
         '3': 0,
-        '4': 3
+        '4': 3,
+        '5': 2
     }
     export default{
         name: 'cardItem',

@@ -19,7 +19,7 @@
                             <div><span class="item_label">提交时间：</span>{{item.submitDay}}</div>
                         </div>
                         <div class="list-item_right" flex="dir:left cross:center">
-                            <span class="right_status" :class="{gray: item.statusId===0,yellow:item.statusId===1,blue:item.statusId===2,red:item.statusId===3,green:item.statusId===4}">{{item.statusName}}</span>
+                            <span class="right_status" :class="{gray: item.statusId===0,yellow:item.statusId===1,blue:item.statusId===2,red:item.statusId===3||item.statusId===5,green:item.statusId===4}">{{item.statusName}}</span>
                             <span class="icon iconfont jt-right">&#xe60f;</span>
                         </div>
                     </div>
@@ -45,8 +45,12 @@
             statusId: 2,
             statusName: '审核通过',
         },
-        '-25-45-85-':{
+        '-25-85-':{
             statusId: 3,
+            statusName: '审核未通过',
+        },
+        '-45-':{
+            statusId: 5,
             statusName: '审核未通过',
         },
         '-40-80-':{

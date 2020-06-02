@@ -229,6 +229,8 @@
                 //出现社区选择区域
                 showCommunityPicker: false,
                 communityColumns: [],
+                //第一次进来时证件类型修改不会触发watch内部的操作
+                isEditInit: false,
                 //选择项数据加载
                 adLoading: false,
                 submitData:{
@@ -296,6 +298,9 @@
             Object.keys(this.submitData).forEach(key=>{
                 this.submitData[key] = orderInfo[key]
             })
+            if(this.submitData.idType!==1){
+                this.isEditInit = true;
+            }
             if(orderInfo.dogOrderId){
                 this.submitData.dogOrderId = orderInfo.dogOrderId;
             }
@@ -319,15 +324,21 @@
             //当证件类型改变时，清理与证件相关的所有数据
             'submitData.idType': function(value){
                 console.log('watch submitData.isType',value);
-                this.submitData.ownerName = '';
-                this.submitData.idCard = '';
-                this.submitData.idCardFront= '';
-                this.submitData.idCardBack= '';
-                this.submitData.firstName = '';
-                this.submitData.lastName = '';
-                this.submitData.country = '';
-                this.submitData.passport = '';
-                this.submitData.sex = 0;
+                if(!this.isEditInit){
+                    this.submitData.ownerName = '';
+                    this.submitData.idCard = '';
+                    this.submitData.idCardFront= '';
+                    this.submitData.idCardBack= '';
+                    this.submitData.firstName = '';
+                    this.submitData.lastName = '';
+                    this.submitData.country = '';
+                    this.submitData.passport = '';
+                    this.submitData.sex = 0;
+                }
+                else{
+                    this.isEditInit = false;
+                }
+
             },
             //当手机号码改变时，清理与验证码相关的数据
             'submitData.phone': function(){

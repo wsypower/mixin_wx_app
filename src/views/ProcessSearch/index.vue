@@ -81,8 +81,12 @@
             statusId: '2',
             statusName: '审核通过',
         },
-        '-25-45-85-':{
+        '-25-85-':{
             statusId: '3',
+            statusName: '审核未通过',
+        },
+        '-45-':{
+            statusId: '5',
             statusName: '审核未通过',
         },
         '-40-80-':{
