@@ -19,7 +19,7 @@
                             <div>有效期：{{item.validityStart|timeFormatter('YYYY-MM-DD')}}至{{item.validityEnd|timeFormatter('YYYY-MM-DD')}}</div>
                             <div>登记证号：{{item.dogCardNumber}}</div>
                         </div>
-                        <div class="dog-item-qr" :style="{ backgroundImage: item.backgroundImage }"></div>
+                        <div class="dog-item-qr" :style="{ backgroundImage: item.backgroundImage }" @click.stop="previewQrImg(item.qRCodePath)"></div>
                     </div>
                 </div>
             </van-swipe-item>
@@ -27,14 +27,15 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Swipe, SwipeItem, Toast } from 'vant';
+    import { Swipe, SwipeItem, Toast, ImagePreview } from 'vant';
     const statusArr = ["有效","即将到期","已到期","注销"];
     export default {
         name: 'top',
         components: {
             [Swipe.name]: Swipe,
             [SwipeItem.name]: SwipeItem,
-            [Toast.name]: Toast
+            [Toast.name]: Toast,
+            [ImagePreview.Component.name]: ImagePreview.Component
         },
         props:{
             dogCards: {
@@ -73,11 +74,13 @@
             }
         },
         methods:{
+            previewQrImg(qRCodePath){
+                ImagePreview([qRCodePath]);
+            },
             gotoDogDetailPage(dogInfo){
                 console.log(`dogInfo:`, dogInfo);
                 Toast('还没开发');
                 this.$store.commit('dog/updateDogInfo', dogInfo);
-                // this.$router.push('/dogCertificateManage/detail');
             }
         }
     }

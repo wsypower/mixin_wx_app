@@ -534,7 +534,13 @@
                         }
                     }
                     else{
-                        Toast.fail({message: '该身份证下已有犬只',duration: 3000});
+                        if(this.submitData.idType!==3){
+                            Toast.fail({message: '该身份证下已有犬只',duration: 3000});
+                        }
+                        else{
+                            Toast.fail({message: '该护照号下已有犬只',duration: 3000});
+                        }
+
                     }
                 });
             }
