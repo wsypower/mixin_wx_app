@@ -84,7 +84,7 @@
         mounted(){
             this.submitData.userId = this.$store.getters['userId'];
             this.submitData.phone = this.$store.getters['dog/dogInfo'].phone;
-            this.submitData.dogCardId = this.$store.getters['dog/dogInfo'].dogId;
+            this.submitData.dogCardId = this.$store.getters['dog/dogInfo'].id;
         },
         methods:{
             //获取手机验证码，60s之后可再次请求

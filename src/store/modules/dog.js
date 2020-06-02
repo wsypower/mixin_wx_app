@@ -3,6 +3,7 @@ export default {
     namespaced: true,
     state: {
         dogInfo:{
+            id: '',
             dogCarStatus: "",
             statusId: 0,
             dogCardNumber: "",
