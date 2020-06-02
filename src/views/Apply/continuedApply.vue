@@ -98,6 +98,7 @@
     import { formatDate } from '@/utils/index.js'
     import { queryImmuneSite } from '@/api/common.js'
     import { bidDogCard } from '@/api/apply.js'
+    import { queryPidDogCard } from '@/api/process.js'
     export default{
         name: 'continuedApply',
         components:{
@@ -147,13 +148,46 @@
                 showDialog: false
             }
         },
+        beforeRouteEnter(to,from,next) {
+            console.log('beforeRouteEnter', to, from);
+            next(vm => {
+                if(to.query.orderId){
+                    vm.$store.commit('updateIsLoading', true);
+                    let params = {
+                        userId : vm.$store.getters['userId'],
+                        orderId: to.query.orderId
+                    }
+                    //获取orderId下的全部数据，然后放入缓存store中
+                    queryPidDogCard(params).then( res => {
+                        vm.$store.commit('updateIsLoading', false);
+                        if(res.errno===0){
+                            Object.keys(vm.submitData).forEach(key=>{
+                                vm.submitData[key] = res.data[key]
+                            })
+                            if(res.data.dogOrderId){
+                                vm.submitData.dogOrderId = res.data.dogOrderId;
+                            }
+                            //用于前端显示
+                            if( vm.submitData.immuneTime){
+                                vm.immuneTime = formatDate(new Date(vm.submitData.immuneTime), 'yyyy-MM-dd');
+                            }
+                            //防止缓存中的currentStep不正确，故需要在这里重新指向当前步
+                            vm.submitData.currentStep = 5;
+                            vm.submitData.userId = vm.$store.getters['userId'];
+                        }
+                        else{
+                            Toast('数据获取失败');
+                        }
+                    });
+                }
+            })
+        },
         mounted(){
-            this.submitData.userId = this.$store.getters['userId'];
             let originLon = this.$store.getters['originLon'];
             let originLat = this.$store.getters['originLat'];
             let areaCode = this.$store.getters['areaCode'];
             let params = {
-                userId: this.submitData.userId,
+                userId: this.$store.getters['userId'],
                 originLon,
                 originLat,
                 areaCode
@@ -162,14 +196,6 @@
             queryImmuneSite(params).then( res => {
                 this.immuneAddressColumns = res.data;
             });
-            //从缓存中读入素有orderInfo数据，适用于新建与编辑
-            const orderInfo = this.$store.getters['order/orderInfo'];
-            Object.keys(this.submitData).forEach(key=>{
-                this.submitData[key] = orderInfo[key]
-            })
-            //防止缓存中的currentStep不正确，故需要在这里重新指向当前步
-            this.submitData.currentStep = 5;
-            this.submitData.userId = this.$store.getters['userId'];
         },
 
         methods:{

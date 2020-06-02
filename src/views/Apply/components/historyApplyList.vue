@@ -130,7 +130,7 @@
                             path:'/continuedApply',
                             query:{
                                 currentStep: 5,
-                                orderId: this.orderInfo.orderId
+                                orderId: item.id
                             }
                         });
                     }
