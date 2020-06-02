@@ -183,6 +183,7 @@
             })
         },
         mounted(){
+            this.submitData.userId = this.$store.getters['userId'];
             let originLon = this.$store.getters['originLon'];
             let originLat = this.$store.getters['originLat'];
             let areaCode = this.$store.getters['areaCode'];
