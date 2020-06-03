@@ -123,17 +123,23 @@
                         this.orderInfo.serviceName = order.serviceName;
                         this.orderInfo.serviceCode = order.serviceCode;
                         this.orderInfo.logList = res.data.list;
+
+                        res.data.list.forEach(item => {
+                            if(item.stepCode === '20'){
+                                let pointInfo = {
+                                    id: item.dogServicePoint.id,
+                                    servicePointName: item.dogServicePoint.servicePointName,
+                                    distance: item.dogServicePoint.distance,
+                                    address: item.dogServicePoint.address,
+                                    serviceTime: item.dogServicePoint.serviceTime,
+                                    originLon: item.dogServicePoint.longitude,
+                                    originLat: item.dogServicePoint.latitude,
+                                }
+                                this.$store.commit('service/updatePointInfo',pointInfo);
+                            }
+                        })
+
                         let temp = res.data.list[0];
-                        let pointInfo = {
-                            id: temp.dogServicePoint.id,
-                            servicePointName: temp.dogServicePoint.servicePointName,
-                            distance: temp.dogServicePoint.distance,
-                            address: temp.dogServicePoint.address,
-                            serviceTime: temp.dogServicePoint.serviceTime,
-                            originLon: temp.dogServicePoint.longitude,
-                            originLat: temp.dogServicePoint.latitude,
-                        }
-                        this.$store.commit('service/updatePointInfo',pointInfo);
                         let needKey = Object.keys(buttonObj).find(key => key.indexOf('-' + temp.stepCode + '-')>=0)
                         if(needKey){
                             this.showButton = true;
