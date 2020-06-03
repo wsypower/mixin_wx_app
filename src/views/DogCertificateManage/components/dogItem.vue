@@ -138,7 +138,8 @@
             width: 84px;
             height: 84px;
             background-blend-mode: lighten;
-            background-size: contain;
+            background-size: 100%;
+            background-position: center;
         }
     }
 </style>
