@@ -13,4 +13,7 @@ const isDevice = () => {
   }
 };
 const browser = isDevice();
+console.log(browser);
+
+
 export default browser;
