@@ -40,3 +40,17 @@ export const queryDogByQrCode = data => {
         params: data
     })
 }
+
+/**
+ * @description 查询某个犬只所有年审记录
+ * @author moxuejuan
+ * @date 2020-06-03 08:43
+ * @param {String} userId 请求参数 :用户唯一标识符默认参数）
+ */
+export const queryYearCarefulRecords = data => {
+    return request({
+        url: `/dogOrder/queryYearCarefulRecords/${data.userId}`,
+        method: 'post',
+        params: data
+    })
+}

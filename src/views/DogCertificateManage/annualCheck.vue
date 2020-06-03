@@ -14,26 +14,41 @@
     import PageHeader from '@/components/pageHeader.vue';
     import OrderItem from '../ProcessSearch/components/orderItem.vue';
     import { formatDate } from '@/utils/index';
-    import { querybidDogCardRecord } from '@/api/process.js'
+    import { queryYearCarefulRecords } from '@/api/dogManage.js'
     const statusObj = {
         '-0-':{
             statusId: '0',
+            iconStatusId: '0',
             statusName: '未提交',
         },
-        '-10-30-60-':{
+        '-10-60-':{
             statusId: '1',
+            iconStatusId: '1',
             statusName: '审核中',
+        },
+        '-25-85-':{
+            statusId: '3',
+            iconStatusId: '1',
+            statusName: '审核未通过',
         },
         '-20-':{
             statusId: '2',
+            iconStatusId: '2',
             statusName: '审核通过',
         },
-        '-25-45-85-':{
-            statusId: '3',
+        '-30-':{
+            statusId: '1',
+            iconStatusId: '2',
+            statusName: '审核中',
+        },
+        '-45-':{
+            statusId: '5',
+            iconStatusId: '2',
             statusName: '审核未通过',
         },
         '-40-80-':{
             statusId: '4',
+            iconStatusId: '3',
             statusName: '已登记',
         }
     }
@@ -47,63 +62,42 @@
             return {
                 params:{
                     userId: '',
+                    dogId: '',
+                    pageSize: 20,
+                    currentPage: 1
                 },
                 cardInfoList: []
             }
         },
         mounted(){
             this.params.userId = this.$store.getters['userId'];
+            this.params.dogId = this.$store.getters['dog/dogInfo'].dogId;
             this.getProcessList();
         },
         methods:{
             getProcessList(){
-                let temp1 = {
-                        orderId: '12345678',
-                        orderCode: '2005010233060200009',
-                        statusId: 1,
-                        statusName: '有效',
-                        dogName: '妮妮',
-                        submitTime: '----',
-                        cardType: '新办',
-                        currentStep: 4,
-                        userType: 0
-                    }
-                let temp2 = {
-                    orderId: '123456785555',
-                    orderCode: '2005010233060200008',
-                    statusId: 1,
-                    statusName: '有效',
-                    dogName: '毛毛',
-                    submitTime: '----',
-                    cardType: '新办',
-                    currentStep: 4,
-                    userType: 0
-                }
-                this.cardInfoList.push(temp1);
-                this.cardInfoList.push(temp2);
-                // querybidDogCardRecord(this.params).then( res => {
-                //     console.log('querybidDogCardRecord',res.data);
-                //     this.cardInfoList = res.data.reduce((acc,item) => {
-                //         let statusKey = Object.keys(statusObj).find(key=>key.indexOf('-' + item.status + '-')>=0);
-                //         let temp = {
-                //             orderId: item.id,
-                //             orderCode: item.orderNo,
-                //             statusId: statusKey ? statusObj[statusKey].statusId: '',
-                //             statusName: statusKey ? statusObj[statusKey].statusName: '',
-                //             dogName: item.dogName,
-                //             submitTime: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'----',
-                //             cardType: item.cardType===0? '新办': '续办',
-                //             currentStep: item.currentStep,
-                //             userType: item.userType
-                //         }
-                //         acc.push(temp);
-                //         return acc
-                //     },[]);
-                // });
+                queryYearCarefulRecords(this.params).then( res => {
+                    console.log('queryYearCarefulRecords',res.data);
+                    this.cardInfoList = res.data.queryList.reduce((acc,item) => {
+                        let statusKey = Object.keys(statusObj).find(key=>key.indexOf('-' + item.status + '-')>=0);
+                        let temp = {
+                            orderId: item.id,
+                            orderCode: item.orderNo,
+                            statusId: statusKey ? statusObj[statusKey].statusId: '',
+                            iconStatusId: statusKey ? statusObj[statusKey].iconStatusId: '',
+                            statusName: statusKey ? statusObj[statusKey].statusName: '',
+                            dogName: item.dogName,
+                            submitTime: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'----',
+                            cardType: item.cardType===0? '新办': '续办',
+                            currentStep: item.currentStep,
+                            userType: item.userType
+                        }
+                        acc.push(temp);
+                        return acc
+                    },[]);
+                });
             },
-            search(){
-                this.getProcessList();
-            },
+
             gotoDetail(item){
                 console.log('item:', item);
                 if(item.statusId === '0'){
@@ -132,7 +126,7 @@
                             path:'/continuedApply',
                             query:{
                                 currentStep: 5,
-                                orderId: this.orderInfo.orderId
+                                orderId: item.orderId
                             }
                         });
                     }

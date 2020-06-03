@@ -35,7 +35,7 @@
         '0': 0,
         '1': 1,
         '2': 2,
-        '3': 0,
+        '3': 3,
         '4': 3,
         '5': 2
     }
@@ -51,6 +51,7 @@
                 orderId: '',
                 orderCode: '',
                 statusId: '',
+                iconStatusId: '',
                 statusName: '',
                 dogName: '',
                 submitTime: '',
@@ -59,7 +60,7 @@
         },
         computed: {
             activeIndex(){
-                return indexArr[this.cardInfo.statusId]
+                return indexArr[this.cardInfo.iconStatusId]
             }
         },
         data(){

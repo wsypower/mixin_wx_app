@@ -71,26 +71,37 @@
     const statusObj = {
         '-0-':{
             statusId: '0',
+            iconStatusId: '0',
             statusName: '未提交',
         },
-        '-10-30-60-':{
+        '-10-60-':{
             statusId: '1',
+            iconStatusId: '1',
             statusName: '审核中',
-        },
-        '-20-':{
-            statusId: '2',
-            statusName: '审核通过',
         },
         '-25-85-':{
             statusId: '3',
+            iconStatusId: '1',
             statusName: '审核未通过',
+        },
+        '-20-':{
+            statusId: '2',
+            iconStatusId: '2',
+            statusName: '审核通过',
+        },
+        '-30-':{
+            statusId: '1',
+            iconStatusId: '2',
+            statusName: '审核中',
         },
         '-45-':{
             statusId: '5',
+            iconStatusId: '2',
             statusName: '审核未通过',
         },
         '-40-80-':{
             statusId: '4',
+            iconStatusId: '3',
             statusName: '已登记',
         }
     }
@@ -154,6 +165,7 @@
                             orderId: item.id,
                             orderCode: item.orderNo,
                             statusId: statusKey ? statusObj[statusKey].statusId: '',
+                            iconStatusId: statusKey ? statusObj[statusKey].iconStatusId: '',
                             statusName: statusKey ? statusObj[statusKey].statusName: '',
                             dogName: item.dogName,
                             submitTime: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'----',

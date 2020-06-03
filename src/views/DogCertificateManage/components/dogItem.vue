@@ -16,12 +16,12 @@
                 <div>有效期：{{dogData.validityStart|timeFormatter('YYYY-MM-DD')}}至{{dogData.validityEnd|timeFormatter('YYYY-MM-DD')}}</div>
                 <div>登记证号：{{dogData.dogCardNumber}}</div>
             </div>
-            <div class="dog-item-qr" :style="{ backgroundImage: dogData.backgroundImage }"></div>
+            <div class="dog-item-qr" :style="{ backgroundImage: dogData.backgroundImage }" @click.stop="previewQrImg(dogData.qRCodePath)"></div>
         </div>
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Toast } from 'vant';
+    import { Toast, ImagePreview } from 'vant';
     export default {
         name: 'dogItem',
         props:{
@@ -40,13 +40,14 @@
         },
         methods:{
             share(){
-                Toast('还没开发分享');
-                // this.$router.push('/qrcodeResult');
+                Toast('还未开发分享');
+            },
+            previewQrImg(qRCodePath){
+                ImagePreview([qRCodePath]);
             },
             gotToDogDetailPage(dogId){
                 if(this.needClick){
                     console.log(`dogId: ${dogId}`);
-                    //Toast('还没开发');
                     this.$store.commit('dog/updateDogInfo', this.dogData);
                     this.$router.push('/dogCertificateManage/detail');
                 }

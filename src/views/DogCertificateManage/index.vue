@@ -14,7 +14,7 @@
     import PageHeader from '@/components/pageHeader.vue';
     import DogItem from './components/dogItem.vue';
     import { queryDogCard } from '@/api/dogManage.js'
-    const statusArr = ["有效","即将到期","已到期","已注销"];
+    const statusArr = ["有效","即将到期","已到期","注销"];
     export default {
         name: 'dogCertificateManage',
         components:{
@@ -44,7 +44,7 @@
                             item.backgroundImage = 'url(' + item.qRCodePath + '),linear-gradient(#f00, #f00)';
                         }
                         else {
-                            item.backgroundImage = 'url(' + item.qRCodePath + '),linear-gradient(#847e74, #847e74)';
+                            item.backgroundImage = 'url(' + item.qRCodePath + '),linear-gradient(#999999, #999999)';
                         }
                         return item
                     });

@@ -11,7 +11,7 @@
                         <img class="dog-item-img" :src="item.dogPhotoFront">
                         <div flex="dir:top" class="dog-item_mes">
                             <span class="dog-item_name">{{item.dogName}}</span>
-                            <span class="dog-item_status" :class="{warning: item.statusId===1,wrong: item.statusId===2}">{{item.dogCarStatus}}</span>
+                            <span class="dog-item_status" :class="{warning: item.statusId===1,wrong: item.statusId===2,gray: item.statusId===3}">{{item.dogCarStatus}}</span>
                         </div>
                     </div>
                     <div flex="dir:left main:justify cross:bottom">
@@ -68,7 +68,7 @@
                         item.backgroundImage = 'url(' + item.qRCodePath + '),linear-gradient(#f00, #f00)';
                     }
                     else {
-                        item.backgroundImage = 'url(' + item.qRCodePath + '),linear-gradient(#847e74, #847e74)';
+                        item.backgroundImage = 'url(' + item.qRCodePath + '),linear-gradient(#999999, #999999)';
                     }
                 })
             }
@@ -79,8 +79,8 @@
             },
             gotoDogDetailPage(dogInfo){
                 console.log(`dogInfo:`, dogInfo);
-                Toast('还没开发');
                 this.$store.commit('dog/updateDogInfo', dogInfo);
+                this.$router.push('/dogCertificateManage/detail');
             }
         }
     }
@@ -149,6 +149,9 @@
                     }
                     &.wrong{
                         background-color: #e33232;
+                    }
+                    &.gray{
+                        background-color: #999999;
                     }
                 }
             }

@@ -57,7 +57,7 @@
     const buttonObj = {
         '-20-': { name:'查看服务点',path: 'service'},
         '-25-85-': {name:'修改信息',path:'applyPage'},
-        '-40-80-': {name:'查看犬证',path: ''}
+        '-40-80-': {name:'查看犬证',path: 'dogDetail'}
     }
     export default {
         name: 'detail',
@@ -131,6 +131,23 @@
                             originLat: temp.dogServicePoint.latitude,
                         }
                         this.$store.commit('service/updatePointInfo',pointInfo);
+                        // let dogInfo = {
+                        //     id: '',
+                        //     dogCarStatus: "",
+                        //     statusId: 0,
+                        //     dogCardNumber: "",
+                        //     dogId: 0,
+                        //     dogName: "",
+                        //     dogPhotoFront: "",
+                        //     validityEnd: 0,
+                        //     validityStart: 0,
+                        //     chipNumber: "",
+                        //     ownerName: "",
+                        //     phone: "",
+                        //     qRCodePath: '',
+                        //     backgroundImage: '',
+                        //     makeTime: ''
+                        // }
                         let needKey = Object.keys(buttonObj).find(key => key.indexOf('-' + temp.stepCode + '-')>=0)
                         if(needKey){
                             this.showButton = true;
@@ -151,8 +168,9 @@
                 this.$router.push('/service');
             },
             goToPage(){
-                if(this.pagePath===''){
+                if(this.pagePath==='dogDetail'){
                     Toast('还未开发');
+                    // this.$router.push('/dogCertificateManage/detail');
                 }
                 else if(this.pagePath==='service'){
                     this.$router.push('/service');
