@@ -42,6 +42,8 @@
     import PageHeader from '@/components/pageHeader.vue';
     import DogItem from './components/dogItem.vue';
     import Clipboard from 'clipboard';
+    import { queryDogCard } from '@/api/dogManage.js'
+    const statusArr = ["有效","即将到期","已到期","注销"];
     export default {
         name: 'dogDetail',
         components:{
@@ -51,15 +53,60 @@
         },
         data(){
             return {
+                params:{
+                    userId: '',
+                    dogCardNumber: ''
+                },
                 dogData: {}
             }
         },
         mounted(){
+            this.params.userId = this.$store.getters['userId'];
+            this.params.dogCardNumber = this.$route.params.dogCardNumber;
+            console.log('dogCardNumber', this.params.dogCardNumber);
             this.getDogDetail();
         },
         methods:{
             getDogDetail(){
-                this.dogData = this.$store.getters['dog/dogInfo'];
+                queryDogCard(this.params).then( res => {
+                    console.log('queryDogCard single', res);
+                    if(res.errno===0){
+                        this.dogData = {
+                            id: res.data.id,
+                            dogCarStatus: res.data.dogCarStatus,
+                            statusId: statusArr.findIndex(it => it === res.data.dogCarStatus),
+                            dogCardNumber: res.data.dogCardNumber,
+                            dogId: res.data.dogId,
+                            dogName: res.data.dogName,
+                            dogPhotoFront: res.data.dogPhotoFront,
+                            validityEnd: res.data.validityEnd,
+                            validityStart: res.data.validityStart,
+                            chipNumber: res.data.chipNumber,
+                            ownerName: res.data.ownerName,
+                            phone: res.data.phone,
+                            qRCodePath: res.data.qRCodePath,
+                            backgroundImage: '',
+                            makeTime: res.data.makeTime
+                        }
+
+                        if(this.dogData.statusId===0){
+                            this.dogData.backgroundImage = 'url(' + this.dogData.qRCodePath + '),linear-gradient(#0f0, #0f0)';
+                        }
+                        else if(this.dogData.statusId===1){
+                            this.dogData.backgroundImage = 'url(' + this.dogData.qRCodePath + '),linear-gradient(#ffa200, #ffa200)';
+                        }
+                        else if(this.dogData.statusId===2){
+                            this.dogData.backgroundImage = 'url(' + this.dogData.qRCodePath + '),linear-gradient(#f00, #f00)';
+                        }
+                        else {
+                            this.dogData.backgroundImage = 'url(' + this.dogData.qRCodePath + '),linear-gradient(#999999, #999999)';
+                        }
+                        this.$store.commit('dog/updateDogInfo', this.dogData);
+                    }
+                    else{
+                        Toast.fail({message: res.errmsg});
+                    }
+                })
             },
             //复制pdf链接
             copyCode(){

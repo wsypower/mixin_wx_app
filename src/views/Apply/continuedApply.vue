@@ -218,7 +218,9 @@
             //提交
             submit(){
                 console.log('submitData', this.submitData);
+                this.$store.commit('updateIsLoading', true);
                 bidDogCard(this.submitData).then( res => {
+                    this.$store.commit('updateIsLoading', false);
                     console.log(res, res);
                     if(res.errno === 0){
                         this.showDialog = true;

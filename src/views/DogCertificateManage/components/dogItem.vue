@@ -1,5 +1,5 @@
 <template>
-    <div class="dog-item" flex="dir:top" @click="gotToDogDetailPage(dogData.id)">
+    <div class="dog-item" flex="dir:top" @click="gotToDogDetailPage(dogData.dogCardNumber)">
         <div flex="dir:left cross:center" style="position: relative">
             <img class="dog-item-img" :src="dogData.dogPhotoFront">
             <div flex="dir:top" class="dog-item_mes">
@@ -45,11 +45,10 @@
             previewQrImg(qRCodePath){
                 ImagePreview([qRCodePath]);
             },
-            gotToDogDetailPage(dogId){
+            gotToDogDetailPage(dogCardNumber){
                 if(this.needClick){
-                    console.log(`dogId: ${dogId}`);
-                    this.$store.commit('dog/updateDogInfo', this.dogData);
-                    this.$router.push('/dogCertificateManage/detail');
+                    console.log(`dogCardNumber: ${dogCardNumber}`);
+                    this.$router.push('/dogCertificateManage/' + dogCardNumber + '/detail');
                 }
             }
         }

@@ -88,6 +88,8 @@
                     serviceName: '',
                     //服务点Code
                     serviceCode: '',
+                    //犬证编号
+                    dogCardNumber: '',
                     //申办进度
                     logList: []
                 },
@@ -117,6 +119,7 @@
                         this.orderInfo.ownerName = order.ownerName;
                         this.orderInfo.dogName = order.dogName;
                         this.orderInfo.breed = order.breed;
+                        this.orderInfo.dogCardNumber = order.dogCardNumber;
                         this.orderInfo.serviceName = order.serviceName;
                         this.orderInfo.serviceCode = order.serviceCode;
                         this.orderInfo.logList = res.data.list;
@@ -131,23 +134,6 @@
                             originLat: temp.dogServicePoint.latitude,
                         }
                         this.$store.commit('service/updatePointInfo',pointInfo);
-                        // let dogInfo = {
-                        //     id: '',
-                        //     dogCarStatus: "",
-                        //     statusId: 0,
-                        //     dogCardNumber: "",
-                        //     dogId: 0,
-                        //     dogName: "",
-                        //     dogPhotoFront: "",
-                        //     validityEnd: 0,
-                        //     validityStart: 0,
-                        //     chipNumber: "",
-                        //     ownerName: "",
-                        //     phone: "",
-                        //     qRCodePath: '',
-                        //     backgroundImage: '',
-                        //     makeTime: ''
-                        // }
                         let needKey = Object.keys(buttonObj).find(key => key.indexOf('-' + temp.stepCode + '-')>=0)
                         if(needKey){
                             this.showButton = true;
@@ -169,8 +155,7 @@
             },
             goToPage(){
                 if(this.pagePath==='dogDetail'){
-                    Toast('还未开发');
-                    // this.$router.push('/dogCertificateManage/detail');
+                    this.$router.push('/dogCertificateManage/' + this.orderInfo.dogCardNumber + '/detail');
                 }
                 else if(this.pagePath==='service'){
                     this.$router.push('/service');

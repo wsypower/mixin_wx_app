@@ -517,7 +517,9 @@
                     if(res.errno===0){
                         //验证码判断
                         if(this.isCheckSms){
+                            this.$store.commit('updateIsLoading', true);
                             bidDogCard(this.submitData).then( res => {
+                                this.$store.commit('updateIsLoading', false);
                                 console.log(res, res);
                                 if(res.errno === 0){
                                     this.$store.commit('order/updateOrderInfo', this.submitData);

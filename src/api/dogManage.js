@@ -9,7 +9,7 @@ export const queryDogCard = data => {
     return request({
         url: `/dogCard/queryDogCard/${data.userId}`,
         method: 'post',
-        data
+        params: data
     })
 }
 

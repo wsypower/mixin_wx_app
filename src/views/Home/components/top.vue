@@ -6,7 +6,7 @@
         </div>
         <van-swipe v-else class="dog-swipe" indicator-color="white">
             <van-swipe-item v-for="item in dogList" :key="item.id">
-                <div class="dog-item" flex="dir:top" @click="gotoDogDetailPage(item)">
+                <div class="dog-item" flex="dir:top" @click="gotoDogDetailPage(item.dogCardNumber)">
                     <div flex="dir:left cross:center">
                         <img class="dog-item-img" :src="item.dogPhotoFront">
                         <div flex="dir:top" class="dog-item_mes">
@@ -77,10 +77,9 @@
             previewQrImg(qRCodePath){
                 ImagePreview([qRCodePath]);
             },
-            gotoDogDetailPage(dogInfo){
-                console.log(`dogInfo:`, dogInfo);
-                this.$store.commit('dog/updateDogInfo', dogInfo);
-                this.$router.push('/dogCertificateManage/detail');
+            gotoDogDetailPage(dogCardNumber){
+                console.log(`dogCardNumber:`, dogCardNumber);
+                this.$router.push('/dogCertificateManage/' + dogCardNumber +'/detail');
             }
         }
     }
