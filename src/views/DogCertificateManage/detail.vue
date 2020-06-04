@@ -138,7 +138,13 @@
                 this.$router.push('/dogCertificateManage/unbind');
             },
             continuedApply(){
-                this.$router.push('/continuedApply');
+                this.$router.push({
+                    path:'/continuedApply',
+                    query:{
+                        dogCardNumber: this.dogData.dogCardNumber,
+                        chipNumber: this.dogData.chipNumber
+                    }
+                });
             }
         }
     }

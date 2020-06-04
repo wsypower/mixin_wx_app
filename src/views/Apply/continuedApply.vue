@@ -180,6 +180,10 @@
                         }
                     });
                 }
+                if(to.query.dogCardNumber){
+                    vm.submitData.dogCardNumber = to.query.dogCardNumber;
+                    vm.submitData.chipNumber = to.query.chipNumber;
+                }
             })
         },
         mounted(){
