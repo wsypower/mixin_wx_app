@@ -90,7 +90,7 @@
                             originLon: item.longitude,
                             distance: item.distance,
                             address: item.address,
-                            serviceTime: item.serviceTime
+                            serviceTime: item.serviceBeginTime + '至' + item.serviceEndTime + ' ' + item.serviceTime
                         }
                         acc.push(temp);
                         return acc

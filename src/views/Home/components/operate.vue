@@ -41,7 +41,8 @@
                     path: ''
                 },{
                     iconClass: 'fwjg',
-                    name: '服务机构'
+                    name: '服务机构',
+                    path: '/service'
                 },{
                     iconClass: 'tsjb',
                     name: '投诉举报',
@@ -58,6 +59,18 @@
                     Toast('还没开发');
                 }
                 else{
+                    if(path==='/service'){
+                        let pointInfo = {
+                            id: '',
+                            servicePointName: '',
+                            distance: '',
+                            address: 0,
+                            serviceTime: '',
+                            originLon: '',
+                            originLat: '',
+                        }
+                        this.$store.commit('service/updatePointInfo',pointInfo);
+                    }
                     this.$router.push(path);
                 }
             }

@@ -100,7 +100,6 @@
         mounted(){
             this.firstPlace = this.$store.getters['service/pointInfo'];
             this.firstPlace.zIndex = 10;
-            console.log('firstPlace',this.firstPlace);
             this.clientHeight = `${document.documentElement.clientHeight}`;
         },
         watch:{
@@ -119,15 +118,18 @@
                     return acc
                 }, []);
                 console.log('mapMaskerList', this.mapMaskerList);
+                this.center.lng = this.firstPlace.originLon;
+                this.center.lat = this.firstPlace.originLat;
             }
         },
         methods:{
             //地图ready之后操作
             mapReadyHandler({BMap, map}) {
                 console.log(BMap, map);
-                this.center.lng = this.firstPlace.originLon;
-                this.center.lat = this.firstPlace.originLat;
-                this.zoom = 15
+                this.center.lng = this.firstPlace.originLon || this.$store.getters['originLon'];
+                this.center.lat = this.firstPlace.originLat || this.$store.getters['originLat'];
+                this.zoom = 15;
+                console.log('this.center.lng',this.center.lng,  this.center.lat);
             },
             //list加载数据
             onLoad() {
@@ -156,7 +158,7 @@
                             originLon: item.longitude,
                             distance: item.distance,
                             address: item.address,
-                            serviceTime: item.serviceTime
+                            serviceTime: item.serviceBeginTime + '至' + item.serviceEndTime + ' ' + item.serviceTime
                         }
                         acc.push(temp);
                         return acc
@@ -169,7 +171,7 @@
                             originLon: item.longitude,
                             distance: item.distance,
                             address: item.address,
-                            serviceTime: item.serviceTime
+                            serviceTime: item.serviceBeginTime + '至' + item.serviceEndTime + ' ' + item.serviceTime
                         }
                         if(item.id !== this.firstPlace.id){
                             temp.active = false;
@@ -182,6 +184,10 @@
                         acc.push(temp);
                         return acc
                     },this.mapMaskerList);
+                    if(this.firstPlace.id === ''){
+                        this.firstPlace = this.placeList[0];
+                        console.log('firstPlace',this.firstPlace);
+                    }
                     // 加载状态结束
                     this.loading = false;
                     // 数据全部加载完成
@@ -193,40 +199,12 @@
             toPoint(point){
                 console.log('to point',this.$refs.bmMarker);
                 this.firstPlace = point;
-                //this.$refs.bmMarker
-                // let size = document.querySelectorAll('.BMap_Marker').length/2;
-                // this.mapMaskerList.forEach((item,index) => {
-                //     if(item.id === point.id){
-                //         document.querySelectorAll('.BMap_Marker')[size+index].style.zIndex = 10;
-                //     }
-                //     else{
-                //         document.querySelectorAll('.BMap_Marker')[size+index].style.zIndex = 0;
-                //     }
-                // })
                 this.showAll = false;
             },
             touchStart(e){
                 console.log('touchStart', e);
                 let touch = e.touches[0]; //获取第一个触点
                 this.startY = Number(touch.pageY);
-            },
-            touchMove(e){
-                // console.log('touchMove', e);
-                // let touch = e.touches[0]; //获取第一个触点
-                // let y = Number(touch.pageY);
-                // let panelHeight = this.$refs.hiddenPanel.offsetHeight;
-                // if(this.startY - y >1){
-                //     if(panelHeight<585){
-                //         this.$refs.hiddenPanel.style.transition = 'unset';
-                //         this.$refs.hiddenPanel.style.height = (this.clientHeight - y) + 'px';
-                //     }
-                // }
-                // if(y - this.startY >1){
-                //     if(panelHeight>50){
-                //         this.$refs.hiddenPanel.style.transition = 'unset';
-                //         this.$refs.hiddenPanel.style.height = (this.clientHeight - y) + 'px';
-                //     }
-                // }
             },
             touchEnd(e){
                 console.log('touchEnd', e);
@@ -235,24 +213,16 @@
                 console.log(this.startY - y);
                 let panelHeight = this.$refs.hiddenPanel.offsetHeight;
                 if(this.startY - y >0){
-                    // this.$refs.hiddenPanel.style.transition = 'height 0.4s';
-                    // this.$refs.hiddenPanel.style.height = 585 + 'px';
                     this.showAll = true;
                 }
                 else if(y - this.startY >0){
-                    // this.$refs.hiddenPanel.style.transition = 'height 0.4s';
-                    // this.$refs.hiddenPanel.style.height = 50 + 'px';
                     this.showAll = false;
                 }
                 else{
                     if(panelHeight<100){
-                        // this.$refs.hiddenPanel.style.transition = 'height 0.6s';
-                        // this.$refs.hiddenPanel.style.height = 585 + 'px';
                         this.showAll = true;
                     }
                     else{
-                        // this.$refs.hiddenPanel.style.transition = 'height 0.6s';
-                        // this.$refs.hiddenPanel.style.height = 50 + 'px';
                         this.showAll = false;
                     }
                 }
