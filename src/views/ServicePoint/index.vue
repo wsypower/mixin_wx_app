@@ -259,9 +259,9 @@
                 .show-place-name{
                     font-family: PingFang-SC-Bold;
                     font-size: 28px;
+                    font-weight: bold;
                     line-height: 50px;
                     letter-spacing: 0px;
-                    font-weight: 600;
                     color: #333333;
                 }
                 .show-place-point{
@@ -346,7 +346,7 @@
                             font-size: 28px;
                             line-height: 50px;
                             letter-spacing: 0px;
-                            font-weight: 600;
+                            font-weight: bold;
                             color: #333333;
                         }
                         .place-item-point{

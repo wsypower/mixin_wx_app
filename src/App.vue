@@ -58,7 +58,7 @@ body {
     margin: 0;
 }
 #app {
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma, Simsun, sans-serif;
+  font-family: "Droid Sans", "Droid Sans Fallback","PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma, Simsun, sans-serif;
   width: 100%;
   height: 100%;
   -webkit-font-smoothing: antialiased;

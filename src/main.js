@@ -19,7 +19,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store/index";
 import "assets/iconfont/iconfont.css";
-import "assets/fontFamily/font.css";
+// import "assets/fontFamily/font.css";
 
 import vueFiltersDate from '@/filters/moment/main'
 Vue.use(vueFiltersDate)
