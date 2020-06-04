@@ -23,11 +23,11 @@
             <div class="item-row-left">办证类型：</div>
             <div class="item-row-right">{{cardInfo.cardType}}</div>
         </div>
-        <van-button plain type="info" class="btn" v-if="cardInfo.statusId === '0'" @click.stop="deleteDogItem(cardInfo.orderId)">作废</van-button>
+        <van-button plain type="info" class="btn" v-if="cardInfo.statusId === '0'||cardInfo.statusId === '3'" @click.stop="deleteDogItem(cardInfo.orderId)">作废</van-button>
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Button, Toast } from 'vant';
+    import { Button, Toast, Dialog } from 'vant';
     import ProcessChart from './processChart.vue';
     import ProcessChartThree from './processChartThree.vue';
     import { deleteDogItem } from '@/api/process.js'
@@ -45,6 +45,7 @@
             ProcessChart,
             ProcessChartThree,
             [Button.name]: Button,
+            [Dialog.Component.name]: Dialog.Component
         },
         props:{
             cardInfo: {
@@ -70,19 +71,26 @@
         },
         methods:{
             deleteDogItem(dogOrderId){
-                let params = {
-                    userId: this.$store.getters['userId'],
-                    orderId: dogOrderId
-                }
-                deleteDogItem(params).then( res => {
-                    if(res.errno === 0){
-                        Toast.success({message: '删除成功'});
-                        this.$emit('refreshList');
+                Dialog.confirm({
+                    title: '',
+                    message: '确定删除此申请吗？'
+                }).then(() => {
+                    let params = {
+                        userId: this.$store.getters['userId'],
+                        orderId: dogOrderId
                     }
-                    else{
-                        Toast.fail({message: res.errmsg});
-                    }
-                })
+                    deleteDogItem(params).then( res => {
+                        if(res.errno === 0){
+                            Toast.success({message: '删除成功'});
+                            this.$emit('refreshList');
+                        }
+                        else{
+                            Toast.fail({message: res.errmsg});
+                        }
+                    })
+                }).catch(() => {
+
+                });
             },
             gotoDetail(){
                 this.$emit('gotoPage');
