@@ -34,6 +34,18 @@ export const queryImmuneSite = data => {
 }
 
 /**
+ * @description 获取犬种类数据
+ * @author moxuejuan
+ * @date 2020-06-04 10:30
+ */
+export const queryDogType = () => {
+    return request({
+        url: `/dogCard/queryDogDict?type=dogType`,
+        method: 'post'
+    })
+}
+
+/**
  * @description 短信发送
  * @author moxuejuan
  * @date 2020-05-20 09:28

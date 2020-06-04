@@ -12,7 +12,26 @@
                 </template>
             </van-field>
             <van-divider></van-divider>
-            <van-field v-model="submitData.breed" label="宠物品种：" placeholder="请输入" input-align="right"/>
+            <!--<van-field v-model="submitData.breed" label="宠物品种：" placeholder="请输入" input-align="right"/>-->
+            <van-field
+                    readonly
+                    clickable
+                    name="picker"
+                    :value="submitData.breed"
+                    label="宠物品种："
+                    placeholder="请选择品种"
+                    @click="showBreedPicker = true"
+                    input-align="right"
+                    right-icon="arrow"
+            />
+            <van-popup v-model="showBreedPicker" position="bottom">
+                <van-picker
+                        show-toolbar
+                        :columns="breedColumns"
+                        @confirm="onBreedConfirm"
+                        @cancel="showBreedPicker = false"
+                />
+            </van-popup>
             <van-divider></van-divider>
             <van-field
                     readonly
@@ -188,7 +207,7 @@
     import MyRadioGroup from '@/components/myRadioGroup.vue';
     import UploadImage from '../components/uploadImage.vue';
     import { formatDate } from '@/utils/index';
-    import { queryImmuneSite } from '@/api/common.js'
+    import { queryImmuneSite, queryDogType } from '@/api/common.js'
     import { queryDogServicePoint } from '@/api/home.js'
     import { bidDogCard } from '@/api/apply.js'
     import myMixin from '@/utils/mixin.js'
@@ -213,6 +232,9 @@
                 showBirthdatePicker: false,
                 showAdoptTimePicker: false,
                 showImmuneTimePicker: false,
+                //宠物品种
+                showBreedPicker: false,
+                breedColumns: [],
                 //展示犬用途弹窗
                 showPurposePicker: false,
                 purposeColumns,
@@ -296,6 +318,12 @@
             queryImmuneSite(params).then( res => {
                 this.immuneAddressColumns = res.data;
             });
+            queryDogType().then( res => {
+                this.breedColumns = res.data.reduce((acc,item) => {
+                    acc.push(item.name);
+                    return acc
+                },[]);
+            });
             //获取意向点数据
             queryDogServicePoint(params).then( res => {
                 this.siteColumns = res.data.reduce((acc, item) => {
@@ -354,6 +382,11 @@
                 this.timeObj.adoptTime = formatDate(value, 'yyyy-MM-dd');
                 this.submitData.adoptTime = value.getTime();
                 this.showAdoptTimePicker = false;
+            },
+            //获取犬品种
+            onBreedConfirm(value){
+                this.submitData.breed = value;
+                this.showBreedPicker = false;
             },
             //获取犬用途
             onPurposeConfirm(value){

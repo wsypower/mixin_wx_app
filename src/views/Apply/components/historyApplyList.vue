@@ -114,27 +114,27 @@
                         }
                     });
                 }
-                else if(item.statusId === 3){
-                    if(item.cardType===0){
-                        this.$router.push({
-                            path:'/newApply',
-                            query:{
-                                currentStep: 1,
-                                orderId: item.id,
-                                userType: item.userType
-                            }
-                        });
-                    }
-                    else{
-                        this.$router.push({
-                            path:'/continuedApply',
-                            query:{
-                                currentStep: 5,
-                                orderId: item.id
-                            }
-                        });
-                    }
-                }
+                // else if(item.statusId === 3){
+                //     if(item.cardType===0){
+                //         this.$router.push({
+                //             path:'/newApply',
+                //             query:{
+                //                 currentStep: 1,
+                //                 orderId: item.id,
+                //                 userType: item.userType
+                //             }
+                //         });
+                //     }
+                //     else{
+                //         this.$router.push({
+                //             path:'/continuedApply',
+                //             query:{
+                //                 currentStep: 5,
+                //                 orderId: item.id
+                //             }
+                //         });
+                //     }
+                // }
                 else{
                     console.log('跳转至订单详情页');
                     this.$router.push('/' + item.orderCode + '/detail');

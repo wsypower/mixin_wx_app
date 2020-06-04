@@ -28,7 +28,7 @@
         },
         '-25-85-':{
             statusId: '3',
-            iconStatusId: '1',
+            iconStatusId: '0',
             statusName: '审核未通过',
         },
         '-20-':{
@@ -110,27 +110,27 @@
                         }
                     });
                 }
-                else if(item.statusId === '3'){
-                    if(item.cardType===0){
-                        this.$router.push({
-                            path:'/newApply',
-                            query:{
-                                currentStep: 1,
-                                orderId: item.orderId,
-                                userType: item.userType
-                            }
-                        });
-                    }
-                    else{
-                        this.$router.push({
-                            path:'/continuedApply',
-                            query:{
-                                currentStep: 5,
-                                orderId: item.orderId
-                            }
-                        });
-                    }
-                }
+                // else if(item.statusId === '3'){
+                //     if(item.cardType===0){
+                //         this.$router.push({
+                //             path:'/newApply',
+                //             query:{
+                //                 currentStep: 1,
+                //                 orderId: item.orderId,
+                //                 userType: item.userType
+                //             }
+                //         });
+                //     }
+                //     else{
+                //         this.$router.push({
+                //             path:'/continuedApply',
+                //             query:{
+                //                 currentStep: 5,
+                //                 orderId: item.orderId
+                //             }
+                //         });
+                //     }
+                // }
                 else{
                     console.log('跳转至订单详情页');
                     this.$router.push('/' + item.orderCode + '/detail');
