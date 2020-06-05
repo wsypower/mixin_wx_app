@@ -19,6 +19,8 @@ import "./flexbile/index";
 
 // 环境判断
 import "./environment/index";
+// import '@/plugins/environment/wx/wechatAuth/index'
+
 
 export default {
   install(Vue) {

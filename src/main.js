@@ -27,7 +27,6 @@ FastClick.attach(document.body);
 
 import Plugins from "@/plugins";
 Vue.use(Plugins);
-
 new Vue({
   router,
   store,

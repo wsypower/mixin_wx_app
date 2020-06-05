@@ -63,8 +63,9 @@ module.exports = {
     // 配置多个代理
     proxy: {
       "/proxy": {
-        target: "https://www.mock.com",
+        target: "http://220.191.224.215/wechat/stage/jump/",
         ws: true, // 代理的WebSockets
+        changeOrigin: true, // 允许websockets跨域
         changeOrigin: true, // 允许websockets跨域
         pathRewrite: {
           "^/proxy": "",

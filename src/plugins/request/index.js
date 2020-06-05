@@ -10,7 +10,6 @@
 /*                                                                                                           */
 /* ********************************************************************************************************* */
 "use strict";
-import Vue from "vue";
 import axios from "axios";
 import Qs from "qs";
 
@@ -28,16 +27,16 @@ let config = {
   timeout: 60 * 100, // 请求超时时间
   //TODO:只能用在 'PUT', 'POST' 和 'PATCH' 这几个请求方法
   //修改请求数据添加必填项 userId
-  transformRequest: [
-    function(data = {}) {
-      //对 data 进行任意转换处理 => 转为fromData(按照实际后台约定修改转换)
-      return Qs.stringify(data, { arrayFormat: "repeat" });
-    },
-  ],
-  //TODO:必须是一个无格式对象(plain object)或 URLSearchParams 对象(GET)
-  paramsSerializer: function(params) {
-    return Qs.stringify(params, { arrayFormat: "brackets" });
-  },
+  // transformRequest: [
+  //   function(data = {}) {
+  //     //对 data 进行任意转换处理 => 转为fromData(按照实际后台约定修改转换)
+  //     return Qs.stringify(data, { arrayFormat: "repeat" });
+  //   },
+  // ],
+  // //TODO:必须是一个无格式对象(plain object)或 URLSearchParams 对象(GET)
+  // paramsSerializer: function(params) {
+  //   return Qs.stringify(params, { arrayFormat: "brackets" });
+  // },
 };
 
 // ##################################################################### //
@@ -71,7 +70,9 @@ service.interceptors.response.use(
     // dataAxios 是 axios 返回数据中的 data
     const dataAxios = response.data;
     // 这个状态码是和后端约定的（默认值为防止外部接口没有code，导致值为undefined）
-    const { code = 111 } = dataAxios;
+    const {
+      code = 111
+    } = dataAxios;
     // 根据 code 进行判断
     switch (code >>> 0) {
       case 111:
@@ -139,7 +140,7 @@ service.interceptors.response.use(
 // ####################### Vue prototype 上挂载axios ###################### //
 // ##################################################################### //
 
-service.install = function(Vue, options) {
+service.install = function (Vue) {
   Vue.axios = service;
   window.axios = service;
   Object.defineProperties(Vue.prototype, {

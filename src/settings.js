@@ -6,10 +6,13 @@ module.exports = {
   title: "vue模板-title",
 
   /**
-   * @type {boolean} true | false
-   * @description 是否在右面板显示设置
+   * @description 微信配置
    */
-  showSettings: true,
+  wx: {
+    appID: "wx8deb5f410186d074",
+    // baseUrl: "http://220.191.224.215/wechat/stage/jump",
+    baseUrl: "http://wx.cgj.luan.gov.cn/wechat/stage/jump",
+  },
 
   /**
    * @type {boolean} true | false
