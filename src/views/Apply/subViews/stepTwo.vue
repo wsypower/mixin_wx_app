@@ -312,7 +312,10 @@
             }
             //获取免疫点数据
             queryImmuneSite(paramsImmuneSite).then( res => {
-                this.immuneAddressColumns = res.data;
+                this.immuneAddressColumns = res.data.reduce((acc,item) => {
+                    acc.push(item.servicePointName);
+                    return acc
+                },[]);
             });
             queryDogType().then( res => {
                 this.breedColumns = res.data.reduce((acc,item) => {

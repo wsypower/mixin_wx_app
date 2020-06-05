@@ -188,18 +188,17 @@
         },
         mounted(){
             this.submitData.userId = this.$store.getters['userId'];
-            let originLon = this.$store.getters['originLon'];
-            let originLat = this.$store.getters['originLat'];
             let areaCode = this.$store.getters['areaCode'];
-            let params = {
-                userId: this.$store.getters['userId'],
-                originLon,
-                originLat,
-                areaCode
+            let paramsImmuneSite = {
+                userId: this.submitData.userId,
+                areaCode,
             }
-            //获取免疫登记地点选项数据
-            queryImmuneSite(params).then( res => {
-                this.immuneAddressColumns = res.data;
+            //获取免疫点数据
+            queryImmuneSite(paramsImmuneSite).then( res => {
+                this.immuneAddressColumns = res.data.reduce((acc,item) => {
+                    acc.push(item.servicePointName);
+                    return acc
+                },[]);
             });
         },
 
