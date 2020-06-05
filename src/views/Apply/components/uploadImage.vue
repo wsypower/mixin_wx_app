@@ -61,14 +61,14 @@
             }
         },
         mounted(){
-            // window.androidBackPress = this.androidBackPress.bind(this);
-            const self = this;
-            window.androidBackPress = function(data){
-
-                console.log(self.loading)
-                console.log(1111111111111111111111111)
-                self.androidBackPress(data)
-            }
+            // // window.androidBackPress = this.androidBackPress.bind(this);
+            // const self = this;
+            // window.androidBackPress = function(data){
+            //
+            //     console.log(self.loading)
+            //     console.log(1111111111111111111111111)
+            //     self.androidBackPress(data)
+            // }
         },
         watch:{
             imgUrl: function(val){
@@ -79,19 +79,19 @@
             }
         },
         methods:{
-            androidBackPress(data){
-                console.log( 'loading',this.loading)
-                console.log('androidBackPress start ',data);
-                //Toast('数据传参');
-                this.loading = false;
-                console.log('androidBackPress end');
-
-            },
+            // androidBackPress(data){
+            //     console.log( 'loading',this.loading)
+            //     console.log('androidBackPress start ',data);
+            //     //Toast('数据传参');
+            //     this.loading = false;
+            //     console.log('androidBackPress end');
+            //
+            // },
             getImage(method){
                 this.showMethodsPanel = false;
-                this.loading = true;
+                // this.loading = true;
                 externalMethods.getImageUrl(method).then((res)=>{
-                    // this.loading = true;
+                    this.loading = true;
                     console.log('upload Image components 000000000000000000000',res);
                     this.imgUrl = res.pics[0].path;
                     setTimeout(() => {
