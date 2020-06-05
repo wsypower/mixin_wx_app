@@ -39,40 +39,25 @@
                 <div class="header-text">已显示{{totalShowSize}}个结果</div>
             </div>
             <div class="hidden-place-body">
-                    <van-list
-                        v-model="loading"
-                        :finished="finished"
-                        finished-text="没有更多了"
-                        @load="onLoad"
-                    >
-                        <div class="place-item" v-for="item in placeList" :key="item.id" @click="toPoint(item)">
-                            <div class="first" flex="dir:left cross:center main:justify">
-                                <span class="place-item-name">{{item.servicePointName}}</span>
-                                <span class="place-item-point"><span class="icon iconfont point">&#xe63e;</span>{{(item.distance/1000).toFixed(2)}}km</span>
-                            </div>
-                            <div class="text-panel"><span>地址：</span><span>{{item.address}}</span></div>
-                            <div class="text-panel"><span>服务时间：</span><span>{{item.serviceTime}}</span></div>
-                        </div>
-                    </van-list>
+                <service-point-list :needMakePoint="true" :pageSize="10" @getServiceMapData="getServiceMapData" @itemClickHandle="toPoint"></service-point-list>
             </div>
         </div>
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { List } from 'vant';
     import PageHeader from '@/components/pageHeader.vue';
     import BaiduMap from 'vue-baidu-map/components/map/Map.vue';
     import bmMarker from 'vue-baidu-map/components/overlays/Marker.vue'
     import bmLabel from 'vue-baidu-map/components/overlays/Label.vue'
-    import { queryDogServicePoint } from '@/api/home.js'
+    import ServicePointList from './components/servicePointList.vue';
     export default {
-        name: 'servicePoint',
+        name: 'service',
         components:{
-            [List.name]: List,
             PageHeader,
             BaiduMap,
             bmMarker,
-            bmLabel
+            bmLabel,
+            ServicePointList
         },
         data(){
             return {
@@ -80,33 +65,24 @@
                 center: {lng: 0, lat: 0},
                 zoom: 3,
                 showAll: false,
-                firstPlace: {},
-                placeList: [],
+                firstPlace: {
+                    id: ''
+                },
                 mapMaskerList: [],
-                loading: false,
-                finished: false,
-                pageSize: 10,
-                currentPage: 0,
-                totalSize: 0,
-                startY: 0,
-                clientHeight: 0
-            }
-        },
-        computed:{
-            totalShowSize: function(){
-                return this.placeList.length;
+                totalShowSize: 0,
+                startY: 0
             }
         },
         mounted(){
             this.firstPlace = this.$store.getters['service/pointInfo'];
-            this.firstPlace.zIndex = 10;
-            this.clientHeight = `${document.documentElement.clientHeight}`;
         },
         watch:{
-            'firstPlace.id': function(newValue){
+            'firstPlace.id': function(){
+                this.center.lng = this.firstPlace.originLon;
+                this.center.lat = this.firstPlace.originLat;
                 let tempArr = JSON.parse(JSON.stringify(this.mapMaskerList));
                 this.mapMaskerList = tempArr.reduce((acc,item) => {
-                    if(item.id !== newValue){
+                    if(item.id !== this.firstPlace.id){
                         item.active = false;
                         item.zIndex = 0;
                     }
@@ -118,9 +94,7 @@
                     return acc
                 }, []);
                 console.log('mapMaskerList', this.mapMaskerList);
-                this.center.lng = this.firstPlace.originLon;
-                this.center.lat = this.firstPlace.originLat;
-            }
+            },
         },
         methods:{
             //地图ready之后操作
@@ -129,77 +103,7 @@
                 this.center.lng = this.firstPlace.originLon || this.$store.getters['originLon'];
                 this.center.lat = this.firstPlace.originLat || this.$store.getters['originLat'];
                 this.zoom = 15;
-                console.log('this.center.lng',this.center.lng,  this.center.lat);
-            },
-            //list加载数据
-            onLoad() {
-                console.log('777777777777777777777777');
-                // let Bmap = this.BMap;
-                //获取范围内的服务点
-                let originLon = this.$store.getters['originLon'];
-                let originLat = this.$store.getters['originLat'];
-                let areaCode = this.$store.getters['areaCode'];
-                let userId = this.$store.getters['userId'];
-                let params = {
-                    userId,
-                    originLon,
-                    originLat,
-                    areaCode,
-                    currentPage: ++this.currentPage,
-                    pageSize: this.pageSize
-                }
-                queryDogServicePoint(params).then( res => {
-                    this.totalSize = res.data.totalCount;
-                    this.placeList = res.data.list.reduce((acc,item) => {
-                        let temp = {
-                            id: item.id,
-                            servicePointName: item.servicePointName,
-                            originLat: item.latitude,
-                            originLon: item.longitude,
-                            distance: item.distance,
-                            address: item.address,
-                            serviceTime: item.serviceBeginTime + '至' + item.serviceEndTime + ' ' + item.serviceTime
-                        }
-                        acc.push(temp);
-                        return acc
-                    },this.placeList);
-                    this.mapMaskerList = res.data.list.reduce((acc,item) => {
-                        let temp = {
-                            id: item.id,
-                            servicePointName: item.servicePointName,
-                            originLat: item.latitude,
-                            originLon: item.longitude,
-                            distance: item.distance,
-                            address: item.address,
-                            serviceTime: item.serviceBeginTime + '至' + item.serviceEndTime + ' ' + item.serviceTime
-                        }
-                        if(item.id !== this.firstPlace.id){
-                            temp.active = false;
-                            temp.zIndex = 0;
-                        }
-                        else{
-                            temp.active = true;
-                            temp.zIndex = 10;
-                        }
-                        acc.push(temp);
-                        return acc
-                    },this.mapMaskerList);
-                    if(this.firstPlace.id === ''){
-                        this.firstPlace = this.placeList[0];
-                        console.log('firstPlace',this.firstPlace);
-                    }
-                    // 加载状态结束
-                    this.loading = false;
-                    // 数据全部加载完成
-                    if (this.placeList.length >= this.totalSize) {
-                        this.finished = true;
-                    }
-                });
-            },
-            toPoint(point){
-                console.log('to point',this.$refs.bmMarker);
-                this.firstPlace = point;
-                this.showAll = false;
+                console.log('this.center',this.center.lng,  this.center.lat);
             },
             touchStart(e){
                 console.log('touchStart', e);
@@ -227,6 +131,17 @@
                     }
                 }
             },
+            getServiceMapData(data){
+                this.mapMaskerList = data.mapMaskerList;
+                this.totalShowSize = data.totalShowSize;
+                if(this.firstPlace.id===''){
+                    this.firstPlace = data.firstPlace;
+                }
+            },
+            toPoint(data){
+                this.firstPlace = data;
+                this.showAll = false;
+            }
         }
     }
 </script>
@@ -332,55 +247,6 @@
                 height: 1070px;
                 padding: 0px 24px;
                 overflow-y: auto;
-                .place-item{
-                    width: 100%;
-                    min-height: 190px;
-                    background-color: #ffffff;
-                    box-shadow: 0px 3px 7px 0px rgba(192, 192, 192, 0.35);
-                    border-radius: 10px;
-                    padding: 20px;
-                    margin-bottom: 20px;
-                    .first{
-                        .place-item-name{
-                            font-family: PingFang-SC-Bold;
-                            font-size: 28px;
-                            line-height: 50px;
-                            letter-spacing: 0px;
-                            font-weight: bold;
-                            color: #333333;
-                        }
-                        .place-item-point{
-                            font-family: PingFang-SC-Medium;
-                            font-size: 28px;
-                            line-height: 40px;
-                            letter-spacing: 0px;
-                            color: #4d4d4d;
-                            .point{
-                                font-size: 30px;
-                                color: #306ce7;
-                                margin-right: 10px;
-                            }
-                        }
-                    }
-                    .text-panel{
-                        &:nth-child(n+1){
-                            line-height: 45px;
-                        }
-                        span:first-child{
-                            font-family: PingFang-SC-Medium;
-                            font-size: 26px;
-                            line-height: 28px;
-                            letter-spacing: 0px;
-                            color: #1e1e1e;
-                        }
-                        span:last-child{
-                            font-family: PingFang-SC-Regular;
-                            font-size: 26px;
-                            letter-spacing: 0px;
-                            color: #4d4d4d;
-                        }
-                    }
-                }
             }
         }
     }

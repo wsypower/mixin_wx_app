@@ -306,16 +306,12 @@
             let originLon = this.$store.getters['originLon'];
             let originLat = this.$store.getters['originLat'];
             let areaCode = this.$store.getters['areaCode'];
-            let params = {
+            let paramsImmuneSite = {
                 userId,
-                originLon,
-                originLat,
                 areaCode,
-                currentPage: -1,
-                pageSize: -1
             }
             //获取免疫点数据
-            queryImmuneSite(params).then( res => {
+            queryImmuneSite(paramsImmuneSite).then( res => {
                 this.immuneAddressColumns = res.data;
             });
             queryDogType().then( res => {
@@ -324,8 +320,16 @@
                     return acc
                 },[]);
             });
+            let paramsService = {
+                userId,
+                originLon,
+                originLat,
+                areaCode,
+                currentPage: -1,
+                pageSize: -1
+            }
             //获取意向点数据
-            queryDogServicePoint(params).then( res => {
+            queryDogServicePoint(paramsService).then( res => {
                 this.siteColumns = res.data.reduce((acc, item) => {
                     let temp = {
                         text: item.servicePointName,
