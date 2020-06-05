@@ -3,13 +3,13 @@
         <div class="item-row" flex="dir:left cross:center main:justify">
             <div class="item-row-left">预约单号：{{cardInfo.orderCode}}</div>
             <div class="item-row-right status"
-                 :class="{gray:cardInfo.statusId==='0',yellow:cardInfo.statusId==='1',blue:cardInfo.statusId==='2',red:cardInfo.statusId==='3'||cardInfo.statusId==='5',green:cardInfo.statusId==='4'}">
+                 :class="{gray:cardInfo.statusId===0,yellow:cardInfo.statusId===1,blue:cardInfo.statusId===2,red:cardInfo.statusId===3||cardInfo.statusId===5,green:cardInfo.statusId===4}">
                 {{cardInfo.statusName}}
             </div>
         </div>
         <div class="item-row process-chart">
-            <process-chart v-if="cardInfo.cardType === '新办'" :activeIndex="activeIndex"></process-chart>
-            <process-chart-three v-else :activeIndex="activeIndex"></process-chart-three>
+            <process-chart v-if="cardInfo.cardType === '新办'" :activeIndex="cardInfo.iconStatusId"></process-chart>
+            <process-chart-three v-else :activeIndex="cardInfo.iconStatusId"></process-chart-three>
         </div>
         <div class="item-row" flex="dir:left cross:center main:justify">
             <div class="item-row-left">宠物昵称：</div>
@@ -23,7 +23,7 @@
             <div class="item-row-left">办证类型：</div>
             <div class="item-row-right">{{cardInfo.cardType}}</div>
         </div>
-        <van-button plain type="info" class="btn" v-if="cardInfo.statusId === '0'||cardInfo.statusId === '3'" @click.stop="deleteDogItem(cardInfo.orderId)">作废</van-button>
+        <van-button plain type="info" class="btn" v-if="cardInfo.statusId === 0||cardInfo.statusId === 3" @click.stop="deleteDogItem(cardInfo.orderId)">作废</van-button>
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -31,14 +31,6 @@
     import ProcessChart from './processChart.vue';
     import ProcessChartThree from './processChartThree.vue';
     import { deleteDogItem } from '@/api/process.js'
-    const indexArr = {
-        '0': 0,
-        '1': 1,
-        '2': 2,
-        '3': 3,
-        '4': 3,
-        '5': 2
-    }
     export default{
         name: 'cardItem',
         components:{
@@ -51,23 +43,16 @@
             cardInfo: {
                 orderId: '',
                 orderCode: '',
-                statusId: '',
-                iconStatusId: '',
+                statusId: 0,
+                iconStatusId: 0,
                 statusName: '',
                 dogName: '',
                 submitTime: '',
                 cardType: ''
             }
         },
-        computed: {
-            activeIndex(){
-                return indexArr[this.cardInfo.iconStatusId]
-            }
-        },
         data(){
-            return {
-
-            }
+            return {}
         },
         methods:{
             deleteDogItem(dogOrderId){
@@ -102,7 +87,6 @@
 <style lang="scss" scoped>
     .result-item{
         width: 100%;
-        //height: 540px;
         background-color: #ffffff;
         box-shadow: 0px 3px 7px 0px rgba(192, 192, 192, 0.35);
         border-radius: 10px;

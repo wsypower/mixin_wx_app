@@ -63,48 +63,12 @@
 <script type="text/ecmascript-6">
     import PageHeader from '@/components/pageHeader.vue';
     import MyRadioGroup from '@/components/myRadioGroup.vue';
-    import { Popup, DatetimePicker, Button } from 'vant';
+    import { Toast, Popup, DatetimePicker, Button } from 'vant';
     import OrderItem from './components/orderItem.vue';
     import { formatDate } from '@/utils/index';
     import { querybidDogCardRecord } from '@/api/process.js'
+    import statusObj from '@/utils/statusObj.js'
     const typeArray = [{labelName: '全部', value: ''},{labelName: '新办', value: '0'},{labelName: '续办', value: '1'}];
-    const statusObj = {
-        '-0-':{
-            statusId: '0',
-            iconStatusId: '0',
-            statusName: '未提交',
-        },
-        '-10-60-':{
-            statusId: '1',
-            iconStatusId: '1',
-            statusName: '审核中',
-        },
-        '-25-85-':{
-            statusId: '3',
-            iconStatusId: '0',
-            statusName: '审核未通过',
-        },
-        '-20-':{
-            statusId: '2',
-            iconStatusId: '2',
-            statusName: '审核通过',
-        },
-        '-30-':{
-            statusId: '1',
-            iconStatusId: '2',
-            statusName: '审核中',
-        },
-        '-45-':{
-            statusId: '5',
-            iconStatusId: '2',
-            statusName: '审核未通过',
-        },
-        '-40-80-':{
-            statusId: '4',
-            iconStatusId: '3',
-            statusName: '已登记',
-        }
-    }
     export default {
         name: 'process',
         components: {
@@ -157,25 +121,32 @@
                 this.showEndTimePicker = false;
             },
             getProcessList(){
+                this.$store.commit('updateIsLoading', true);
                 querybidDogCardRecord(this.params).then( res => {
+                    this.$store.commit('updateIsLoading', false);
                     console.log('querybidDogCardRecord',res.data);
-                    this.cardInfoList = res.data.reduce((acc,item) => {
-                        let statusKey = Object.keys(statusObj).find(key=>key.indexOf('-' + item.status + '-')>=0);
-                        let temp = {
-                            orderId: item.id,
-                            orderCode: item.orderNo,
-                            statusId: statusKey ? statusObj[statusKey].statusId: '',
-                            iconStatusId: statusKey ? statusObj[statusKey].iconStatusId: '',
-                            statusName: statusKey ? statusObj[statusKey].statusName: '',
-                            dogName: item.dogName,
-                            submitTime: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'----',
-                            cardType: item.cardType===0? '新办': '续办',
-                            currentStep: item.currentStep,
-                            userType: item.userType
-                        }
-                        acc.push(temp);
-                        return acc
-                    },[]);
+                    if(res.errno === 0){
+                        this.cardInfoList = res.data.reduce((acc,item) => {
+                            let statusKey = Object.keys(statusObj).find(key=>key.indexOf('-' + item.status + '-')>=0);
+                            let temp = {
+                                orderId: item.id,
+                                orderCode: item.orderNo,
+                                statusId: statusKey ? statusObj[statusKey].statusId: undefined,
+                                iconStatusId: statusKey ? statusObj[statusKey].iconStatusId: undefined,
+                                statusName: statusKey ? statusObj[statusKey].statusName: '',
+                                dogName: item.dogName,
+                                submitTime: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'----',
+                                cardType: item.cardType===0? '新办': '续办',
+                                currentStep: item.currentStep,
+                                userType: item.userType
+                            }
+                            acc.push(temp);
+                            return acc
+                        },[]);
+                    }
+                    else{
+                        Toast.fail({message: res.errmsg||'数据获取失败'});
+                    }
                 });
             },
             search(){
@@ -193,27 +164,6 @@
                         }
                     });
                 }
-                // else if(item.statusId === '3'){
-                //     if(item.cardType==='新办'){
-                //         this.$router.push({
-                //             path:'/newApply',
-                //             query:{
-                //                 currentStep: 1,
-                //                 orderId: item.orderId,
-                //                 userType: item.userType
-                //             }
-                //         });
-                //     }
-                //     else{
-                //         this.$router.push({
-                //             path:'/continuedApply',
-                //             query:{
-                //                 currentStep: 5,
-                //                 orderId: item.orderId
-                //             }
-                //         });
-                //     }
-                // }
                 else{
                     console.log('跳转至订单详情页');
                     this.$router.push('/' + item.orderCode + '/detail');

@@ -62,7 +62,7 @@
             }
         },
         mounted(){
-
+            window.androidBackPress = this.androidBackPress;
         },
         watch:{
             imgUrl: function(val){
@@ -73,6 +73,9 @@
             }
         },
         methods:{
+            androidBackPress(){
+                Toast('数据传参');
+            },
             getImage(method){
                 this.showMethodsPanel = false;
                 externalMethods.getImageUrl(method).then((res)=>{

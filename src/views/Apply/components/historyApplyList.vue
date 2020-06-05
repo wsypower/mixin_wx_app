@@ -32,35 +32,9 @@
     import { Toast } from 'vant'
     import { formatDate, getDay } from '@/utils/index.js'
     import { querybidDogCardRecord } from '@/api/process.js'
-    const statusObj = {
-        '-0-':{
-            statusId: 0,
-            statusName: '未提交',
-        },
-        '-10-30-60-':{
-            statusId: 1,
-            statusName: '审核中',
-        },
-        '-20-':{
-            statusId: 2,
-            statusName: '审核通过',
-        },
-        '-25-85-':{
-            statusId: 3,
-            statusName: '审核未通过',
-        },
-        '-45-':{
-            statusId: 5,
-            statusName: '审核未通过',
-        },
-        '-40-80-':{
-            statusId: 4,
-            statusName: '已登记',
-        }
-    }
+    import statusObj from '@/utils/statusObj.js'
     export default {
         name: 'historyApplyList',
-        components:{},
         data(){
             return {
                 params:{
@@ -74,36 +48,40 @@
         },
         mounted(){
             this.params.userId = this.$store.getters['userId'];
-            //let end = formatDate(new Date(), 'yyyy-MM-dd');
             this.params.endTime = new Date().getTime();
             this.params.beginTime = new Date(getDay(-30)).getTime();
             this.getListData();
         },
         methods:{
             getListData(){
+                this.$store.commit('updateIsLoading', true);
                 querybidDogCardRecord(this.params).then(res=>{
-                    console.log('histoeyApplyList', res.data);
-                    this.listData = res.data.reduce((acc,item) => {
-                        let statusKey = Object.keys(statusObj).find(key=>key.indexOf('-' + item.status + '-')>=0);
-                        let temp = {
-                            id: item.id,
-                            currentStep: item.currentStep,
-                            name: item.dogName ? item.dogName : '----',
-                            dogType: item.breed ?item.breed : '----',
-                            submitDay: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'----',
-                            statusId: statusKey ? statusObj[statusKey].statusId: '',
-                            statusName: statusKey ? statusObj[statusKey].statusName: '',
-                            userType: item.userType,
-                            cardType: item.cardType,
-                            orderCode: item.orderNo
-                        }
-                        acc.push(temp);
-                        return acc
-                    },[]);
+                    this.$store.commit('updateIsLoading', false);
+                    if(res.errno === 0){
+                        this.listData = res.data.reduce((acc,item) => {
+                            let statusKey = Object.keys(statusObj).find(key=>key.indexOf('-' + item.status + '-')>=0);
+                            let temp = {
+                                id: item.id,
+                                currentStep: item.currentStep,
+                                name: item.dogName ? item.dogName : '----',
+                                dogType: item.breed ?item.breed : '----',
+                                submitDay: item.submitTime ? formatDate(item.submitTime, 'yyyy-MM-dd'):'----',
+                                statusId: statusKey ? statusObj[statusKey].statusId: '',
+                                statusName: statusKey ? statusObj[statusKey].statusName: '',
+                                userType: item.userType,
+                                cardType: item.cardType,
+                                orderCode: item.orderNo
+                            }
+                            acc.push(temp);
+                            return acc
+                        },[]);
+                    }
+                    else{
+                        Toast.fail({message: res.errmsg||'数据获取失败'})
+                    }
                 });
             },
             gotoDetail(item){
-                console.log('item:', item);
                 if(item.statusId === 0){
                     this.$router.push({
                         path:'/newApply',
@@ -114,32 +92,9 @@
                         }
                     });
                 }
-                // else if(item.statusId === 3){
-                //     if(item.cardType===0){
-                //         this.$router.push({
-                //             path:'/newApply',
-                //             query:{
-                //                 currentStep: 1,
-                //                 orderId: item.id,
-                //                 userType: item.userType
-                //             }
-                //         });
-                //     }
-                //     else{
-                //         this.$router.push({
-                //             path:'/continuedApply',
-                //             query:{
-                //                 currentStep: 5,
-                //                 orderId: item.id
-                //             }
-                //         });
-                //     }
-                // }
                 else{
-                    console.log('跳转至订单详情页');
                     this.$router.push('/' + item.orderCode + '/detail');
                 }
-
             }
         }
     }
@@ -204,11 +159,10 @@
                         color: #4d4d4d;
                         >div{
                             .item_name{
-                                //width: 133px;
                                 font-family: PingFang-SC-Bold;
                                 font-size: 30px;
                                 line-height: 40px;
-                                font-weight: 600;
+                                font-weight: bold;
                                 color: #333333;
                                 margin-right: 30px;
                             }
