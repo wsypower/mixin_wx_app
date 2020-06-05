@@ -4,9 +4,9 @@
             <img class="dog-item-img" :src="dogData.dogPhotoFront">
             <div flex="dir:top" class="dog-item_mes">
                 <span class="dog-item_name">{{dogData.dogName}}</span>
-                <span class="dog-item_status" :class="{warning: dogData.statusId===1,wrong: dogData.statusId===2,gray: dogData.statusId===3}">{{dogData.dogCarStatus}}</span>
+                <span class="dog-item_status" :class="{warning: statusId===1,wrong: statusId===2,gray: statusId===3}">{{dogData.dogCarStatus}}</span>
             </div>
-            <div class="share_btn" flex="dir:left" @click.stop="share">
+            <div class="share_btn" flex="dir:left" v-if="needShare" @click.stop="share">
                 <span class="icon iconfont icon-fenxiang3"></span>
                 <span>分享</span>
             </div>
@@ -16,19 +16,26 @@
                 <div>有效期：{{dogData.validityStart|timeFormatter('YYYY-MM-DD')}}至{{dogData.validityEnd|timeFormatter('YYYY-MM-DD')}}</div>
                 <div>登记证号：{{dogData.dogCardNumber}}</div>
             </div>
-            <div class="dog-item-qr" :style="{ backgroundImage: dogData.backgroundImage }" @click.stop="previewQrImg(dogData.qRCodePath)"></div>
+            <div class="dog-item-qr" :style="{ backgroundImage: backgroundImage }" @click.stop="previewQrImg(dogData.qRCodePath)"></div>
         </div>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import { Toast, ImagePreview } from 'vant';
+    const statusArr = ["有效","即将到期","已到期","注销"];
     export default {
         name: 'dogItem',
         props:{
-            needClick:{
+            needToDetail:{
                 type: Boolean,
                 default (){
-                    return true
+                    return false
+                }
+            },
+            needShare:{
+                type: Boolean,
+                default (){
+                    return false
                 }
             },
             dogData:{
@@ -38,6 +45,25 @@
                 }
             }
         },
+        computed:{
+           statusId: function(){
+               return statusArr.findIndex(it => it === this.dogData.dogCarStatus);
+           },
+           backgroundImage: function(){
+               if(this.statusId===0){
+                   return 'url(' + this.dogData.qRCodePath + '),linear-gradient(#0f0, #0f0)';
+               }
+               else if(this.statusId===1){
+                    return 'url(' + this.dogData.qRCodePath + '),linear-gradient(#ffa200, #ffa200)';
+               }
+               else if(this.statusId===2){
+                   return 'url(' + this.dogData.qRCodePath + '),linear-gradient(#f00, #f00)';
+               }
+               else {
+                   return 'url(' + this.dogData.qRCodePath + '),linear-gradient(#999999, #999999)';
+               }
+           }
+        },
         methods:{
             share(){
                 Toast('还未开发分享');
@@ -46,7 +72,7 @@
                 ImagePreview([qRCodePath]);
             },
             gotToDogDetailPage(dogCardNumber){
-                if(this.needClick){
+                if(this.needToDetail){
                     console.log(`dogCardNumber: ${dogCardNumber}`);
                     this.$router.push('/dogCertificateManage/' + dogCardNumber + '/detail');
                 }

@@ -1,7 +1,7 @@
 <template>
     <div class="dog-detail-page">
         <page-header title="电子犬证"></page-header>
-        <dog-item :dogData="dogData" :needClick="false"></dog-item>
+        <dog-item :dogData="dogData" :needToDetail="false" :needShare="true"></dog-item>
         <div class="message-panel">
             <div class="row" flex="dir:left cross:center main:justify">
                 <div class="row_left">电子芯片：</div>
@@ -28,11 +28,11 @@
                 </div>
             </div>
         </div>
-        <div v-if="dogData.statusId===1||dogData.statusId===2" class="btn-panel" flex="dir:left cross:center main:justify">
+        <div v-if="dogData.dogCarStatus==='即将到期'||dogData.dogCarStatus==='已到期'" class="btn-panel" flex="dir:left cross:center main:justify">
             <van-button type="info" class="btn pre-btn" @click="unBind">注销</van-button>
             <van-button type="info" class="btn next-btn" @click="continuedApply">续办</van-button>
         </div>
-        <div v-if="dogData.statusId===0" class="btn-panel" flex="dir:left cross:center main:justify">
+        <div v-if="dogData.dogCarStatus==='有效'" class="btn-panel" flex="dir:left cross:center main:justify">
             <van-button type="info" class="btn" @click="unBind">注销</van-button>
         </div>
     </div>
@@ -43,7 +43,6 @@
     import DogItem from './components/dogItem.vue';
     import Clipboard from 'clipboard';
     import { queryDogCard } from '@/api/dogManage.js'
-    const statusArr = ["有效","即将到期","已到期","注销"];
     export default {
         name: 'dogDetail',
         components:{
@@ -68,13 +67,14 @@
         },
         methods:{
             getDogDetail(){
+                this.$store.commit('updateIsLoading', true);
                 queryDogCard(this.params).then( res => {
+                    this.$store.commit('updateIsLoading', false);
                     console.log('queryDogCard single', res);
                     if(res.errno===0){
                         this.dogData = {
                             id: res.data.id,
                             dogCarStatus: res.data.dogCarStatus,
-                            statusId: statusArr.findIndex(it => it === res.data.dogCarStatus),
                             dogCardNumber: res.data.dogCardNumber,
                             dogId: res.data.dogId,
                             dogName: res.data.dogName,
@@ -85,26 +85,12 @@
                             ownerName: res.data.ownerName,
                             phone: res.data.phone,
                             qRCodePath: res.data.qRCodePath,
-                            backgroundImage: '',
                             makeTime: res.data.makeTime
-                        }
-
-                        if(this.dogData.statusId===0){
-                            this.dogData.backgroundImage = 'url(' + this.dogData.qRCodePath + '),linear-gradient(#0f0, #0f0)';
-                        }
-                        else if(this.dogData.statusId===1){
-                            this.dogData.backgroundImage = 'url(' + this.dogData.qRCodePath + '),linear-gradient(#ffa200, #ffa200)';
-                        }
-                        else if(this.dogData.statusId===2){
-                            this.dogData.backgroundImage = 'url(' + this.dogData.qRCodePath + '),linear-gradient(#f00, #f00)';
-                        }
-                        else {
-                            this.dogData.backgroundImage = 'url(' + this.dogData.qRCodePath + '),linear-gradient(#999999, #999999)';
                         }
                         this.$store.commit('dog/updateDogInfo', this.dogData);
                     }
                     else{
-                        Toast.fail({message: res.errmsg});
+                        Toast.fail({message: res.errmsg || '获取数据失败'});
                     }
                 })
             },
