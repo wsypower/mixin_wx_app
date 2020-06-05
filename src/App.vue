@@ -6,7 +6,7 @@
       <router-view v-wechat-title="$route.meta.title" />
       <!-- </Navigation> -->
     </transition>
-    <van-overlay :show="show" @click="show = false" class-name=bcolor>
+    <van-overlay :show="show" class-name=bcolor>
       <div class="wrapper">
         <van-loading color="#1989fa" size="40px"/>
       </div>

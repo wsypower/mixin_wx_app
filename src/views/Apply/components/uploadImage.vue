@@ -2,10 +2,8 @@
     <div class="upload-item" >
         <div class="has-img" v-if="imgUrl">
             <div class="img-panel" @click="previewImage">
-                <img :src="imgUrl" />
-            </div>
-            <div v-if="loading" class="loading" flex="cross:center main:center">
-                <van-loading size="24" />
+                <!--<img :src="imgUrl" />-->
+                <van-image width="100%" height="100%" fit="contain" :src="imgUrl" />
             </div>
             <div class="close_btn" flex="cross:center main:center" @click="clearImage()">X</div>
         </div>
@@ -13,9 +11,9 @@
              class="file_icon"
              :class="{zmIcon:uploadIconType==='1',jzzIcon:uploadIconType==='2',myjlIcon:uploadIconType==='3'}"
              @click="showMethodsPanel = true">
-            <!--<div v-if="loading" class="loading" flex="cross:center main:center">-->
-                <!--<van-loading size="24" />-->
-            <!--</div>-->
+            <div v-if="loading" class="loading" flex="cross:center main:center">
+                <van-loading size="24" />
+            </div>
         </div>
         <div class="file-zm_text" v-if="textValue">{{textValue}}</div>
         <van-popup v-model="showMethodsPanel" position="bottom">
@@ -27,14 +25,15 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Popup, Loading, Toast, ImagePreview } from 'vant'
+    import { Popup, Loading, Toast, ImagePreview, Image as VanImage } from 'vant'
     import externalMethods from '@/utils/externalMethods/index.js'
     export default {
         name: 'uploadImage',
         components:{
             [Popup.name]: Popup,
             [Loading.name]: Loading,
-            [ImagePreview.Component.name]: ImagePreview.Component
+            [ImagePreview.Component.name]: ImagePreview.Component,
+            [VanImage.name]: VanImage
         },
         props:{
             textValue:{
@@ -62,7 +61,14 @@
             }
         },
         mounted(){
-            window.androidBackPress = this.androidBackPress;
+            // window.androidBackPress = this.androidBackPress.bind(this);
+            const self = this;
+            window.androidBackPress = function(data){
+
+                console.log(self.loading)
+                console.log(1111111111111111111111111)
+                self.androidBackPress(data)
+            }
         },
         watch:{
             imgUrl: function(val){
@@ -73,13 +79,19 @@
             }
         },
         methods:{
-            androidBackPress(){
-                Toast('数据传参');
+            androidBackPress(data){
+                console.log( 'loading',this.loading)
+                console.log('androidBackPress start ',data);
+                //Toast('数据传参');
+                this.loading = false;
+                console.log('androidBackPress end');
+
             },
             getImage(method){
                 this.showMethodsPanel = false;
+                this.loading = true;
                 externalMethods.getImageUrl(method).then((res)=>{
-                    this.loading = true;
+                    // this.loading = true;
                     console.log('upload Image components 000000000000000000000',res);
                     this.imgUrl = res.pics[0].path;
                     setTimeout(() => {
@@ -114,6 +126,15 @@
             &.myjlIcon{
                 @include bg-image("~assets/images/myjl");
             }
+            .loading{
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 3;
+                background-color: rgba(0,0,0,0.5);
+            }
         }
         .file-zm_text{
             margin-top: 24px;
@@ -134,6 +155,7 @@
                 width: 100%;
                 height: 100%;
                 overflow: hidden;
+                background-color: #eeeeee;
                 img{
                     width: 100%;
                 }
@@ -148,15 +170,6 @@
                 background-color: rgba(0,0,0,0.5);
                 font-size: 36px;
                 color: #ffffff;
-            }
-            .loading{
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: 3;
-                background-color: rgba(0,0,0,0.5);
             }
         }
         .methods-panel{
