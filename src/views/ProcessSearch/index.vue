@@ -34,7 +34,7 @@
             <div class="result-panel-header" flex="dir:left cross:center">
                 <span class="header-left">进度情况</span>
             </div>
-            <div class="result-panel-body">
+            <div class="result-panel-body" v-if="cardInfoList.length>0">
                 <order-item class="order-item"
                             :cardInfo="item"
                             v-for="item in cardInfoList"
@@ -42,6 +42,10 @@
                             @refreshList="() => {getProcessList();}"
                             @gotoPage="() => {gotoDetail(item);}">
                 </order-item>
+            </div>
+            <div class="no-data" v-else flex="dir:top cross:center main:center">
+                <div class="no-data_icon"></div>
+                <div class="no-data_text">暂无进度</div>
             </div>
         </div>
         <van-popup v-model="showBeginTimePicker" position="bottom">
@@ -262,6 +266,23 @@
         .result-panel-body{
             .order-item{
                 margin-bottom: 20px;
+            }
+        }
+        .no-data{
+            margin-top: 200px;
+            width: 100%;
+            &_icon{
+                width: 374px;
+                height: 288px;
+                background-size: 100% 100%;
+                @include bg-image("~assets/images/no_data");
+            }
+            &_text{
+                font-family: PingFang-SC-Medium;
+                font-size: 32px;
+                line-height: 43px;
+                letter-spacing: 0px;
+                color: #666666;
             }
         }
     }
