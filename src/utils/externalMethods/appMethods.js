@@ -69,7 +69,7 @@ APP.getImageUrl = (method) =>{
     else{
         return new Promise((resolve, reject)=> {
             hesc.device.media.select({
-                image: {multiple: false, compress: false, max: 1},//multiple true进行多选compress true进行压缩，max最多选9张，如果multiple设置为false，max默认赋值1
+                image: {multiple: false, compress: true, max: 1},//multiple true进行多选compress true进行压缩，max最多选9张，如果multiple设置为false，max默认赋值1
                 thumbnail: false,//true 优先返回缩略图base64，后台上传图片，false不需要缩略图，直接后台上传图片
                 mediaUrl: URL_CONFIG.fileUrl,//附件服务器地址
                 onThumbnail: function (result) {

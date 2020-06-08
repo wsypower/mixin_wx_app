@@ -2,17 +2,18 @@
     <div class="upload-item" >
         <div class="has-img" v-if="imgUrl">
             <div class="img-panel" @click="previewImage">
-                <img :src="imgUrl" />
+                <!--<img :src="imgUrl" />-->
+                <van-image width="100%" height="100%" fit="contain" :src="imgUrl" />
             </div>
             <div class="close_btn" flex="cross:center main:center" @click="clearImage()">X</div>
-            <div v-if="loading" class="loading" flex="cross:center main:center">
-                <van-loading size="24" />
-            </div>
         </div>
         <div v-else
              class="file_icon"
              :class="{zmIcon:uploadIconType==='1',fmIcon:uploadIconType==='2'}"
              @click="getImageUrlAndMoreMessage">
+            <div v-if="loading" class="loading" flex="cross:center main:center">
+                <van-loading size="24" />
+            </div>
         </div>
         <div class="file-zm_text" v-if="textValue">{{textValue}}</div>
     </div>
@@ -95,6 +96,15 @@
             &.fmIcon{
                 @include bg-image("~assets/images/sfz-fm");
             }
+            .loading{
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.5);
+                z-index: 3;
+            }
         }
         .file-zm_text{
             margin-top: 24px;
@@ -129,15 +139,6 @@
                 background-color: rgba(0,0,0,0.5);
                 font-size: 36px;
                 color: #ffffff;
-            }
-            .loading{
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0,0,0,0.5);
-                z-index: 3;
             }
         }
     }
