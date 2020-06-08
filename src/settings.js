@@ -11,7 +11,7 @@ module.exports = {
   wx: {
     appID: "wx8deb5f410186d074",
     // baseUrl: "http://220.191.224.215/wechat/stage/jump",
-    baseUrl: "http://wx.cgj.luan.gov.cn/wechat/stage/jump",
+    baseUrl: "http://192.168.71.33:8369/wechat/stage/jump/",
   },
 
   /**

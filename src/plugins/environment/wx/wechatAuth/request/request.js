@@ -16,9 +16,9 @@ export default class CommonServer {
    */
   static login(data) {
     return service({
-      url: `${baseUrl}/getJsdkMd`,
-      method: "post",
-      data,
+      url: `${baseUrl}/getOpenId`,
+      method: "GET",
+      params:data,
     });
   }
 }
