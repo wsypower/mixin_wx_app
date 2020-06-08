@@ -84,7 +84,6 @@
     .dog-item{
         width: 100%;
         height: 300px;
-        margin-top: 20px;
         padding: 40px;
         border-radius: 10px;
         @include bg-image("~assets/images/home_bg");

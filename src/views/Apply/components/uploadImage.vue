@@ -3,7 +3,11 @@
         <div class="has-img" v-if="imgUrl">
             <div class="img-panel" @click="previewImage">
                 <!--<img :src="imgUrl" />-->
-                <van-image width="100%" height="100%" fit="contain" :src="imgUrl" />
+                <van-image width="100%" height="100%" fit="contain" :src="imgUrl" >
+                    <template v-slot:loading>
+                        <van-loading type="spinner" size="20" />
+                    </template>
+                </van-image>
             </div>
             <div class="close_btn" flex="cross:center main:center" @click="clearImage()">X</div>
         </div>

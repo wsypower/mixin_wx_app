@@ -1,7 +1,7 @@
 <template>
     <div class="dog-detail-page">
         <page-header title="电子犬证"></page-header>
-        <dog-item :dogData="dogData" :needToDetail="false" :needShare="true"></dog-item>
+        <dog-item :dogData="dogData" :needToDetail="false" :needShare="true" class="mt10"></dog-item>
         <div class="message-panel">
             <div class="row" flex="dir:left cross:center main:justify">
                 <div class="row_left">电子芯片：</div>
@@ -142,6 +142,9 @@
     /*padding-top: 88px;*/
     background-color: #f5f5f5;
     padding: 88px 24px 0px 24px;
+    .mt10{
+        margin-top: 20px;
+    }
     .message-panel{
         margin-top: 20px;
         background-color: #ffffff;
