@@ -65,14 +65,7 @@
             }
         },
         mounted(){
-            // // window.androidBackPress = this.androidBackPress.bind(this);
-            // const self = this;
-            // window.androidBackPress = function(data){
-            //
-            //     console.log(self.loading)
-            //     console.log(1111111111111111111111111)
-            //     self.androidBackPress(data)
-            // }
+            window.androidBackPress = this.androidBackPress;
         },
         watch:{
             imgUrl: function(val){
@@ -83,14 +76,9 @@
             }
         },
         methods:{
-            // androidBackPress(data){
-            //     console.log( 'loading',this.loading)
-            //     console.log('androidBackPress start ',data);
-            //     //Toast('数据传参');
-            //     this.loading = false;
-            //     console.log('androidBackPress end');
-            //
-            // },
+            androidBackPress(data){
+                console.log('androidBackPress start ',data);
+            },
             getImage(method){
                 this.showMethodsPanel = false;
                 // this.loading = true;

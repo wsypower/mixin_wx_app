@@ -57,6 +57,9 @@
                 imgUrl: '',
             }
         },
+        mounted(){
+            window.androidBackPress = this.androidBackPress;
+        },
         watch:{
             initImageUrl: function(val){
                 console.log(666);
@@ -64,6 +67,9 @@
             }
         },
         methods:{
+            androidBackPress(data){
+                console.log('androidBackPress start ',data);
+            },
             getImageUrlAndMoreMessage(){
                 this.loading = true;
                 externalMethods.getImageUrlAndMoreMessage(this.imageType).then(res => {
