@@ -21,6 +21,7 @@ import "./flexbile/index";
 import "./environment/index";
 // import '@/plugins/environment/wx/wechatAuth/index'
 import wechatAuth from "@/plugins/environment/wx/wechatAuth";
+
 export default {
   install(Vue) {
     Vue.use(wechatAuth);

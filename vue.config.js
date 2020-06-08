@@ -63,7 +63,7 @@ module.exports = {
     // 配置多个代理
     proxy: {
       "/proxy": {
-        target: "http://220.191.224.215/wechat/stage/jump/",
+        target: "http://192.168.71.33:8369/stage/jump/",
         ws: true, // 代理的WebSockets
         changeOrigin: true, // 允许websockets跨域
         changeOrigin: true, // 允许websockets跨域

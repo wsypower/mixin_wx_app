@@ -14,6 +14,9 @@ import { createNamespacedHelpers } from "vuex";
 const { mapState } = createNamespacedHelpers("pagesAnimation");
 export default {
   name: "app",
+  created () {
+    console.log('vue歘就按');;
+  },
   computed: {
     ...mapState({
       direction: state => state.direction
