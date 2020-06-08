@@ -19,13 +19,14 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import { Loading, Toast, ImagePreview } from 'vant'
+    import { Loading, Toast, ImagePreview, Image as VanImage } from 'vant'
     import externalMethods from '@/utils/externalMethods/index.js'
     export default {
         name: 'photoForMessage',
         components:{
             [Loading.name]: Loading,
-            [ImagePreview.Component.name]: ImagePreview.Component
+            [ImagePreview.Component.name]: ImagePreview.Component,
+            [VanImage.name]: VanImage
         },
         props:{
             textValue:{
@@ -125,9 +126,7 @@
                 width: 100%;
                 height: 100%;
                 overflow: hidden;
-                img{
-                    width: 100%;
-                }
+                background-color: #eeeeee;
             }
             .close_btn{
                 position: absolute;

@@ -156,9 +156,6 @@
                 height: 100%;
                 overflow: hidden;
                 background-color: #eeeeee;
-                img{
-                    width: 100%;
-                }
             }
             .close_btn{
                 position: absolute;
