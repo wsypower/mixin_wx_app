@@ -19,11 +19,11 @@ import "./flexbile/index";
 
 // 环境判断
 import "./environment/index";
-import '@/plugins/environment/wx/wechatAuth/index'
-
-
+// import '@/plugins/environment/wx/wechatAuth/index'
+import wechatAuth from "@/plugins/environment/wx/wechatAuth";
 export default {
   install(Vue) {
+    Vue.use(wechatAuth);
     // 设置为 false 以阻止 vue 在启动时生成生产提示
     // https://cn.vuejs.org/v2/api/#productionTip
     Vue.config.productionTip = false;
