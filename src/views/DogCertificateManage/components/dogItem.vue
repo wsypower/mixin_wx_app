@@ -135,6 +135,7 @@
                 color: #ffffff;
                 text-align: center;
                 padding: 0px 10px;
+                width: 120px;
                 &.warning{
                     background-color: #ffa200;
                 }

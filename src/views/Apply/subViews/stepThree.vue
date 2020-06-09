@@ -77,6 +77,7 @@
             }
         },
         mounted(){
+            this.$store.commit('updateIsLoading', true);
             this.$nextTick(()=>{
                 //从缓存中读入素有orderInfo数据，适用于新建与编辑
                 const orderInfo = this.$store.getters['order/orderInfo'];
@@ -94,6 +95,9 @@
                 //在缓存中的currentStep是当时提交之后的下一步，故需要在这里重新指向当前步
                 this.submitData.currentStep = 3;
                 this.submitData.userId = this.$store.getters['userId'];
+                setTimeout(()=>{
+                    this.$store.commit('updateIsLoading', false);
+                },1500);
             });
         },
 
