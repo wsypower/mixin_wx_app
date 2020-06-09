@@ -11,17 +11,15 @@ Vue.use(wechatAuth, {
   appid: WX_CONFIG.appID,
 });
 
-store.registerModule('wechatAuth', wechatAuthSore);
+store.registerModule("wechatAuth", wechatAuthSore);
 
 router.beforeEach(async (to, from, next) => {
-  const {
-    loginStatus
-  } = store.state.wechatAuth;
+  const { loginStatus } = store.state.wechatAuth;
   switch (loginStatus) {
     case 0:
       wechatAuth.redirect_uri = processUrl();
       await store.dispatch("wechatAuth/setLoginStatus", 1);
-      window.location.href = wechatAuth.authUrl;
+      // window.location.href = wechatAuth.authUrl;
       break;
     case 1:
       try {
@@ -75,7 +73,7 @@ function processLogin(code) {
   return new Promise(async (resolve, reject) => {
     try {
       const token = await CommonServer.login(data);
-      console.log(token)
+      console.log(token);
 
       // await store.dispatch("wechatAuth/setLoginStatus", 2);
       // await store.dispatch("wechatAuth/setAccessToken", accessToken);
@@ -83,7 +81,7 @@ function processLogin(code) {
 
       resolve({
         status: 1,
-        data: "登录成功"
+        data: "登录成功",
       });
     } catch (err) {
       reject(err);
