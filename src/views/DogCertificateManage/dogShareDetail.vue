@@ -4,7 +4,7 @@
         <div class="share-page-main" flex="dir:top main:justify">
             <div class="share-page-main-content">
                 <div class="dog-img-bg">
-                    <div class="img-panel">
+                    <div class="img-panel" flex="cross:center main:center">
                         <img :src="dogDetail.dogPhotoFront" />
                     </div>
                 </div>
