@@ -508,6 +508,15 @@
                     Toast.fail({message: '中国籍人员请使用身份证申请',duration: 3000});
                     return
                 }
+                if(!(this.submitData.idCard&&this.submitData.passport)){
+                    if(this.submitData.idType!==3){
+                        Toast.fail({message: '请填入身份证号',duration: 3000});
+                    }
+                    else{
+                        Toast.fail({message: '请填入护照号',duration: 3000});
+                    }
+                    return
+                }
                 //身份证判断
                 let params = {
                     userId: this.submitData.userId,

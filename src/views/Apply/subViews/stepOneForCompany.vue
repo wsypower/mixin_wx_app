@@ -387,6 +387,10 @@
             nextStep(){
                 console.log('submitData', this.submitData);
                 //身份证判断
+                if(!this.submitData.idCard){
+                    Toast.fail({message: '请填入身份证号',duration: 3000});
+                    return
+                }
                 let params = {
                     userId: this.submitData.userId,
                     idCard: this.submitData.idCard

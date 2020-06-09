@@ -71,10 +71,9 @@
                 console.log('androidBackPress start ',data);
             },
             getImageUrlAndMoreMessage(){
-                this.loading = true;
                 externalMethods.getImageUrlAndMoreMessage(this.imageType).then(res => {
-                    console.log('photo for message components: 9999999999999', res);
                     this.loading = true;
+                    console.log('photo for message components: 9999999999999', res);
                     this.imgUrl = res.imageUrl;
                     this.$emit('getMessage',{imageType:this.imageType, data:res});
                     setTimeout(() => {
