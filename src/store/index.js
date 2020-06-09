@@ -27,9 +27,15 @@ export default new Vuex.Store({
       isWX: true, // 是否是微信，
       token: '', // 用户原始登入有效期的唯一标识
       userId: 'xxx', // 养犬管理的用户UserId
-      originLon: '120.13', // 默认杭州西湖区的经度
-      originLat: '30.28', // 默认杭州西湖区的纬度
-      areaCode: '330106' //默认杭州西湖区的区域Code
+      // originLon: '120.492736', // 默认绍兴柯桥区的经度
+      // originLat: '30.08763', // 默认绍兴柯桥区的纬度
+      // areaCode: '330603' //默认绍兴柯桥区的区域Code
+      originLon: '120.5819', // 默认绍兴越城区的经度
+      originLat: '29.98895', // 默认绍兴越城区的纬度
+      areaCode: '330602' //默认绍兴越城区的区域Code
+      // originLon: '120.13', // 默认杭州西湖区的经度
+      // originLat: '30.28', // 默认杭州西湖区的纬度
+      // areaCode: '330106' //默认杭州西湖区的区域Code
   },
   getters: {
       isWX: state => {

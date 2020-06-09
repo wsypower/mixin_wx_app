@@ -56,7 +56,9 @@
                     userId: '',
                     dogCardNumber: ''
                 },
-                dogData: {}
+                dogData: {
+                    qRCodePath: require('@/assets/images/no_data@2x.png')
+                }
             }
         },
         mounted(){

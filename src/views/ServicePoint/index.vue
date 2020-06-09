@@ -62,7 +62,7 @@
         data(){
             return {
                 //地图使用参数
-                center: {lng: 0, lat: 0},
+                center: {lng: 120.59, lat: 29.98},
                 zoom: 3,
                 showAll: false,
                 firstPlace: {
@@ -78,8 +78,6 @@
         },
         watch:{
             'firstPlace.id': function(){
-                this.center.lng = this.firstPlace.originLon;
-                this.center.lat = this.firstPlace.originLat;
                 let tempArr = JSON.parse(JSON.stringify(this.mapMaskerList));
                 this.mapMaskerList = tempArr.reduce((acc,item) => {
                     if(item.id !== this.firstPlace.id){
@@ -136,10 +134,14 @@
                 this.totalShowSize = data.totalShowSize;
                 if(this.firstPlace.id===''){
                     this.firstPlace = data.firstPlace;
+                    this.center.lng = this.firstPlace.originLon;
+                    this.center.lat = this.firstPlace.originLat;
                 }
             },
             toPoint(data){
                 this.firstPlace = data;
+                this.center.lng = this.firstPlace.originLon;
+                this.center.lat = this.firstPlace.originLat;
                 this.showAll = false;
             }
         }
