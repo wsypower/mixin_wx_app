@@ -386,9 +386,9 @@
             //第一步数据提交：1、检查身份证是否已有犬只绑定；2、检查验证码是否通过；
             nextStep(){
                 console.log('submitData', this.submitData);
-                //身份证判断
-                if(!this.submitData.idCard){
-                    Toast.fail({message: '请填入身份证号',duration: 3000});
+                let warnMessage = this.checkParams(1);
+                if(warnMessage!=='success'){
+                    Toast.fail({message: warnMessage,duration: 3000});
                     return
                 }
                 let params = {

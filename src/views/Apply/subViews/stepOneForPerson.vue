@@ -508,13 +508,9 @@
                     Toast.fail({message: '中国籍人员请使用身份证申请',duration: 3000});
                     return
                 }
-                if(!(this.submitData.idCard&&this.submitData.passport)){
-                    if(this.submitData.idType!==3){
-                        Toast.fail({message: '请填入身份证号',duration: 3000});
-                    }
-                    else{
-                        Toast.fail({message: '请填入护照号',duration: 3000});
-                    }
+                let warnMessage = this.checkParams(1);
+                if(warnMessage!=='success'){
+                    Toast.fail({message: warnMessage,duration: 3000});
                     return
                 }
                 //身份证判断
@@ -545,12 +541,13 @@
                         }
                     }
                     else{
-                        if(this.submitData.idType!==3){
-                            Toast.fail({message: '该身份证下已有犬只',duration: 3000});
-                        }
-                        else{
-                            Toast.fail({message: '该护照号下已有犬只',duration: 3000});
-                        }
+                        Toast.fail({message: res.errmsg,duration: 3000});
+                        // if(this.submitData.idType!==3){
+                        //     Toast.fail({message: '该身份证下已有犬只',duration: 3000});
+                        // }
+                        // else{
+                        //     Toast.fail({message: '该护照号下已有犬只',duration: 3000});
+                        // }
 
                     }
                 });

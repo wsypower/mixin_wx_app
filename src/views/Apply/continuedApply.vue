@@ -221,6 +221,11 @@
             //提交
             submit(){
                 console.log('submitData', this.submitData);
+                let warnMessage = this.checkParams(5);
+                if(warnMessage!=='success'){
+                    Toast.fail({message: warnMessage,duration: 3000});
+                    return
+                }
                 this.$store.commit('updateIsLoading', true);
                 bidDogCard(this.submitData).then( res => {
                     this.$store.commit('updateIsLoading', false);
