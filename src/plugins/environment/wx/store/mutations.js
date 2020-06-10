@@ -9,6 +9,9 @@ const mutations = {
   },
   [types.SET_USER_INFO] (state, userInfo) {
     state.userInfo = userInfo
+  },
+  [types.SET_JS_TOKEN](state,jsToken){
+    state.jsToken = jsToken
   }
 }
 

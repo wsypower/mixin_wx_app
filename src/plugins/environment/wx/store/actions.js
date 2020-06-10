@@ -5,6 +5,7 @@ import {
   saveCookie,
   saveStorage,
   USER_INFO,
+  JS_TOKEN
 } from "../utils/cache";
 import * as types from "./mutationTypes";
 
@@ -35,6 +36,16 @@ export const setUserInfo = ({ commit }, query) => {
   commit(types.SET_USER_INFO, saveStorage(USER_INFO, query));
 };
 
+/**
+ * 设置js_token
+ * @param commit
+ * @param state
+ * @param query
+ */
+export const setJsToken = ({ commit }, query) => {
+  console.log(query);
+  commit(types.SET_JS_TOKEN, saveStorage(JS_TOKEN, query));
+};
 /**
  * 设置token
  * @param commit
