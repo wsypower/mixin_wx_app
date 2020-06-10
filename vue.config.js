@@ -15,6 +15,8 @@ const path = require("path");
 const defaultSettings = require("./src/settings.js");
 // 使用uglify-js进行js文件的压缩。
 // const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+// 使用compression-webpack-plugin打包gzip
+const CompressionPlugin = require("compression-webpack-plugin")
 // 使用terser-webpack-plugin 替换uglify-js 进行js文件的压缩
 // TODO:uglify - js不能识别es6代码，如果外部依赖中存在es6代码，将很难捕获到问题
 const TerserPlugin = require("terser-webpack-plugin");
@@ -181,6 +183,12 @@ module.exports = {
       //     },
       //   }),
       // ]);
+      config.plugin("compressionPlugin").use(new CompressionPlugin({
+          test: /\.js$|\.html$|\.css/,
+          threshold: 10240,
+          deleteOriginalAssets: false
+      }));
+
       // 启用多线程打包压缩，并移除console
       config.optimization.minimizer([
         new TerserPlugin({
