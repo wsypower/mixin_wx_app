@@ -20,7 +20,26 @@ import service from "./request/index";
 import "./flexbile/index";
 
 // 环境判断
-import "./environment/index";
+// import browser from "./environment/index";
+// console.log("browser", browser);
+
+// const wx = () => import(/* webpackChunkName: "wx-sdk" */ "weixin-js-sdk");
+// const hesc = () => import(/* webpackChunkName: "wx-sdk" */ "hesc-jsapi");
+// wx().then((w) => {
+//   console.log(w);
+// });
+// hesc().then((w) => {
+//   console.log(w);
+// });
+// if (browser === "weixin-js-sdk") {
+//   import(
+//     /* webpackChunkName: "wx-sdk" */
+//     /* webpackMode: "lazy" */
+//     browser
+//   ).then((wx) => {
+//     console.log("wx", wx);
+//   });
+// }
 // import '@/plugins/environment/wx/wechatAuth/index'
 import wechatAuth from "@/plugins/environment/wx/wechatAuth";
 
@@ -28,6 +47,7 @@ export default {
   install(Vue) {
     Vue.use(wechatAuth, {
       wechatId: "af21e2c0033e11e96b2df410224d169f",
+      debug:true
     });
     // 设置为 false 以阻止 vue 在启动时生成生产提示
     // https://cn.vuejs.org/v2/api/#productionTip
