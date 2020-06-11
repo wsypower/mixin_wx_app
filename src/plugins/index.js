@@ -18,6 +18,8 @@ import store from "@/store";
 import service from "./request/index";
 // 淘宝的flexbile 增加一个修正字体字号大小的影响
 import "./flexbile/index";
+// TODO:微信鉴权（如果是微信环境才会执行内部鉴权，否则注册空插件）
+import wechatAuth from "@/plugins/environment/wx/wechatAuth";
 
 // 环境判断
 // import browser from "./environment/index";
@@ -28,20 +30,7 @@ import "./flexbile/index";
 // wx().then((w) => {
 //   console.log(w);
 // });
-// hesc().then((w) => {
-//   console.log(w);
-// });
-// if (browser === "weixin-js-sdk") {
-//   import(
-//     /* webpackChunkName: "wx-sdk" */
-//     /* webpackMode: "lazy" */
-//     browser
-//   ).then((wx) => {
-//     console.log("wx", wx);
-//   });
-// }
 // import '@/plugins/environment/wx/wechatAuth/index'
-import wechatAuth from "@/plugins/environment/wx/wechatAuth";
 
 export default {
   install(Vue) {

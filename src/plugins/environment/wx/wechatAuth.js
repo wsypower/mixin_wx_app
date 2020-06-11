@@ -6,7 +6,7 @@
 /*   By: wsy <2553241022@qq.com>                             +#++:++#  +#++:++#++ :#:           +#+          */
 /*                                                          +#+              +#+ +#+   +#+#    +#+           */
 /*   Created: 2020/06/10 23:44:12 by wsy                   #+#       #+#    #+# #+#    #+#    #+#            */
-/*   Updated: 2020/06/10 23:44:12 by wsy                  ########## ########   ######## ###########         */
+/*   Updated: 2020/06/11 17:26:01 by wsy                  ########## ########   ######## ###########         */
 /*                                                                                                           */
 /* ********************************************************************************************************* */
 
@@ -29,7 +29,8 @@ class VueWechat {
     Vue,
     { wechatId = "af21e2c0033e11e96b2df410224d169f", debug = false } = {}
   ) {
-    this.init(wechatId, debug);
+    // ---- 如果是微信环境才会执行初始化 ---- //
+    this.isWx() && this.init(wechatId, debug);
   }
   // ====================================================== //
   // ========================= 初始化 ======================== //
@@ -43,7 +44,16 @@ class VueWechat {
     // ----- 用路由钩子注册阻塞页面加载 ---- //
     this.interceptRouter();
   }
-
+  // ====================================================== //
+  // ====================== 判断是否是微信环境 ===================== //
+  // ====================================================== //
+  isWx() {
+    if (typeof navigator === "undefined") {
+      return;
+    }
+    var ua = navigator.userAgent.toLowerCase();
+    return !!~ua.indexOf("micromessenger");
+  }
   // ====================================================== //
   // ================== router 做鉴权拦截==================== //
   // ====================================================== //
@@ -53,12 +63,12 @@ class VueWechat {
       const { loginStatus } = store.state.wechat;
       // ----- 请求鉴权和js-sdk签名 ---- //
       switch (loginStatus) {
-        case 0:
-          await store.dispatch("wechat/setLoginStatus", 1);
-          break;
         case 1:
+          next();
+          break;
+        case 0:
           try {
-            // ~~~~~~~~~~~~~~~~~ 查看鉴权 ~~~~~~~~~~~~~~~~ //
+            // ~~~~~~~~~~~~~~~~~ 开始鉴权 ~~~~~~~~~~~~~~~~ //
             const authentication = await this.requestWxConfig();
             // ~~~~~~~~~~ 成功跳转，否则跳转入请关注公众号页面 ~~~~~~~~~ //
             authentication && next();
@@ -135,8 +145,9 @@ class VueWechat {
         debug: this.debug,
         jsApiList: this.jsApiList,
       });
-      wx.ready(function() {
+      wx.ready(async function() {
         resolve(true);
+        await store.dispatch("wechat/setLoginStatus", 1);
         console.log("鉴权成功");
       });
       wx.error(function(res) {
