@@ -16,19 +16,19 @@
                               uploadIconType="1"
                               @changeImage="getResultImage"
                               imageType="informationPic"
-                              :initImageUrl="submitData.informationPic"></upload-image>
+                              :initImageUrl="imageList.informationPic"></upload-image>
                 <upload-image textValue="添加养犬承诺书"
                               uploadIconType="1"
                               @changeImage="getResultImage"
                               imageType="commitmentPic"
-                              :initImageUrl="submitData.commitmentPic"></upload-image>
+                              :initImageUrl="imageList.commitmentPic"></upload-image>
             </div>
             <div class="upload-img" flex="dir:left cross:center main:justify">
                 <upload-image textValue="添加其他材料"
                               uploadIconType="1"
                               @changeImage="getResultImage"
                               imageType="otherPic"
-                              :initImageUrl="submitData.otherPic"></upload-image>
+                              :initImageUrl="imageList.otherPic"></upload-image>
             </div>
             <van-divider></van-divider>
             <div class="form-item-label">备注：</div>
@@ -78,8 +78,19 @@
             return {
                 //提交成功后的弹窗显示
                 showDialog: false,
+                //用于前端显示用
+                imageList:{
+                    //信息登记表
+                    informationPic: '',
+                    //养犬承诺书
+                    commitmentPic: '',
+                    //其他材料
+                    otherPic: '',
+                },
                 submitData:{
                     userId: '',
+                    // 图片上传的IP以及端口
+                    imgHost: '',
                     //订单ID
                     dogOrderId: '',
                     //当前步骤
@@ -105,6 +116,9 @@
             Object.keys(this.submitData).forEach(key=>{
                 this.submitData[key] = orderInfo[key]
             })
+            this.imageList.informationPic = this.submitData.imgHost + this.submitData.informationPic;
+            this.imageList.commitmentPic = this.submitData.imgHost + this.submitData.commitmentPic;
+            this.imageList.otherPic = this.submitData.otherPic === '' ?  '' : this.submitData.imgHost + this.submitData.otherPic;
             //在缓存中的currentStep是当时提交之后的下一步，故需要在这里重新指向当前步
             this.submitData.currentStep = 4;
             this.submitData.userId = this.$store.getters['userId'];
@@ -118,6 +132,7 @@
             //图片上传
             getResultImage(data){
                 this.submitData[data.imageType] = data.url;
+                this.imageList[data.imageType] = data.imgUrl;
             },
             //上一步
             preStep(){

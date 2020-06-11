@@ -1,7 +1,7 @@
 <template>
     <div class="dog-item" flex="dir:top" @click="gotToDogDetailPage(dogData.dogCardNumber)">
         <div flex="dir:left cross:center" style="position: relative">
-            <img class="dog-item-img" :src="dogData.dogPhotoFront">
+            <img class="dog-item-img" :src="dogData.imgHost + dogData.dogPhotoFront">
             <div flex="dir:top" class="dog-item_mes">
                 <span class="dog-item_name">{{dogData.dogName}}</span>
                 <span class="dog-item_status" :class="{warning: statusId===1,wrong: statusId===2,gray: statusId===3}">{{dogData.dogCarStatus}}</span>

@@ -55,6 +55,7 @@
             return{
                 loading : false,
                 imgUrl: '',
+                originPath: ''
             }
         },
         mounted(){
@@ -75,6 +76,7 @@
                     this.loading = true;
                     console.log('photo for message components: 9999999999999', res);
                     this.imgUrl = res.imageUrl;
+                    this.originPath = res.originPath;
                     this.$emit('getMessage',{imageType:this.imageType, data:res});
                     setTimeout(() => {
                         this.loading = false;

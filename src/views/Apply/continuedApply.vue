@@ -53,19 +53,19 @@
                               uploadIconType="1"
                               @changeImage="getResultImage"
                               imageType="immunePhotos"
-                              :initImageUrl="submitData.immunePhotos"></upload-image>
+                              :initImageUrl="imageList.immunePhotos"></upload-image>
                 <upload-image textValue="添加宠物免疫记录"
                               uploadIconType="3"
                               @changeImage="getResultImage"
                               imageType="immuneRecord"
-                              :initImageUrl="submitData.immuneRecord"></upload-image>
+                              :initImageUrl="imageList.immuneRecord"></upload-image>
             </div>
             <div class="upload-img" flex="dir:left cross:center main:justify">
                 <upload-image textValue="添加其他材料"
                               uploadIconType="1"
                               @changeImage="getResultImage"
                               imageType="otherPic"
-                              :initImageUrl="submitData.otherPic"></upload-image>
+                              :initImageUrl="imageList.otherPic"></upload-image>
             </div>
             <van-divider></van-divider>
             <div class="form-item-label">备注：</div>
@@ -121,8 +121,19 @@
                 immuneTime: '',
                 //显示免疫登记日期选择
                 showImmuneTimePicker: false,
+                //用于前端显示用
+                imageList:{
+                    //免疫证照片
+                    immunePhotos: '',
+                    //免疫记录照片
+                    immuneRecord: '',
+                    //其他材料
+                    otherPic: '',
+                },
                 submitData:{
                     userId: '',
+                    // 图片上传的IP以及端口
+                    imgHost: '',
                     //续办
                     currentStep: 5,
                     //犬证编号
@@ -164,6 +175,10 @@
                             Object.keys(vm.submitData).forEach(key=>{
                                 vm.submitData[key] = res.data[key]
                             })
+                            vm.imageList.immunePhotos = vm.submitData.imgHost + vm.submitData.immunePhotos;
+                            vm.imageList.immuneRecord = vm.submitData.imgHost + vm.submitData.immuneRecord;
+                            vm.imageList.otherPic = vm.submitData.otherPic === '' ? '' : vm.submitData.imgHost + vm.submitData.otherPic;
+
                             if(res.data.dogOrderId){
                                 vm.submitData.dogOrderId = res.data.dogOrderId;
                             }
@@ -206,6 +221,7 @@
             //上传图片
             getResultImage(data){
                 this.submitData[data.imageType] = data.url;
+                this.imageList[data.imageType] = data.imgUrl;
             },
             //获取免疫地点
             onImmuneAddressConfirm(value){

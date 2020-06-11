@@ -80,6 +80,7 @@
                             dogCardNumber: res.data.dogCardNumber,
                             dogId: res.data.dogId,
                             dogName: res.data.dogName,
+                            imgHost: res.data.imgHost,
                             dogPhotoFront: res.data.dogPhotoFront,
                             validityEnd: res.data.validityEnd,
                             validityStart: res.data.validityStart,

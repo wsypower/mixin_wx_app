@@ -62,14 +62,15 @@
                 showMethodsPanel: false,
                 loading : false,
                 imgUrl: '',
+                originPath: ''
             }
         },
         mounted(){
             window.androidBackPress = this.androidBackPress;
         },
         watch:{
-            imgUrl: function(val){
-                this.$emit('changeImage',{imageType:this.imageType, url:val});
+            originPath: function(val){
+                this.$emit('changeImage',{imageType:this.imageType, url:val,imgUrl:this.imgUrl});
             },
             initImageUrl: function(val){
                 this.imgUrl = val;
@@ -86,6 +87,8 @@
                     this.loading = true;
                     console.log('upload Image components 000000000000000000000',res);
                     this.imgUrl = res.pics[0].path;
+                    console.log('this.imgUrl',this.imgUrl);
+                    this.originPath = res.pics[0].originPath;
                     setTimeout(() => {
                         this.loading = false;
                     }, 500);
@@ -95,6 +98,7 @@
             },
             clearImage(){
                 this.imgUrl = '';
+                this.originPath = '';
             },
             previewImage(){
                 ImagePreview([this.imgUrl]);

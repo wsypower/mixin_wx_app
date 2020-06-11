@@ -1,5 +1,7 @@
 const orderInitInfo = {
     dogOrderId: '',
+    // 图片上传的IP以及端口
+    imgHost: '',
     //个人
     userType: 0,
     //新办

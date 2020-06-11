@@ -23,13 +23,13 @@
                                    @getMessage="getResultMessage"
                                    imageType="idCardFront"
                                    @clearImage="clearImage"
-                                   :initImageUrl="submitData.idCardFront"></photo-for-message>
+                                   :initImageUrl="imageList.idCardFront"></photo-for-message>
                 <photo-for-message textValue="拍摄身份证反面"
                                    uploadIconType="2"
                                    @getMessage="getResultMessage"
                                    imageType="idCardBack"
                                    @clearImage="clearImage"
-                                   :initImageUrl="submitData.idCardBack"></photo-for-message>
+                                   :initImageUrl="imageList.idCardBack"></photo-for-message>
             </div>
             <van-divider></van-divider>
             <van-field v-model="submitData.ownerName" label="犬主姓名：" placeholder="请输入" input-align="right"/>
@@ -119,7 +119,7 @@
                               uploadIconType="1"
                               @changeImage="getResultImage"
                               imageType="businessLicense"
-                              :initImageUrl="submitData.businessLicense"></upload-image>
+                              :initImageUrl="imageList.businessLicense"></upload-image>
             </div>
         </van-form>
         <div class="btn-panel" flex="dir:top cross:center main:center">
@@ -167,8 +167,16 @@
                 communityColumns: [],
                 //加载区域数据动效
                 adLoading: false,
+                //用于前端显示用
+                imageList:{
+                    idCardFront: '',
+                    idCardBack: '',
+                    businessLicense:''
+                },
                 submitData:{
                     userId: null,
+                    // 图片上传的IP以及端口
+                    imgHost: '',
                     //单位
                     userType: 1,
                     //新办
@@ -219,6 +227,10 @@
             Object.keys(this.submitData).forEach(key=>{
                 this.submitData[key] = orderInfo[key]
             });
+            this.imageList.idCardFront = this.submitData.imgHost + this.submitData.idCardFront;
+            this.imageList.idCardBack = this.submitData.imgHost + this.submitData.idCardBack;
+            this.imageList.businessLicense = this.submitData.imgHost + this.submitData.businessLicense;
+
             if(orderInfo.dogOrderId){
                 this.submitData.dogOrderId = orderInfo.dogOrderId;
             }
@@ -254,24 +266,29 @@
                 if(type === 'idCardFront'){
                     this.submitData.ownerName = data.data.name;
                     this.submitData.idCard = data.data.idCardNumber;
-                    this.submitData.idCardFront = data.data.imageUrl;
+                    this.submitData.idCardFront = data.data.originPath;
+                    this.imageList.idCardFront = data.data.imageUrl;
                 }
                 else if(type === 'idCardBack'){
-                    this.submitData.idCardBack = data.data.imageUrl;
+                    this.submitData.idCardBack = data.data.originPath;
+                    this.imageList.idCardBack = data.data.imageUrl;
                 }
             },
             //删除照片
             clearImage(data){
                 if(data.imageType === 'idCardBack'){
                     this.submitData.idCardBack = '';
+                    this.imageList.idCardBack = '';
                 }
                 else{
                     this.submitData.idCardFront = '';
+                    this.imageList.idCardFront = '';
                 }
             },
             //图片上传
             getResultImage(data){
                 this.submitData[data.imageType] = data.url;
+                this.imageList[data.imageType] = data.imgUrl;
             },
             //获取手机验证码，60s之后可再次请求
             getAuthCode:function () {

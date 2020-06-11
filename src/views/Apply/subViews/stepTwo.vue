@@ -106,12 +106,12 @@
                               uploadIconType="1"
                               @changeImage="getResultImage"
                               imageType="dogPhotoFront"
-                              :initImageUrl="submitData.dogPhotoFront"></upload-image>
+                              :initImageUrl="imageList.dogPhotoFront"></upload-image>
                 <upload-image textValue="上传宠物侧面照"
                               uploadIconType="1"
                               @changeImage="getResultImage"
                               imageType="dogPhotoBack"
-                              :initImageUrl="submitData.dogPhotoBack"></upload-image>
+                              :initImageUrl="imageList.dogPhotoBack"></upload-image>
             </div>
             <van-divider></van-divider>
         </van-form>
@@ -166,12 +166,12 @@
                               uploadIconType="1"
                               @changeImage="getResultImage"
                               imageType="immunePhotos"
-                              :initImageUrl="submitData.immunePhotos"></upload-image>
+                              :initImageUrl="imageList.immunePhotos"></upload-image>
                 <upload-image textValue="添加宠物免疫记录"
                               uploadIconType="3"
                               @changeImage="getResultImage"
                               imageType="immuneRecord"
-                              :initImageUrl="submitData.immuneRecord"></upload-image>
+                              :initImageUrl="imageList.immuneRecord"></upload-image>
             </div>
         </van-form>
         <div class="step-module-header" flex="dir:left cross:center">
@@ -253,8 +253,17 @@
                     //免疫登记日期
                     immuneTime:'',
                 },
+                //用于前端显示用
+                imageList:{
+                    dogPhotoFront: '',
+                    dogPhotoBack: '',
+                    immunePhotos: '',
+                    immuneRecord: ''
+                },
                 submitData:{
                     dogOrderId: '',
+                    // 图片上传的IP以及端口
+                    imgHost: '',
                     userType: 0,
                     userId: '',
                     //当前步骤
@@ -351,6 +360,12 @@
                 Object.keys(vm.submitData).forEach(key=>{
                     vm.submitData[key] = orderInfo[key]
                 })
+
+                vm.imageList.dogPhotoFront = vm.submitData.imgHost + vm.submitData.dogPhotoFront;
+                vm.imageList.dogPhotoBack = vm.submitData.imgHost + vm.submitData.dogPhotoBack;
+                vm.imageList.immunePhotos = vm.submitData.imgHost + vm.submitData.immunePhotos;
+                vm.imageList.immuneRecord = vm.submitData.imgHost + vm.submitData.immuneRecord;
+
                 vm.submitData.userId = vm.$store.getters['userId'];
                 //在缓存中的currentStep是当时提交之后的下一步，故需要在这里重新指向当前步
                 vm.submitData.currentStep = 2;
@@ -426,6 +441,7 @@
             //图片上传
             getResultImage(data){
                 this.submitData[data.imageType] = data.url;
+                this.imageList[data.imageType] = data.imgUrl;
             },
             //上一步
             preStep(){
