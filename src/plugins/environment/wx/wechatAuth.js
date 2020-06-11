@@ -18,9 +18,9 @@ import wechatStore from "./store";
 import wx from "weixin-js-sdk";
 class VueWechat {
   constructor() {
-    this.jsToken = null;
     this.wechatId = null;
     this.debug = true;
+    this.jsApiList = [];
   }
   // ====================================================== //
   // ======================= vue插件插槽 ====================== //
@@ -34,23 +34,57 @@ class VueWechat {
   // ====================================================== //
   // ========================= 初始化 ======================== //
   // ====================================================== //
-  init(wechatId, debug) {
-    this.setWechatId(wechatId);
+  init(wechatId, debug, jsApiList = ["chooseImage"]) {
+    this.wechatId = wechatId;
     this.debug = debug;
+    this.jsApiList = jsApiList;
+    // ----- 动态生成一个store模块 ---- //
     this.wechatStore();
-    // 用路由钩子注册阻塞页面加载
+    // ----- 用路由钩子注册阻塞页面加载 ---- //
     this.interceptRouter();
   }
-  // 设置wechatId
-  setWechatId(wechatId) {
-    this.wechatId = wechatId;
-  }
-  // 设置JsToken
-  setJsToken(jsToken) {
-    this.jsToken = jsToken;
+
+  // ====================================================== //
+  // ================== router 做鉴权拦截==================== //
+  // ====================================================== //
+  interceptRouter() {
+    router.beforeEach(async (to, from, next) => {
+      // -------- 获取登录状态 -------- //
+      const { loginStatus } = store.state.wechat;
+      // ----- 请求鉴权和js-sdk签名 ---- //
+      switch (loginStatus) {
+        case 0:
+          await store.dispatch("wechat/setLoginStatus", 1);
+          break;
+        case 1:
+          try {
+            // ~~~~~~~~~~~~~~~~~ 查看鉴权 ~~~~~~~~~~~~~~~~ //
+            const authentication = await this.requestWxConfig();
+            // ~~~~~~~~~~ 成功跳转，否则跳转入请关注公众号页面 ~~~~~~~~~ //
+            authentication && next();
+          } catch (err) {
+            await store.dispatch("wechat/setLoginStatus", 0);
+            console.error("Error", err);
+            next();
+          }
+          break;
+        case 2:
+          next();
+          break;
+        default:
+          break;
+      }
+      next();
+    });
   }
   // ====================================================== //
-  // ======================= request ======================= //
+  // ====================== 动态添加store ===================== //
+  // ====================================================== //
+  wechatStore() {
+    store.registerModule("wechat", wechatStore);
+  }
+  // ====================================================== //
+  // ======================= 请求鉴权签名 ======================= //
   // ====================================================== //
   /**
    * @description
@@ -61,7 +95,7 @@ class VueWechat {
   requestJsdkM() {
     return axios
       .post(
-        "http://192.168.71.33:8369/wechat/stage/jump/getJsdkMd",
+        "http://wyf.vipgz4.idcfengye.com/wechat/stage/jump/getJsdkMd",
         qs.stringify({
           url: encodeURIComponent(location.href.split("#")[0]),
           wechatId: this.wechatId,
@@ -79,60 +113,30 @@ class VueWechat {
       });
   }
   // ====================================================== //
-  // ======================= router ======================= //
-  // ====================================================== //
-  interceptRouter() {
-    router.beforeEach(async (to, from, next) => {
-      // 获取登录状态
-      const { loginStatus } = store.state.wechat;
-      // 请求鉴权和js-sdk签名
-      switch (loginStatus) {
-        case 0:
-          await store.dispatch("wechat/setLoginStatus", 1);
-          break;
-        case 1:
-          try {
-            const jsToken = await this.requestJsdkM();
-            await this.wxConfig(jsToken, this.debug);
-            console.log("鉴权结束");
-            await store.dispatch("wechat/setJsToken", jsToken);
-            this.setJsToken(jsToken);
-            next();
-            return true;
-          } catch (err) {
-            await store.dispatch("wechat/setLoginStatus", 0);
-            console.error("Error", err);
-            next();
-          }
-          break;
-        case 2:
-          next();
-          break;
-        default:
-          break;
-      }
-      next();
-    });
-  }
-  // ====================================================== //
-  // ======================== store ======================= //
-  // ====================================================== //
-  wechatStore() {
-    store.registerModule("wechat", wechatStore);
-  }
-  // ====================================================== //
   // ======================= wx权限配置 ======================= //
   // ====================================================== //
-  wxConfig(jsToken, debug) {
-    console.log(jsToken);
+  /**
+   * @description
+   * 请求wx-js
+   * @author wsy
+   * @date 2020-06-11  16:57:18
+   */
+  async requestWxConfig() {
+    // 获取鉴权参数
+    const jsToken = await this.requestJsdkM();
+    await store.dispatch("wechat/setJsToken", jsToken);
+    const { appId, timestamp, noncestr, signature } = jsToken;
     return new Promise((resolve, reject) => {
-      wx.config(
-        Object.assign(jsToken, {
-          debug,
-        })
-      );
+      wx.config({
+        appId,
+        timestamp,
+        nonceStr: noncestr,
+        signature,
+        debug: this.debug,
+        jsApiList: this.jsApiList,
+      });
       wx.ready(function() {
-        resolve();
+        resolve(true);
         console.log("鉴权成功");
       });
       wx.error(function(res) {

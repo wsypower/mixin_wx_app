@@ -47,7 +47,8 @@ export default {
   install(Vue) {
     Vue.use(wechatAuth, {
       wechatId: "af21e2c0033e11e96b2df410224d169f",
-      debug:true
+      debug: false,
+      jsApiList: ["chooseImage"],
     });
     // 设置为 false 以阻止 vue 在启动时生成生产提示
     // https://cn.vuejs.org/v2/api/#productionTip
