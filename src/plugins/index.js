@@ -10,8 +10,6 @@
 /*                                                                                                           */
 /* ********************************************************************************************************* */
 import vueWechatTitle from "vue-wechat-title";
-import router from "@/router";
-import store from "@/store";
 // TODO: 只能用于单路由，如遇到tab路由形式，压栈的形式就会有问题，推荐移动端不采用子路由，改换动态组件
 // import router from "@/router";
 // import Navigation from "./navigation/index";
@@ -31,14 +29,12 @@ import wechatAuth from "@/plugins/environment/wx/wechatAuth";
 //   console.log(w);
 // });
 // import '@/plugins/environment/wx/wechatAuth/index'
+import defaultSettings from "@/settings.js";
+console.log(defaultSettings.wx);
 
 export default {
   install(Vue) {
-    Vue.use(wechatAuth, {
-      wechatId: "af21e2c0033e11e96b2df410224d169f",
-      debug: false,
-      jsApiList: ["chooseImage"],
-    });
+    Vue.use(wechatAuth, { ...defaultSettings.wx });
     // 设置为 false 以阻止 vue 在启动时生成生产提示
     // https://cn.vuejs.org/v2/api/#productionTip
     Vue.config.productionTip = false;

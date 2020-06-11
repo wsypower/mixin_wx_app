@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   /**
    * @type {boolean} true | false
    * @description 是否在右面板显示设置
@@ -9,9 +9,10 @@ module.exports = {
    * @description 微信配置
    */
   wx: {
-    appID: "wx8deb5f410186d074",
-    // baseUrl: "http://220.191.224.215/wechat/stage/jump",
-    baseUrl: "http://192.168.71.33:8369/wechat/stage/jump/",
+    wechatId: "af21e2c0033e11e96b2df410224d169f",
+    debug: false,
+    jsApiList: ["chooseImage"],
+    getJsdkMdUrl: "http://wyf.vipgz4.idcfengye.com/wechat/stage/jump/getJsdkMd",
   },
 
   /**

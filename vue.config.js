@@ -12,7 +12,7 @@
 
 "use strict";
 const path = require("path");
-const defaultSettings = require("./src/settings.js");
+// const defaultSettings = require("./src/settings.js");
 // 使用uglify-js进行js文件的压缩。
 // const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 // 使用terser-webpack-plugin 替换uglify-js 进行js文件的压缩
@@ -23,7 +23,7 @@ const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 // PWD骨架屏
 const SkeletonWebpackPlugin = require("vue-skeleton-webpack-plugin");
 const resolve = (dir) => path.join(__dirname, dir);
-const name = defaultSettings.title || "vue模板"; // page title
+// const name = defaultSettings.title || "vue模板"; // page title
 
 // ====================================================== //
 // ======================= 可修改的端口号 ====================== //
@@ -81,7 +81,7 @@ module.exports = {
   configureWebpack: {
     // 在webpack的名称字段中提供应用程序的标题，以便
     // 可以在index.html中对其进行访问以注入正确的标题。
-    name: name,
+    // name: name,
     resolve: {
       alias: {
         "@": resolve("src"), // 主目录

@@ -6,7 +6,7 @@
 /*   By: wsy <2553241022@qq.com>                             +#++:++#  +#++:++#++ :#:           +#+          */
 /*                                                          +#+              +#+ +#+   +#+#    +#+           */
 /*   Created: 2020/06/10 23:44:12 by wsy                   #+#       #+#    #+# #+#    #+#    #+#            */
-/*   Updated: 2020/06/11 17:26:01 by wsy                  ########## ########   ######## ###########         */
+/*   Updated: 2020/06/11 18:17:43 by wsy                  ########## ########   ######## ###########         */
 /*                                                                                                           */
 /* ********************************************************************************************************* */
 
@@ -21,24 +21,32 @@ class VueWechat {
     this.wechatId = null;
     this.debug = true;
     this.jsApiList = [];
+    this.getJsdkMdUrl =
+      "http://wyf.vipgz4.idcfengye.com/wechat/stage/jump/getJsdkMd";
   }
   // ====================================================== //
   // ======================= vue插件插槽 ====================== //
   // ====================================================== //
   install(
     Vue,
-    { wechatId = "af21e2c0033e11e96b2df410224d169f", debug = false } = {}
+    {
+      wechatId = "af21e2c0033e11e96b2df410224d169f",
+      debug = false,
+      jsApiList,
+      getJsdkMdUrl,
+    } = {}
   ) {
     // ---- 如果是微信环境才会执行初始化 ---- //
-    this.isWx() && this.init(wechatId, debug);
+    this.isWx() && this.init(wechatId, debug, jsApiList, getJsdkMdUrl);
   }
   // ====================================================== //
   // ========================= 初始化 ======================== //
   // ====================================================== //
-  init(wechatId, debug, jsApiList = ["chooseImage"]) {
+  init(wechatId, debug, jsApiList = ["chooseImage"], getJsdkMdUrl) {
     this.wechatId = wechatId;
     this.debug = debug;
     this.jsApiList = jsApiList;
+    this.getJsdkMdUrl = getJsdkMdUrl;
     // ----- 动态生成一个store模块 ---- //
     this.wechatStore();
     // ----- 用路由钩子注册阻塞页面加载 ---- //
@@ -103,9 +111,11 @@ class VueWechat {
    * @date 2020-06-08  18:40:12
    */
   requestJsdkM() {
+    let getJsdkMdUrl = this.getJsdkMdUrl;
+    console.log(getJsdkMdUrl);
     return axios
       .post(
-        "http://wyf.vipgz4.idcfengye.com/wechat/stage/jump/getJsdkMd",
+        getJsdkMdUrl,
         qs.stringify({
           url: encodeURIComponent(location.href.split("#")[0]),
           wechatId: this.wechatId,
@@ -119,6 +129,7 @@ class VueWechat {
         }
       })
       .catch(function(error) {
+        console.log(error);
         return error;
       });
   }
@@ -131,28 +142,32 @@ class VueWechat {
    * @author wsy
    * @date 2020-06-11  16:57:18
    */
-  async requestWxConfig() {
+  requestWxConfig() {
     // 获取鉴权参数
-    const jsToken = await this.requestJsdkM();
-    await store.dispatch("wechat/setJsToken", jsToken);
-    const { appId, timestamp, noncestr, signature } = jsToken;
-    return new Promise((resolve, reject) => {
-      wx.config({
-        appId,
-        timestamp,
-        nonceStr: noncestr,
-        signature,
-        debug: this.debug,
-        jsApiList: this.jsApiList,
-      });
-      wx.ready(async function() {
-        resolve(true);
-        await store.dispatch("wechat/setLoginStatus", 1);
-        console.log("鉴权成功");
-      });
-      wx.error(function(res) {
-        reject(res);
-      });
+    return new Promise(async (resolve, reject) => {
+      try {
+        const jsToken = await this.requestJsdkM();
+        await store.dispatch("wechat/setJsToken", jsToken);
+        const { appId, timestamp, noncestr, signature } = jsToken;
+        wx.config({
+          appId,
+          timestamp,
+          nonceStr: noncestr,
+          signature,
+          debug: this.debug,
+          jsApiList: this.jsApiList,
+        });
+        wx.ready(async function() {
+          resolve(true);
+          await store.dispatch("wechat/setLoginStatus", 1);
+          console.log("鉴权成功");
+        });
+        wx.error(function(res) {
+          reject(res);
+        });
+      } catch (error) {
+        reject(error);
+      }
     });
   }
 }
