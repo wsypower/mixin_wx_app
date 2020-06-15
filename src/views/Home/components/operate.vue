@@ -34,11 +34,11 @@
                 },{
                     iconClass: 'zdfg',
                     name: '制度法规',
-                    path: ''
+                    path: '/laws'
                 },{
                     iconClass: 'yqzs',
                     name: '养犬知识',
-                    path: ''
+                    path: '/dogKnowledge'
                 },{
                     iconClass: 'fwjg',
                     name: '服务机构',
