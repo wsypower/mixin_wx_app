@@ -6,7 +6,10 @@
             @load="onLoad"
             class="list-panel"
     >
-        <div class="article-item" flex="dir:left cross:center main:justify" v-for="item in dataList" :key="item.id" @click="itemClickHandle(item)">
+        <div class="article-item" flex="dir:left cross:center main:justify" v-for="(item,index) in dataList" :key="item.id" @click="itemClickHandle(item)">
+            <div class="top-flag" v-if="index===0">
+                <span class="icon iconfont icon-zhiding"></span><span>置顶</span>
+            </div>
             <div class="message" flex="dir:top main:justify">
                 <div class="title">{{item.title}}</div>
                 <div class="time">{{item.time}}</div>
@@ -121,6 +124,26 @@
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 20px;
+            position: relative;
+            .top-flag{
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                z-index: 1;
+                width: 90px;
+                height: 34px;
+                line-height: 34px;
+                background-color: #e00808;
+                border-radius: 10px 0px 0px 0px;
+                font-family: PingFang-SC-Medium;
+                font-size: 14px;
+                color: #ffffff;
+                text-align: center;
+                .icon-zhiding{
+                    font-size: 14px;
+                    width: 20px;
+                }
+            }
             &:last-child{
                 margin-bottom: 0px;
             }

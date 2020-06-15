@@ -1,38 +1,10 @@
 {
   "id": "1801694",
-  "name": "绍兴犬类管理系统",
+  "name": "绍兴犬类管理系统APP",
   "font_family": "iconfont",
   "css_prefix_text": "icon-",
   "description": "",
   "glyphs": [
-    {
-      "icon_id": "8802640",
-      "name": "置顶",
-      "font_class": "zhiding",
-      "unicode": "e64a",
-      "unicode_decimal": 58954
-    },
-    {
-      "icon_id": "9928763",
-      "name": "取消",
-      "font_class": "quxiao1",
-      "unicode": "e606",
-      "unicode_decimal": 58886
-    },
-    {
-      "icon_id": "854236",
-      "name": "密码",
-      "font_class": "mima",
-      "unicode": "e897",
-      "unicode_decimal": 59543
-    },
-    {
-      "icon_id": "6457529",
-      "name": "用户名",
-      "font_class": "yonghuming",
-      "unicode": "e65a",
-      "unicode_decimal": 58970
-    },
     {
       "icon_id": "1009213",
       "name": "电话",
