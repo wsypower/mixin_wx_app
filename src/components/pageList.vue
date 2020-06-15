@@ -12,6 +12,7 @@
             </div>
             <div class="message" flex="dir:top main:justify">
                 <div class="title">{{item.title}}</div>
+                <div class="sub-title" v-if="item.subTitle">{{item.subTitle}}</div>
                 <div class="time">{{item.time}}</div>
             </div>
             <div class="img-panel" flex="cross:center main:center">
@@ -62,19 +63,22 @@
 
                 let temp1 = {
                     id: 'x1',
-                    title: '养狗，你需要掌握这几类药，对狗狗有益处',
+                    title: '绍兴市养犬管理办法',
+                    subTitle: '绍【2020第一号文】',
                     time: '2020-06-01',
                     imageUrl: 'http://5b0988e595225.cdn.sohucs.com/images/20190325/2d99032a5d5f48688a5d823eb4fb75d3.jpeg'
                 }
                 let temp2 = {
                     id: 'x2',
-                    title: '狗狗有这五个喂养条件，表明已具有长寿“特质”',
+                    title: '绍兴市养犬管理办法',
+                    subTitle: '绍【2020第一号文】',
                     time: '2020-06-01',
                     imageUrl: 'http://5b0988e595225.cdn.sohucs.com/images/20190325/393c01106c86447b851f27e8301b8167.jpeg'
                 }
                 let temp3 = {
                     id: 'x3',
-                    title: '狗狗预苗为何要打三针？',
+                    title: '绍兴市养犬管理办法',
+                    subTitle: '绍【2020第一号文】',
                     time: '2020-06-01',
                     imageUrl: 'http://5b0988e595225.cdn.sohucs.com/images/20190325/eae5e722fd484b53bc12d6218fbc940c.jpeg'
                 }
@@ -156,6 +160,11 @@
                     font-size: 28px;
                     color: #333333;
                     font-weight: bold;
+                }
+                .sub-title{
+                    font-family: PingFang-SC-Medium;
+                    font-size: 26px;
+                    color: #4d4d4d;
                 }
                 .time{
                     font-family: PingFang-SC-Medium;
