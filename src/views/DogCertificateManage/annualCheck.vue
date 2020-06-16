@@ -25,6 +25,7 @@
         },
         data(){
             return {
+                //年审记录的入参
                 params:{
                     userId: '',
                     dogId: '',
@@ -40,6 +41,7 @@
             this.getProcessList();
         },
         methods:{
+            //获取年审记录
             getProcessList(){
                 this.$store.commit('updateIsLoading', true);
                 queryYearCarefulRecords(this.params).then( res => {
@@ -69,7 +71,7 @@
                     }
                 });
             },
-
+            //跳转到订单详情页或者编辑页面
             gotoDetail(item){
                 console.log('item:', item);
                 if(item.statusId === '0'){

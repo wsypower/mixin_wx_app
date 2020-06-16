@@ -52,6 +52,7 @@
         },
         data(){
             return {
+                //获取单个狗证详情的入参
                 params:{
                     userId: '',
                     dogCardNumber: ''
@@ -68,6 +69,7 @@
             this.getDogDetail();
         },
         methods:{
+            //获取单个狗证详情
             getDogDetail(){
                 this.$store.commit('updateIsLoading', true);
                 queryDogCard(this.params).then( res => {
@@ -112,6 +114,7 @@
                     });
                 })
             },
+            //违规记录/年审记录
             goToPage(page){
                 if(page==='wg'){
                     Toast({
@@ -123,9 +126,11 @@
                     this.$router.push('/dogCertificateManage/annual');
                 }
             },
+            //跳转到注销页面
             unBind(){
                 this.$router.push('/dogCertificateManage/unbind');
             },
+            //跳转到续办页面
             continuedApply(){
                 this.$router.push({
                     path:'/continuedApply',

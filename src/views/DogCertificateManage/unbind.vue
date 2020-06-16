@@ -66,17 +66,26 @@
         },
         data(){
             return {
+                //获取验证码
                 auth_time: 60,
                 sendAuthCode: true,
+                //检查验证码
                 isCheckSms: false,
+                //注销原因选择
                 showReasonPicker: false,
                 ReasonColumns: ['死亡','其他'],
+                //注销入参
                 submitData:{
                     userId: '',
+                    //手机号码
                     phone: '',
+                    //验证码
                     verificationCode: '',
+                    //狗证ID
                     dogCardId: '',
+                    //注销原因
                     cancelReason: '',
+                    //备注
                     remark: ''
                 }
             }
@@ -129,12 +138,14 @@
                     }
                 });
             },
+            //选择注销原因
             onReasonConfirm(value){
                 console.log(`当前选中值：`, value);
                 this.submitData.cancelReason = value;
                 //this.submitData.reason = this.ReasonColumns.findIndex(e => e === value);
                 this.showReasonPicker = false;
             },
+            //注销提交
             unbindSubmit(){
                 console.log('unbindSubmit', this.submitData)
                 if( this.isCheckSms){

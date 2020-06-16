@@ -129,6 +129,7 @@
                     }
                 }
             },
+            //得到所有地图点位
             getServiceMapData(data){
                 this.mapMaskerList = data.mapMaskerList;
                 this.totalShowSize = data.totalShowSize;
@@ -138,6 +139,7 @@
                     this.center.lat = this.firstPlace.originLat;
                 }
             },
+            //跳转到点击的点位
             toPoint(data){
                 this.firstPlace = data;
                 this.center.lng = this.firstPlace.originLon;

@@ -70,8 +70,8 @@
     import { Toast, Popup, DatetimePicker, Button } from 'vant';
     import OrderItem from './components/orderItem.vue';
     import { formatDate } from '@/utils/index';
-    import { querybidDogCardRecord } from '@/api/process.js'
-    import statusObj from '@/utils/statusObj.js'
+    import { querybidDogCardRecord } from '@/api/process.js';
+    import statusObj from '@/utils/statusObj.js';
     const typeArray = [{labelName: '全部', value: ''},{labelName: '新办', value: '0'},{labelName: '续办', value: '1'}];
     export default {
         name: 'process',
@@ -85,12 +85,14 @@
         },
         data(){
             return {
+                //展示查询窗口
                 showSearch: false,
                 typeArray,
                 showBeginTimePicker: false,
                 showEndTimePicker: false,
                 beginTimeString: '',
                 endTimeString: '',
+                //查询入参
                 params:{
                     userId: '',
                     beginTime: undefined,
@@ -105,25 +107,30 @@
             this.getProcessList();
         },
         methods:{
+            //展示/影藏查询块
             showSearchPanel(){
                 console.log('click right');
                 this.showSearch = !this.showSearch;
             },
+            //获取办证类型
             getRealValue(attrName, value){
                 this.params[attrName] = value;
             },
+            //获取查询开始时间
             onBeginTimeConfirm(value){
                 this.beginTimeString = formatDate(value, 'yyyy-MM-dd');
                 this.params.beginTime = new Date(value).getTime();
                 console.log(this.params.beginTime);
                 this.showBeginTimePicker = false;
             },
+            //获取查询结束时间
             onEndTimeConfirm(value){
                 this.endTimeString = formatDate(value, 'yyyy-MM-dd');
                 this.params.endTime = new Date(value).getTime();
                 console.log(this.params.endTime);
                 this.showEndTimePicker = false;
             },
+            //获取进度记录
             getProcessList(){
                 this.$store.commit('updateIsLoading', true);
                 querybidDogCardRecord(this.params).then( res => {
@@ -153,9 +160,11 @@
                     }
                 });
             },
+            //查询
             search(){
                 this.getProcessList();
             },
+            //跳转到编辑页或者订单详情页
             gotoDetail(item){
                 console.log('item:', item);
                 if(item.statusId === '0'){

@@ -101,6 +101,7 @@
             this.getDetailData();
         },
         methods: {
+            //获取订单详情
             getDetailData(){
                 let params = {
                     userId: this.$store.getters['userId'],
@@ -155,10 +156,12 @@
                     }
                 });
             },
+            //点击服务点，跳转到服务点页面
             goToServicePage(){
                 this.pagePath = 'service';
                 this.$router.push('/service');
             },
+            //跳转到编辑页、犬证详情页、服务页
             goToPage(){
                 if(this.pagePath==='dogDetail'){
                     this.$router.push('/dogCertificateManage/' + this.orderInfo.dogCardNumber + '/detail');

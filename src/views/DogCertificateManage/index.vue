@@ -30,6 +30,7 @@
             this.getListData();
         },
         methods:{
+            //获取用户的所有犬证
             getListData(){
                 this.$store.commit('updateIsLoading', true);
                 queryDogCard({userId: this.$store.getters['userId']}).then( res => {

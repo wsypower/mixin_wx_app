@@ -61,22 +61,34 @@
         },
         data(){
             return {
+                //二维码
                 qrCode: '',
+                //犬管中心电话
                 telPhone: '0571-********',
                 dogDetail:{
+                    //犬昵称
                     dogName: '',
+                    //犬正面照
                     dogPhotoFront: '',
+                    //犬性别
                     dogSex: '',
+                    //犬种类
                     breed: '',
+                    //犬毛色
                     hairColor: '',
+                    //犬主姓名
                     ownerName: '',
+                    //犬主手机号
                     phone: '',
+                    //犬证编号
                     dogCardNumber: ''
                 }
             }
         },
         mounted(){
+            //从URL上面获取qrCode
             this.qrCode = getURLParameters('qrcode');
+            //获取分享信息
             this.getShareData();
         },
         methods:{
@@ -85,22 +97,6 @@
                 queryDogByQrCode({qrCode: this.qrCode}).then(res => {
                     this.dogDetail = res.data;
                 })
-
-                // this.dogDetail.dogName = '平平';
-                // this.dogDetail.dogPhotoFront = 'http://220.191.224.215/upload/file/2020/05/27/20200527104810159847.jpg';
-                // this.dogDetail.dogSex = '公';
-                // this.dogDetail.breed = '金毛';
-                // this.dogDetail.hairColor = '土黄';
-                // let ownerName = '张三丰';
-                // if(ownerName.length===2){
-                //     this.dogDetail.ownerName = ownerName.substring(0,1) + '*';
-                // }
-                // else{
-                //     this.dogDetail.ownerName = ownerName.substring(0,1) + '*' + ownerName.substring(ownerName.length-1);
-                // }
-                // let phone = '13356784598';
-                // this.dogDetail.phone = phone.substring(0,3) + '****' + phone.substring(phone.length-4);
-                // this.dogDetail.dogCardNumber = '33010319880823M';
             },
             phoneToDogManageCenter(){
                 //犬管中心电话
