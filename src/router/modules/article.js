@@ -6,8 +6,8 @@ const routes = [
         meta: { keepAlive:false }
     },
     {
-        path: '/dogKnowledge/:id/detail',
-        name: 'knowledgeDetail',
+        path: '/dogKnowledge/detail',
+        name: 'dogKnowledgeDetail',
         component: () => import(/* webpackChunkName: "process" */ '@/views/DogKnowledge/detail.vue'),
         meta: { keepAlive:false }
     },
@@ -18,10 +18,10 @@ const routes = [
         meta: { keepAlive:false }
     },
     {
-        path: '/laws/:id/detail',
-        name: 'lawsDetail',
+        path: '/lawsKnowledge/detail',
+        name: 'lawsKnowledgeDetail',
         component: () => import(/* webpackChunkName: "process" */ '@/views/LawsKnowledge/detail.vue'),
         meta: { keepAlive:false }
-    },
+    }
 ];
 export default routes;

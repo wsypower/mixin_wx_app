@@ -1,7 +1,7 @@
 <template>
     <div class="dog-knowledge-page">
         <page-header title="养犬知识"></page-header>
-        <page-list :interfaceUrl="interfaceUrl" @itemClickHandle="geToArticleDetail"></page-list>
+        <page-list :type="0"></page-list>
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -14,18 +14,10 @@
             PageList
         },
         data(){
-            return {
-                interfaceUrl: null
-            }
+            return {}
         },
-        mounted(){
-
-        },
-        methods:{
-            geToArticleDetail(data){
-                this.$router.push('/dogKnowledge/' + data.id + '/detail');
-            }
-        }
+        mounted(){},
+        methods:{}
     }
 </script>
 <style lang="scss" scoped>
@@ -34,6 +26,5 @@
         height: 100%;
         background-color: #f5f5f5;
         padding-top: 88px;
-
     }
 </style>

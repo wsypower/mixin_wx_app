@@ -12,8 +12,8 @@
             </div>
             <div class="message" flex="dir:top main:justify">
                 <div class="title">{{item.title}}</div>
-                <div class="sub-title" v-if="item.subTitle">{{item.subTitle}}</div>
-                <div class="time">{{item.time}}</div>
+                <div class="sub-title" v-if="item.documentNumber">{{item.documentNumber}}</div>
+                <div class="time">{{item.publishTime|timeFormatter('YYYY-MM-DD')}}</div>
             </div>
             <div class="img-panel" flex="cross:center main:center">
                 <img :src="item.imageUrl" />
@@ -23,15 +23,16 @@
 </template>
 <script type="text/ecmascript-6">
     import { List } from 'vant';
+    import { queryArticle } from '@/api/article.js'
     export default {
         name: 'pageList',
         components:{
             [List.name]: List,
         },
         props:{
-            interfaceUrl:{
-                type: Object,
-                default: null
+            type:{
+                type: Number,
+                default: 0
             }
         },
         data(){
@@ -39,8 +40,13 @@
                 dataList: [],
                 loading: false,
                 finished: false,
-                currentPage: 0,
-                pageSize: 10
+                params:{
+                    userId: '',
+                    type: 0,  //0 制度法规 1犬类知识库
+                    areaCode: '',
+                    currentPage: 0,
+                    pageSize: 10
+                }
             }
         },
         computed:{
@@ -49,70 +55,35 @@
             },
         },
         mounted(){
-
+            this.params.userId = this.$store.getters['userId'];
+            this.params.areaCode = this.$store.getters['areaCode'];
+            this.params.type = this.type;
         },
         methods:{
             //list加载数据
             onLoad() {
                 console.log('0009998887777666');
-                let params = {
-                    userId :this.userId,
-                    currentPage: ++this.currentPage,
-                    pageSize: this.pageSize
-                }
-
-                let temp1 = {
-                    id: 'x1',
-                    title: '绍兴市养犬管理办法',
-                    subTitle: '绍【2020第一号文】',
-                    time: '2020-06-01',
-                    imageUrl: 'http://5b0988e595225.cdn.sohucs.com/images/20190325/2d99032a5d5f48688a5d823eb4fb75d3.jpeg'
-                }
-                let temp2 = {
-                    id: 'x2',
-                    title: '绍兴市养犬管理办法',
-                    subTitle: '绍【2020第一号文】',
-                    time: '2020-06-01',
-                    imageUrl: 'http://5b0988e595225.cdn.sohucs.com/images/20190325/393c01106c86447b851f27e8301b8167.jpeg'
-                }
-                let temp3 = {
-                    id: 'x3',
-                    title: '绍兴市养犬管理办法',
-                    subTitle: '绍【2020第一号文】',
-                    time: '2020-06-01',
-                    imageUrl: 'http://5b0988e595225.cdn.sohucs.com/images/20190325/eae5e722fd484b53bc12d6218fbc940c.jpeg'
-                }
-                this.dataList.push(temp1);
-                this.dataList.push(temp2);
-                this.dataList.push(temp3);
-                this.interfaceUrl(params).then( res => {
-                    console.log('interfaceUrl', res);
-                });
-                // queryDogServicePoint(params).then( res => {
-                //     this.totalSize = res.data.totalCount;
-                //     this.placeList = res.data.list.reduce((acc,item) => {
-                //         let temp = {
-                //             id: item.id,
-                //             servicePointName: item.servicePointName,
-                //             originLat: item.latitude,
-                //             originLon: item.longitude,
-                //             distance: item.distance,
-                //             address: item.address,
-                //             serviceTime: item.serviceBeginTime + '至' + item.serviceEndTime + ' ' + item.serviceTime
-                //         }
-                //         acc.push(temp);
-                //         return acc
-                //     },this.placeList);
-                //     // 加载状态结束
+                this.params.currentPage = this.params.currentPage + 1;
+                queryArticle(this.params).then( res => {
+                    this.totalSize = res.data.count;
+                    this.dataList = res.data.queryList;
+                    // 加载状态结束
                     this.loading = false;
-                //     // 数据全部加载完成
-                //     if (this.placeList.length >= this.totalSize) {
+                    // 数据全部加载完成
+                    if (this.dataList.length >= this.totalSize) {
                         this.finished = true;
-                //     }
-                // });
+                    }
+                });
             },
             itemClickHandle(item){
-                this.$emit('itemClickHandle', item);
+                this.$store.commit('article/updateArticleInfo',item);
+                if(this.type===0){
+                    this.$router.push('/lawsKnowledge/detail');
+                }
+                else{
+                    this.$router.push('/dogKnowledge/detail');
+                }
+
             }
         }
     }

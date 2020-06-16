@@ -1,32 +1,43 @@
 <template>
-    <div class="laws-detail-page">
+    <div class="knowledge-detail-page">
         <page-header title="制度法规"></page-header>
         <div class="page-top">
-            <div class="title">2020年绍兴市养犬管理办法</div>
+            <div class="title">{{articleInfo.title}}</div>
             <div flex="dir:left main:justify">
-                <span>绍【2020第一号文】</span>
-                <span>2020-06-01</span>
+                <span>{{articleInfo.documentNumber}}</span>
+                <span>{{articleInfo.publishTime|timeFormatter('YYYY-MM-DD')}}</span>
             </div>
         </div>
-        <div v-html="articleHtml"></div>
+        <div v-html="articleInfo.content"></div>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import PageHeader from '@/components/pageHeader.vue';
     export default {
-        name: 'lawsDetail',
+        name: 'knowledgeDetail',
         components:{
             PageHeader
         },
         data(){
             return {
-                articleHtml: ''
+                articleInfo:{
+                    title: '',
+                    documentNumber: '',
+                    publishTime: 0,
+                    content: ''
+                }
             }
+        },
+        mounted(){
+            let info = this.$store.getters['article/articleInfo'];
+            Object.keys(this.articleInfo).forEach(key => {
+                this.articleInfo[key] = info[key];
+            });
         }
     }
 </script>
 <style lang="scss" scoped>
-    .laws-detail-page{
+    .knowledge-detail-page{
         width: 100%;
         height: 100%;
         background-color: #ffffff;
