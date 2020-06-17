@@ -177,9 +177,9 @@
                             Object.keys(vm.submitData).forEach(key=>{
                                 vm.submitData[key] = res.data[key]
                             })
-                            vm.imageList.immunePhotos = vm.submitData.imgHost + vm.submitData.immunePhotos;
-                            vm.imageList.immuneRecord = vm.submitData.imgHost + vm.submitData.immuneRecord;
-                            vm.imageList.otherPic = vm.submitData.otherPic === '' ? '' : vm.submitData.imgHost + vm.submitData.otherPic;
+                            vm.imageList.immunePhotos = vm.submitData.immunePhotos ? vm.submitData.imgHost + vm.submitData.immunePhotos : '';
+                            vm.imageList.immuneRecord = vm.submitData.immuneRecord ? vm.submitData.imgHost + vm.submitData.immuneRecord : '';
+                            vm.imageList.otherPic = vm.submitData.otherPic ? vm.submitData.imgHost + vm.submitData.otherPic : '';
 
                             if(res.data.dogOrderId){
                                 vm.submitData.dogOrderId = res.data.dogOrderId;

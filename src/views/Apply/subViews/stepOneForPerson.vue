@@ -307,11 +307,18 @@
             Object.keys(this.submitData).forEach(key=>{
                 this.submitData[key] = orderInfo[key]
             })
-
-            this.imageList.idCardFront = this.submitData.imgHost + this.submitData.idCardFront;
-            this.imageList.idCardBack = this.submitData.imgHost + this.submitData.idCardBack;
-            this.imageList.residencyProofFront = this.submitData.imgHost + this.submitData.residencyProofFront;
-            this.imageList.residencyProofBack = this.submitData.imgHost + this.submitData.residencyProofBack;
+            if(this.submitData.idCardFront){
+                this.imageList.idCardFront = this.submitData.imgHost + this.submitData.idCardFront;
+            }
+            if(this.submitData.idCardBack) {
+                this.imageList.idCardBack = this.submitData.imgHost + this.submitData.idCardBack;
+            }
+            if(this.submitData.residencyProofFront) {
+                this.imageList.residencyProofFront = this.submitData.imgHost + this.submitData.residencyProofFront;
+            }
+            if(this.submitData.residencyProofBack) {
+                this.imageList.residencyProofBack = this.submitData.imgHost + this.submitData.residencyProofBack;
+            }
 
             if(this.submitData.idType!==1){
                 this.isEditInit = true;

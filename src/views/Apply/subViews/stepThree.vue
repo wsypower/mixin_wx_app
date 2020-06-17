@@ -81,7 +81,7 @@
             this.$nextTick(()=>{
                 //从缓存中读入素有orderInfo数据，适用于新建与编辑
                 const orderInfo = this.$store.getters['order/orderInfo'];
-                this.pdfUrl = orderInfo.picPath;
+                this.pdfUrl = orderInfo.imgHost + orderInfo.picPath;
                 console.log('three', orderInfo, this.pdfUrl);
                 // const pdfUrlArr = this.pdfUrl.split('//');
                 // this.src = pdf.createLoadingTask('/pdf/' + pdfUrlArr[pdfUrlArr.length-1]);

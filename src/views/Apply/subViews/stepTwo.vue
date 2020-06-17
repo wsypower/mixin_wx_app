@@ -360,11 +360,18 @@
                 Object.keys(vm.submitData).forEach(key=>{
                     vm.submitData[key] = orderInfo[key]
                 })
-
-                vm.imageList.dogPhotoFront = vm.submitData.imgHost + vm.submitData.dogPhotoFront;
-                vm.imageList.dogPhotoBack = vm.submitData.imgHost + vm.submitData.dogPhotoBack;
-                vm.imageList.immunePhotos = vm.submitData.imgHost + vm.submitData.immunePhotos;
-                vm.imageList.immuneRecord = vm.submitData.imgHost + vm.submitData.immuneRecord;
+                if(vm.submitData.dogPhotoFront){
+                    vm.imageList.dogPhotoFront = vm.submitData.imgHost + vm.submitData.dogPhotoFront;
+                }
+                if(vm.submitData.dogPhotoBack) {
+                    vm.imageList.dogPhotoBack = vm.submitData.imgHost + vm.submitData.dogPhotoBack;
+                }
+                if(vm.submitData.immunePhotos) {
+                    vm.imageList.immunePhotos = vm.submitData.imgHost + vm.submitData.immunePhotos;
+                }
+                if(vm.submitData.immuneRecord) {
+                    vm.imageList.immuneRecord = vm.submitData.imgHost + vm.submitData.immuneRecord;
+                }
 
                 vm.submitData.userId = vm.$store.getters['userId'];
                 //在缓存中的currentStep是当时提交之后的下一步，故需要在这里重新指向当前步

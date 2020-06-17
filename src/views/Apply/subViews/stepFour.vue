@@ -116,9 +116,9 @@
             Object.keys(this.submitData).forEach(key=>{
                 this.submitData[key] = orderInfo[key]
             })
-            this.imageList.informationPic = this.submitData.imgHost + this.submitData.informationPic;
-            this.imageList.commitmentPic = this.submitData.imgHost + this.submitData.commitmentPic;
-            this.imageList.otherPic = this.submitData.otherPic === '' ?  '' : this.submitData.imgHost + this.submitData.otherPic;
+            this.imageList.informationPic = this.submitData.informationPic ?  this.submitData.imgHost + this.submitData.informationPic : '';
+            this.imageList.commitmentPic = this.submitData.commitmentPic ? this.submitData.imgHost + this.submitData.commitmentPic : '';
+            this.imageList.otherPic = this.submitData.otherPic ?  this.submitData.imgHost + this.submitData.otherPic : '';
             //在缓存中的currentStep是当时提交之后的下一步，故需要在这里重新指向当前步
             this.submitData.currentStep = 4;
             this.submitData.userId = this.$store.getters['userId'];

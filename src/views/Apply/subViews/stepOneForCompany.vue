@@ -227,9 +227,15 @@
             Object.keys(this.submitData).forEach(key=>{
                 this.submitData[key] = orderInfo[key]
             });
-            this.imageList.idCardFront = this.submitData.imgHost + this.submitData.idCardFront;
-            this.imageList.idCardBack = this.submitData.imgHost + this.submitData.idCardBack;
-            this.imageList.businessLicense = this.submitData.imgHost + this.submitData.businessLicense;
+            if(this.submitData.idCardFront) {
+                this.imageList.idCardFront = this.submitData.imgHost + this.submitData.idCardFront;
+            }
+            if(this.submitData.idCardBack) {
+                this.imageList.idCardBack = this.submitData.imgHost + this.submitData.idCardBack;
+            }
+            if(this.submitData.businessLicense) {
+                this.imageList.businessLicense = this.submitData.imgHost + this.submitData.businessLicense;
+            }
 
             if(orderInfo.dogOrderId){
                 this.submitData.dogOrderId = orderInfo.dogOrderId;
