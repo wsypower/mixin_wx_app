@@ -1,86 +1,88 @@
 <template>
     <div class="continued-step-page">
         <page-header title="犬证续办"></page-header>
-        <van-form>
-            <van-field v-model="submitData.dogCardNumber" label="犬证编号：" placeholder="请输入犬证编号" input-align="right"/>
-            <van-divider></van-divider>
-            <van-field v-model="submitData.chipNumber" label="犬证芯片号：" placeholder="请输入芯片号（非必填）" input-align="right"/>
-            <van-divider></van-divider>
-            <van-field
-                    readonly
-                    clickable
-                    name="picker"
-                    :value="submitData.immuneAddress"
-                    label="免疫地点："
-                    placeholder="请选择地点"
-                    @click="showImmuneAddressPicker = true"
-                    input-align="right"
-                    right-icon="arrow"
-            />
-            <van-popup v-model="showImmuneAddressPicker" position="bottom">
-                <van-picker
-                        show-toolbar
-                        :columns="immuneAddressColumns"
-                        @confirm="onImmuneAddressConfirm"
-                        @cancel="showImmuneAddressPicker = false"
+        <div class="form-panel">
+            <van-form>
+                <van-field v-model="submitData.dogCardNumber" label="犬证编号：" placeholder="请输入犬证编号" input-align="right"/>
+                <van-divider></van-divider>
+                <van-field v-model="submitData.chipNumber" label="犬证芯片号：" placeholder="请输入芯片号（非必填）" input-align="right"/>
+                <van-divider></van-divider>
+                <van-field
+                        readonly
+                        clickable
+                        name="picker"
+                        :value="submitData.immuneAddress"
+                        label="免疫地点："
+                        placeholder="请选择地点"
+                        @click="showImmuneAddressPicker = true"
+                        input-align="right"
+                        right-icon="arrow"
                 />
-            </van-popup>
-            <van-divider></van-divider>
-            <van-field v-model="submitData.immuneNumber" label="免疫证编号：" placeholder="请输入编号" input-align="right"/>
-            <van-divider></van-divider>
-            <van-field
-                    readonly
-                    clickable
-                    name="datetimePicker"
-                    :value="immuneTime"
-                    label="免疫登记日期："
-                    placeholder="请选择日期"
-                    @click="showImmuneTimePicker = true"
-                    input-align="right"
-                    right-icon="arrow"
-                    class="label-width-200"
-            />
-            <van-popup v-model="showImmuneTimePicker" position="bottom">
-                <van-datetime-picker
-                        type="date"
-                        @confirm="onImmuneTimeConfirm"
-                        @cancel="showImmuneTimePicker = false"
+                <van-popup v-model="showImmuneAddressPicker" position="bottom">
+                    <van-picker
+                            show-toolbar
+                            :columns="immuneAddressColumns"
+                            @confirm="onImmuneAddressConfirm"
+                            @cancel="showImmuneAddressPicker = false"
+                    />
+                </van-popup>
+                <van-divider></van-divider>
+                <van-field v-model="submitData.immuneNumber" label="免疫证编号：" placeholder="请输入编号" input-align="right"/>
+                <van-divider></van-divider>
+                <van-field
+                        readonly
+                        clickable
+                        name="datetimePicker"
+                        :value="immuneTime"
+                        label="免疫登记日期："
+                        placeholder="请选择日期"
+                        @click="showImmuneTimePicker = true"
+                        input-align="right"
+                        right-icon="arrow"
+                        class="label-width-200"
                 />
-            </van-popup>
-            <van-divider></van-divider>
-            <div class="upload-img" flex="dir:left cross:center main:justify">
-                <upload-image textValue="添加免疫证首页"
-                              uploadIconType="1"
-                              @changeImage="getResultImage"
-                              imageType="immunePhotos"
-                              :initImageUrl="imageList.immunePhotos"></upload-image>
-                <upload-image textValue="添加宠物免疫记录"
-                              uploadIconType="3"
-                              @changeImage="getResultImage"
-                              imageType="immuneRecord"
-                              :initImageUrl="imageList.immuneRecord"></upload-image>
+                <van-popup v-model="showImmuneTimePicker" position="bottom">
+                    <van-datetime-picker
+                            type="date"
+                            @confirm="onImmuneTimeConfirm"
+                            @cancel="showImmuneTimePicker = false"
+                    />
+                </van-popup>
+                <van-divider></van-divider>
+                <div class="upload-img" flex="dir:left cross:center main:justify">
+                    <upload-image textValue="添加免疫证首页"
+                                  uploadIconType="1"
+                                  @changeImage="getResultImage"
+                                  imageType="immunePhotos"
+                                  :initImageUrl="imageList.immunePhotos"></upload-image>
+                    <upload-image textValue="添加宠物免疫记录"
+                                  uploadIconType="3"
+                                  @changeImage="getResultImage"
+                                  imageType="immuneRecord"
+                                  :initImageUrl="imageList.immuneRecord"></upload-image>
+                </div>
+                <div class="upload-img" flex="dir:left cross:center main:justify">
+                    <upload-image textValue="添加其他材料"
+                                  uploadIconType="1"
+                                  @changeImage="getResultImage"
+                                  imageType="otherPic"
+                                  :initImageUrl="imageList.otherPic"></upload-image>
+                </div>
+                <van-divider></van-divider>
+                <div class="form-item-label">备注：</div>
+                <van-field
+                        class="remark"
+                        type="textarea"
+                        v-model="submitData.remark"
+                        rows="4"
+                        autosize
+                        :border="true"
+                        placeholder="请输入备注信息"
+                />
+            </van-form>
+            <div class="btn-panel" flex="dir:left cross:center main:center">
+                <van-button type="info" class="btn next-btn" @click="submit">提交</van-button>
             </div>
-            <div class="upload-img" flex="dir:left cross:center main:justify">
-                <upload-image textValue="添加其他材料"
-                              uploadIconType="1"
-                              @changeImage="getResultImage"
-                              imageType="otherPic"
-                              :initImageUrl="imageList.otherPic"></upload-image>
-            </div>
-            <van-divider></van-divider>
-            <div class="form-item-label">备注：</div>
-            <van-field
-                    class="remark"
-                    type="textarea"
-                    v-model="submitData.remark"
-                    rows="4"
-                    autosize
-                    :border="true"
-                    placeholder="请输入备注信息"
-            />
-        </van-form>
-        <div class="btn-panel" flex="dir:left cross:center main:center">
-            <van-button type="info" class="btn next-btn" @click="submit">提交</van-button>
         </div>
         <van-popup v-model="showDialog" class="dialog-warp">
             <div class="dialog" flex="dir:top cross:center">
@@ -266,30 +268,36 @@
         width: 100%;
         height: 100%;
         background-color: #f5f5f5;
-        padding-top: 88px;
-        .upload-img{
-            padding: 37px 45px;
-            background-color: #ffffff;
-        }
-        .form-item-label{
-            background-color: #ffffff;
-            padding: 20px 32px;
-            font-family: PingFang-SC-Medium;
-            font-size: 28px;
-            font-weight: normal;
-            font-stretch: normal;
-            line-height: 40px;
-            letter-spacing: 0px;
-            color: #4d4d4d;
-        }
-        .btn-panel{
-            height: 170px;
-            width: 100%;
-            .next-btn{
-                width: 702px;
-                height: 80px;
+        display: flex;
+        flex-direction: column;
+        .form-panel{
+            flex: auto;
+            overflow-y: auto;
+            .upload-img{
+                padding: 37px 45px;
+                background-color: #ffffff;
+            }
+            .form-item-label{
+                background-color: #ffffff;
+                padding: 20px 32px;
+                font-family: PingFang-SC-Medium;
+                font-size: 28px;
+                font-weight: normal;
+                font-stretch: normal;
+                line-height: 40px;
+                letter-spacing: 0px;
+                color: #4d4d4d;
+            }
+            .btn-panel{
+                height: 170px;
+                width: 100%;
+                .next-btn{
+                    width: 702px;
+                    height: 80px;
+                }
             }
         }
+
         .dialog-warp{
             border-radius: 20px;
         }

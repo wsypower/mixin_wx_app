@@ -33,7 +33,6 @@
         <div class="hidden-place" ref="hiddenPanel" :class="{h1170:showAll}">
             <div class="hidden-place-header" flex="dir:top cross:center main:center"
                  @touchstart.stop.prevent="touchStart"
-                 @touchmove.stop.prevent="touchMove"
                  @touchend.stop.prevent="touchEnd">
                 <div class="line"></div>
                 <div class="header-text">已显示{{totalShowSize}}个结果</div>
@@ -154,10 +153,11 @@
         width: 100%;
         height: 100%;
         background-color: #f5f5f5;
-        padding-top: 88px;
+        display: flex;
+        flex-direction: column;
         .map-panel{
             width: 100%;
-            height: 100%;
+            flex: auto;
             .bm-view{
                 width: 100%;
                 height: 100%;

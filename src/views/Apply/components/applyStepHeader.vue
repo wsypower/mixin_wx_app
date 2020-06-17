@@ -43,6 +43,7 @@
     .apply-step{
         width: 100%;
         height: 160px;
+        flex: none;
         background-color: #ffffff;
         position: relative;
         .background_line{

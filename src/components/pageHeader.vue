@@ -1,5 +1,5 @@
 <template>
-    <van-nav-bar :title="title" :left-arrow="leftArrow" fixed @click-left="onClickLeft" @click-right="onClickRight">
+    <van-nav-bar :title="title" :left-arrow="leftArrow" @click-left="onClickLeft" @click-right="onClickRight">
         <template #right>
             <slot name="right"></slot>
         </template>
@@ -49,6 +49,7 @@
 .van-nav-bar{
     height: 88px;
     background-color: #306ce7;
+    flex: none;
     .van-nav-bar__left{
         padding-left: 12px;
     }

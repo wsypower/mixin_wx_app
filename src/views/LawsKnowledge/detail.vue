@@ -8,7 +8,7 @@
                 <span>{{articleInfo.publishTime|timeFormatter('YYYY-MM-DD')}}</span>
             </div>
         </div>
-        <div v-html="articleInfo.content"></div>
+        <div v-html="articleInfo.content" class="content"></div>
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -41,12 +41,14 @@
         width: 100%;
         height: 100%;
         background-color: #ffffff;
-        padding-top: 88px;
+        display: flex;
+        flex-direction: column;
         .page-top{
             height: 156px;
             width: 100%;
             border-bottom: 2px solid #e6e6e6;
             padding: 0px 32px 0px 32px;
+            flex: none;
             .title{
                 padding: 30px 0px;
                 font-family: PingFang-SC-Bold;
@@ -61,6 +63,11 @@
                 font-size: 28px;
                 color: #666666;
             }
+        }
+        .content{
+            padding: 25px;
+            flex: auto;
+            overflow-y: auto;
         }
     }
 </style>

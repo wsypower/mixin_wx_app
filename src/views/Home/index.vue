@@ -92,7 +92,8 @@
     .home{
         height: 100%;
         width: 100%;
-        padding-top: 88px;
+        display: flex;
+        flex-direction: column;
         .header-left{
             color: #fff;
             .point{
@@ -106,9 +107,10 @@
             }
         }
         .main{
-            height: 100%;
             width: 100%;
             padding: 20px 24px;
+            flex: auto;
+            overflow-y: auto;
         }
     }
 </style>

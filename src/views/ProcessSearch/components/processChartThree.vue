@@ -50,7 +50,7 @@
         width: 100%;
         padding: 0px 60px;
         .process-panel {
-            width: 110px;
+            width: 116px;
             .process-icon_wai{
                 width: 56px;
                 height: 56px;

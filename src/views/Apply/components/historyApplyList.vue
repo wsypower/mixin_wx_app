@@ -9,21 +9,19 @@
                 <div class="no-data_text">暂无办理记录~</div>
             </div>
             <div class="list-body-content">
-                <my-scroll>
-                    <div v-for="item in listData" :key="item.id" class="list-item" flex="dir:left cross:center main:justify" @click="gotoDetail(item)">
-                        <div class="list-item_left">
-                            <div flex="dir:left cross:center">
-                                <span class="item_name">{{item.name}}</span>
-                                <div flex="dir:left"><span class="item_label">品种：</span>{{item.dogType}}</div>
-                            </div>
-                            <div><span class="item_label">提交时间：</span>{{item.submitDay}}</div>
+                <div v-for="item in listData" :key="item.id" class="list-item" flex="dir:left cross:center main:justify" @click="gotoDetail(item)">
+                    <div class="list-item_left">
+                        <div flex="dir:left cross:center">
+                            <span class="item_name">{{item.name}}</span>
+                            <div flex="dir:left"><span class="item_label">品种：</span>{{item.dogType}}</div>
                         </div>
-                        <div class="list-item_right" flex="dir:left cross:center">
-                            <span class="right_status" :class="{gray: item.statusId===0,yellow:item.statusId===1,blue:item.statusId===2,red:item.statusId===3||item.statusId===5,green:item.statusId===4}">{{item.statusName}}</span>
-                            <span class="icon iconfont jt-right">&#xe60f;</span>
-                        </div>
+                        <div><span class="item_label">提交时间：</span>{{item.submitDay}}</div>
                     </div>
-                </my-scroll>
+                    <div class="list-item_right" flex="dir:left cross:center">
+                        <span class="right_status" :class="{gray: item.statusId===0,yellow:item.statusId===1,blue:item.statusId===2,red:item.statusId===3||item.statusId===5,green:item.statusId===4}">{{item.statusName}}</span>
+                        <span class="icon iconfont jt-right">&#xe60f;</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -145,6 +143,7 @@
             }
             .list-body-content{
                 height: 100%;
+                overflow-y: auto;
                 .list-item{
                     width: 702px;
                     height: 130px;

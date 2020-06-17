@@ -6,7 +6,7 @@
                 <span class="dog-item_name">{{dogData.dogName}}</span>
                 <span class="dog-item_status" :class="{warning: statusId===1,wrong: statusId===2,gray: statusId===3}">{{dogData.dogCarStatus}}</span>
             </div>
-            <div class="share_btn" flex="dir:left" v-if="needShare" @click.stop="share">
+            <div class="share_btn" flex="dir:left cross:center main:center" v-if="needShare" @click.stop="share">
                 <span class="icon iconfont icon-fenxiang3"></span>
                 <span>分享</span>
             </div>
@@ -103,7 +103,7 @@
                 color: #ffffff;
             }
             .icon-fenxiang3{
-                margin: 0px 6px 0px 14px;
+                margin: 0px 6px 0px 0px;
             }
         }
         .dog-item-img{

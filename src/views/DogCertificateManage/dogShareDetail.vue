@@ -1,7 +1,7 @@
 <template>
     <div class="share-page">
         <page-header title="犬证详情" :leftArrow="false"></page-header>
-        <div class="share-page-main" flex="dir:top main:justify">
+        <div class="share-page-main">
             <div class="share-page-main-content">
                 <div class="dog-img-bg">
                     <div class="img-panel" flex="cross:center main:center">
@@ -109,21 +109,23 @@
     .share-page{
         width: 100%;
         height: 100%;
-        padding-top: 88px;
         background-color: #f5f5f5;
+        display: flex;
+        flex-direction: column;
         .share-page-main{
             width: 100%;
-            height: 100%;
             padding: 28px 24px 46px 24px;
+            flex: auto;
+            overflow-y: auto;
             .share-page-main-content{
                 width: 100%;
                 height: 1020px;
                 background-color: #ffffff;
                 box-shadow: 0px 3px 7px 0px rgba(135, 135, 135, 0.35);
                 border-radius: 10px;
-                padding: 0px 28px;
+                padding: 40px 28px 0px 28px;
                 .dog-img-bg{
-                    margin: 40px auto 50px;
+                    margin: 0px auto 50px;
                     width: 412px;
                     height: 518px;
                     @include bg-image("~assets/images/img_bg");

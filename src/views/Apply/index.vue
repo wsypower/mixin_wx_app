@@ -82,11 +82,13 @@
         height: 100%;
         width: 100%;
         background-color: #f5f5f5;
-        padding-top: 88px;
+        display: flex;
+        flex-direction: column;
         .apply-main{
             width: 100%;
-            height: 100%;
             padding: 20px 24px;
+            flex: auto;
+            overflow-y: auto;
             .type-content{
                 .form-item{
                     margin-bottom: 34px;

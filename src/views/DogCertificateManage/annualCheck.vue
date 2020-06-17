@@ -1,13 +1,15 @@
 <template>
-    <div class="annual-check-page" flex="dir:top cross:center">
+    <div class="annual-check-page">
         <page-header title="年审记录"></page-header>
-        <order-item class="order-item"
-                    :cardInfo="item"
-                    v-for="item in cardInfoList"
-                    :key="item.orderCode"
-                    @refreshList="() => {getProcessList();}"
-                    @gotoPage="() => {gotoDetail(item);}">
-        </order-item>
+        <div class="page-main">
+            <order-item class="order-item"
+                        :cardInfo="item"
+                        v-for="item in cardInfoList"
+                        :key="item.orderCode"
+                        @refreshList="() => {getProcessList();}"
+                        @gotoPage="() => {gotoDetail(item);}">
+            </order-item>
+        </div>
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -98,9 +100,19 @@
         width: 100%;
         height: 100%;
         background-color: #f5f5f5;
-        padding: 88px 24px 20px 24px;
-        .order-item{
-            margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        .page-main{
+            width: 100%;
+            padding: 20px 24px;
+            flex: auto;
+            overflow-y: auto;
+            .order-item{
+                margin-bottom: 20px;
+                &:last-child{
+                    margin-bottom: 0px;
+                }
+            }
         }
     }
 </style>

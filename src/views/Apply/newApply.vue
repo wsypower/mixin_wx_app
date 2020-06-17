@@ -2,12 +2,10 @@
     <div class="step-page">
         <page-header title="犬证新办"></page-header>
         <apply-step-header :activeStep="activeStep"></apply-step-header>
-        <div class="page-body">
-            <my-scroll ref="myScroll">
-                <transition :name="transitionName">
-                    <router-view/>
-                </transition>
-            </my-scroll>
+        <div class="page-body" ref="myScroll">
+            <transition :name="transitionName">
+                <router-view/>
+            </transition>
         </div>
     </div>
 </template>
@@ -95,12 +93,15 @@
 .step-page{
     width: 100%;
     height: 100%;
-    padding-top: 88px;
     background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
     .page-body{
         width: 100%;
-        height: calc(100% - 160px);
-        overflow: hidden;
+        /*height: calc(100% - 160px);*/
+        /*overflow: hidden;*/
+        flex: auto;
+        overflow-y: auto;
     }
 }
 </style>

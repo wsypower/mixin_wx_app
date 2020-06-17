@@ -40,6 +40,7 @@
                 dataList: [],
                 loading: false,
                 finished: false,
+                totalSize: 0,
                 params:{
                     userId: '',
                     type: 0,  //0 制度法规 1犬类知识库
@@ -66,7 +67,10 @@
                 this.params.currentPage = this.params.currentPage + 1;
                 queryArticle(this.params).then( res => {
                     this.totalSize = res.data.count;
-                    this.dataList = res.data.queryList;
+                    this.dataList = res.data.queryList.reduce((acc, item) => {
+                        acc.push(item);
+                        return acc
+                    },this.dataList);
                     // 加载状态结束
                     this.loading = false;
                     // 数据全部加载完成

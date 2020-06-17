@@ -50,19 +50,22 @@
     .dog-manage-page{
         width: 100%;
         height: 100%;
-        padding-top: 88px;
         background-color: #f5f5f5;
+        display: flex;
+        flex-direction: column;
         .dog-manage-body{
             width: 100%;
             padding: 0px 24px;
             padding-bottom: 20px;
+            flex: auto;
+            overflow-y: auto;
             .mt20{
                 margin-top: 20px;
             }
         }
         .no-data{
             width: 100%;
-            height: 100%;
+            flex: auto;
             &_icon{
                 width: 374px;
                 height: 288px;

@@ -1,39 +1,41 @@
 <template>
     <div class="dog-detail-page">
         <page-header title="电子犬证"></page-header>
-        <dog-item :dogData="dogData" :needToDetail="false" :needShare="true" class="mt10"></dog-item>
-        <div class="message-panel">
-            <div class="row" flex="dir:left cross:center main:justify">
-                <div class="row_left">电子芯片：</div>
-                <div class="row_right" flex="dir:left cross:center">
-                    <span>{{dogData.chipNumber}}</span>
-                    <span class="sep"></span>
-                    <span class="text_btn copyCode" :data-clipboard-text="dogData.chipNumber" @click="copyCode">复制</span>
+        <div class="page-main">
+            <dog-item :dogData="dogData" :needToDetail="false" :needShare="true" class="mt10"></dog-item>
+            <div class="message-panel">
+                <div class="row" flex="dir:left cross:center main:justify">
+                    <div class="row_left">电子芯片：</div>
+                    <div class="row_right" flex="dir:left cross:center">
+                        <span>{{dogData.chipNumber}}</span>
+                        <span class="sep"></span>
+                        <span class="text_btn copyCode" :data-clipboard-text="dogData.chipNumber" @click="copyCode">复制</span>
+                    </div>
+                </div>
+                <div class="row" flex="dir:left cross:center main:justify">
+                    <div class="row_left">办理时间：</div>
+                    <div class="row_right">{{dogData.makeTime|timeFormatter('YYYY-MM-DD')}}</div>
+                </div>
+                <div class="row" flex="dir:left cross:center main:justify">
+                    <div class="row_left">年审记录：</div>
+                    <div class="row_right" @click="goToPage('ns')">
+                        <span class="icon iconfont icon-arrowRight-fill"></span>
+                    </div>
+                </div>
+                <div class="row" flex="dir:left cross:center main:justify">
+                    <div class="row_left">违规记录：</div>
+                    <div class="row_right" @click="goToPage('wg')">
+                        <span class="icon iconfont icon-arrowRight-fill"></span>
+                    </div>
                 </div>
             </div>
-            <div class="row" flex="dir:left cross:center main:justify">
-                <div class="row_left">办理时间：</div>
-                <div class="row_right">{{dogData.makeTime|timeFormatter('YYYY-MM-DD')}}</div>
+            <div v-if="dogData.dogCarStatus==='即将到期'||dogData.dogCarStatus==='已到期'" class="btn-panel" flex="dir:left cross:center main:justify">
+                <van-button type="info" class="btn pre-btn" @click="unBind">注销</van-button>
+                <van-button type="info" class="btn next-btn" @click="continuedApply">续办</van-button>
             </div>
-            <div class="row" flex="dir:left cross:center main:justify">
-                <div class="row_left">年审记录：</div>
-                <div class="row_right" @click="goToPage('ns')">
-                    <span class="icon iconfont icon-arrowRight-fill"></span>
-                </div>
+            <div v-if="dogData.dogCarStatus==='有效'" class="btn-panel" flex="dir:left cross:center main:justify">
+                <van-button type="info" class="btn" @click="unBind">注销</van-button>
             </div>
-            <div class="row" flex="dir:left cross:center main:justify">
-                <div class="row_left">违规记录：</div>
-                <div class="row_right" @click="goToPage('wg')">
-                    <span class="icon iconfont icon-arrowRight-fill"></span>
-                </div>
-            </div>
-        </div>
-        <div v-if="dogData.dogCarStatus==='即将到期'||dogData.dogCarStatus==='已到期'" class="btn-panel" flex="dir:left cross:center main:justify">
-            <van-button type="info" class="btn pre-btn" @click="unBind">注销</van-button>
-            <van-button type="info" class="btn next-btn" @click="continuedApply">续办</van-button>
-        </div>
-        <div v-if="dogData.dogCarStatus==='有效'" class="btn-panel" flex="dir:left cross:center main:justify">
-            <van-button type="info" class="btn" @click="unBind">注销</van-button>
         </div>
     </div>
 </template>
@@ -147,61 +149,65 @@
 .dog-detail-page{
     width: 100%;
     height: 100%;
-    /*padding-top: 88px;*/
     background-color: #f5f5f5;
-    padding: 88px 24px 0px 24px;
-    .mt10{
-        margin-top: 20px;
-    }
-    .message-panel{
-        margin-top: 20px;
-        background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    .page-main{
         width: 100%;
-        box-shadow: 0px 3px 7px 0px rgba(192, 192, 192, 0.35);
-        border-radius: 10px;
-        .row{
+        padding: 0px 24px 0px 24px;
+        .mt10{
+            margin-top: 20px;
+        }
+        .message-panel{
+            margin-top: 20px;
+            background-color: #ffffff;
             width: 100%;
-            height: 80px;
-            border-bottom: 2px solid #f5f5f5;
-            padding: 0px 30px 0px 40px;
-            &:last-child{
-                border-width: 0;
-            }
-            .row_left{
-                font-family: PingFang-SC-Medium;
-                font-size: 26px;
-                color: #4d4d4d;
-            }
-            .row_right{
-                font-family: PingFang-SC-Medium;
-                font-size: 28px;
-                color: #666666;
-                .sep{
-                    display: inline-block;
-                    margin: 0px 20px;
-                    width: 4px;
-                    height: 30px;
-                    background-color: #999999;
+            box-shadow: 0px 3px 7px 0px rgba(192, 192, 192, 0.35);
+            border-radius: 10px;
+            .row{
+                width: 100%;
+                height: 80px;
+                border-bottom: 2px solid #f5f5f5;
+                padding: 0px 30px 0px 40px;
+                &:last-child{
+                    border-width: 0;
                 }
-                .text_btn{
-                    color: #306ce7;
+                .row_left{
+                    font-family: PingFang-SC-Medium;
+                    font-size: 26px;
+                    color: #4d4d4d;
+                }
+                .row_right{
+                    font-family: PingFang-SC-Medium;
+                    font-size: 28px;
+                    color: #666666;
+                    .sep{
+                        display: inline-block;
+                        margin: 0px 20px;
+                        width: 4px;
+                        height: 30px;
+                        background-color: #999999;
+                    }
+                    .text_btn{
+                        color: #306ce7;
+                    }
                 }
             }
         }
-    }
-    .btn-panel{
-        height: 240px;
-        width: 100%;
-        .btn{
+        .btn-panel{
+            height: 240px;
             width: 100%;
-            height: 80px;
-        }
-        .pre-btn{
-            width: 340px;
-            background-color: #6392f4;
-        }
-        .next-btn{
-            width: 340px;
+            .btn{
+                width: 100%;
+                height: 80px;
+            }
+            .pre-btn{
+                width: 340px;
+                background-color: #6392f4;
+            }
+            .next-btn{
+                width: 340px;
+            }
         }
     }
 }

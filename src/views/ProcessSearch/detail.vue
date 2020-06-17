@@ -198,11 +198,13 @@
     .detail-page{
         width: 100%;
         height: 100%;
-        padding-top: 88px;
         background-color: #f5f5f5;
+        display: flex;
+        flex-direction: column;
         .base-panel{
             width: 100%;
             background-color: #ffffff;
+            flex: none;
             .item-row{
                 height: 68px;
                 width: 100%;
@@ -232,7 +234,8 @@
             }
         }
         .log-panel{
-            //height: calc(100% - 340px);
+            flex: auto;
+            overflow-y: auto;
             .log-header{
                 height: 90px;
                 padding-left: 24px;

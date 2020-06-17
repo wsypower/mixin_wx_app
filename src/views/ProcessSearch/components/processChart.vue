@@ -58,7 +58,7 @@
     .process-icon-panel {
         height: 156px;
         .process-panel {
-            width: 110px;
+            width: 116px;
             .process-icon_wai{
                 width: 56px;
                 height: 56px;

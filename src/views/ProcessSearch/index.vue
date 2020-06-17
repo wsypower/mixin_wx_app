@@ -1,51 +1,51 @@
 <template>
-    <div class="process-search-page" flex="dir:top cross:center">
+    <div class="process-search-page">
         <page-header title="进度查询" @clickRight="showSearchPanel">
             <div class="header-right" slot="right">
                 <span class="icon iconfont icon-sousuo1"></span>
             </div>
         </page-header>
-        <div class="search-panel"  v-show="showSearch">
-            <div class="form-item" flex="dir:left cross:center">
-                <div class="form-item-label">日期选择：</div>
-                <div class="form-item-inline" flex="dir:left cross:center main:justify">
-                    <div class="daytime" @click="showBeginTimePicker=true">
-                        <span>{{beginTimeString}}</span>
-                        <span class="icon iconfont icon-arrowBottom-fill"></span>
-                    </div>
-                    <span class="step">至</span>
-                    <div class="daytime" @click="showEndTimePicker=true">
-                        <span>{{endTimeString}}</span>
-                        <span class="icon iconfont icon-arrowBottom-fill"></span>
+        <div class="page-main">
+            <div class="search-panel"  v-show="showSearch">
+                <div class="form-item" flex="dir:left cross:center">
+                    <div class="form-item-label">日期选择：</div>
+                    <div class="form-item-inline" flex="dir:left cross:center main:justify">
+                        <div class="daytime" @click="showBeginTimePicker=true">
+                            <span>{{beginTimeString}}</span>
+                            <span class="icon iconfont icon-arrowBottom-fill"></span>
+                        </div>
+                        <span class="step">至</span>
+                        <div class="daytime" @click="showEndTimePicker=true">
+                            <span>{{endTimeString}}</span>
+                            <span class="icon iconfont icon-arrowBottom-fill"></span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-item" flex="dir:left cross:center">
-                <div class="form-item-label">办证类型：</div>
-                <div class="form-item-inline">
-                    <my-radio-group :initValue="params.cardType" :radioGroup="typeArray" @getRealValue="(name)=>{getRealValue('cardType', name)}"></my-radio-group>
+                <div class="form-item" flex="dir:left cross:center">
+                    <div class="form-item-label">办证类型：</div>
+                    <div class="form-item-inline">
+                        <my-radio-group :initValue="params.cardType" :radioGroup="typeArray" @getRealValue="(name)=>{getRealValue('cardType', name)}"></my-radio-group>
+                    </div>
                 </div>
+                <van-button type="info" class="search-btn" @click="search">查询</van-button>
             </div>
-            <van-button type="info" class="search-btn" @click="search">查询</van-button>
-        </div>
-
-
-        <div class="result-panel">
-            <div class="result-panel-header" flex="dir:left cross:center">
-                <span class="header-left">进度情况</span>
-            </div>
-            <div class="result-panel-body" v-if="cardInfoList.length>0">
-                <order-item class="order-item"
-                            :cardInfo="item"
-                            v-for="item in cardInfoList"
-                            :key="item.orderCode"
-                            @refreshList="() => {getProcessList();}"
-                            @gotoPage="() => {gotoDetail(item);}">
-                </order-item>
-            </div>
-            <div class="no-data" v-else flex="dir:top cross:center main:center">
-                <div class="no-data_icon"></div>
-                <div class="no-data_text">暂无进度</div>
+            <div class="result-panel">
+                <div class="result-panel-header" flex="dir:left cross:center">
+                    <span class="header-left">进度情况</span>
+                </div>
+                <div class="result-panel-body" v-if="cardInfoList.length>0">
+                    <order-item class="order-item"
+                                :cardInfo="item"
+                                v-for="item in cardInfoList"
+                                :key="item.orderCode"
+                                @refreshList="() => {getProcessList();}"
+                                @gotoPage="() => {gotoDetail(item);}">
+                    </order-item>
+                </div>
+                <div class="no-data" v-else flex="dir:top cross:center main:center">
+                    <div class="no-data_icon"></div>
+                    <div class="no-data_text">暂无进度</div>
+                </div>
             </div>
         </div>
         <van-popup v-model="showBeginTimePicker" position="bottom">
@@ -191,12 +191,17 @@
     width: 100%;
     height: 100%;
     background-color: #f5f5f5;
-    padding: 88px 24px 0px 24px;
+    display: flex;
+    flex-direction: column;
     .header-right{
         color: #ffffff;
         .icon-sousuo1{
             font-size: 28px;
         }
+    }
+    .page-main{
+        width: 100%;
+        padding: 0px 24px 0px 24px;
     }
     .search-panel{
         width: 100%;
@@ -204,6 +209,7 @@
         margin: 20px 0px;
         background-color: #ffffff;
         padding: 46px 30px 30px 30px;
+        flex: none;
         .form-item{
             margin-bottom: 40px;
             .form-item-label{
@@ -259,6 +265,8 @@
     }
     .result-panel{
         width: 100%;
+        flex: auto;
+        overflow-y: auto;
         .result-panel-header{
             width: 100%;
             height: 90px;
