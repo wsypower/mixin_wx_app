@@ -16,7 +16,7 @@
                 <div>有效期：{{dogData.validityStart|timeFormatter('YYYY-MM-DD')}}至{{dogData.validityEnd|timeFormatter('YYYY-MM-DD')}}</div>
                 <div>登记证号：{{dogData.dogCardNumber}}</div>
             </div>
-            <div class="dog-item-qr" :style="{ backgroundImage: backgroundImage }" @click.stop="previewQrImg(dogData.qRCodePath)"></div>
+            <div class="dog-item-qr" :style="{ backgroundImage: backgroundImage }" @click.stop="previewQrImg(dogData.imgHost + dogData.qRCodePath)"></div>
         </div>
     </div>
 </template>
@@ -51,16 +51,16 @@
            },
            backgroundImage: function(){
                if(this.statusId===0){
-                   return 'url(' + this.dogData.qRCodePath + '),linear-gradient(#0f0, #0f0)';
+                   return 'url(' + this.dogData.imgHost + this.dogData.qRCodePath + '),linear-gradient(#0f0, #0f0)';
                }
                else if(this.statusId===1){
-                    return 'url(' + this.dogData.qRCodePath + '),linear-gradient(#ffa200, #ffa200)';
+                    return 'url(' + this.dogData.imgHost + this.dogData.qRCodePath + '),linear-gradient(#ffa200, #ffa200)';
                }
                else if(this.statusId===2){
-                   return 'url(' + this.dogData.qRCodePath + '),linear-gradient(#f00, #f00)';
+                   return 'url(' + this.dogData.imgHost + this.dogData.qRCodePath + '),linear-gradient(#f00, #f00)';
                }
                else {
-                   return 'url(' + this.dogData.qRCodePath + '),linear-gradient(#999999, #999999)';
+                   return 'url(' + this.dogData.imgHost + this.dogData.qRCodePath + '),linear-gradient(#999999, #999999)';
                }
            }
         },
