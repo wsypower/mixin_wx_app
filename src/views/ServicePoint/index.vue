@@ -3,6 +3,10 @@
         <page-header title="服务点"></page-header>
         <div class="map-panel">
             <baidu-map class="bm-view" ak="fyqKIIAp1Vg3BN5KGd4ZBbhpUeuYhZW7" :center="center" :zoom="zoom" @ready="mapReadyHandler">
+                <bm-marker :key="-1"
+                           :position="{lng: pinLon, lat: pinLat}"
+                           :icon="{url: require('@/assets/images/pin.png'), size: {width: 30, height: 30}}">
+                </bm-marker>
                 <template v-for="place in mapMaskerList">
                     <bm-marker v-if="!place.active"
                                :key="place.id"
@@ -22,13 +26,16 @@
                 </template>
             </baidu-map>
         </div>
-        <div class="show-place">
-            <div class="show-place-header" flex="dir:left cross:center main:justify">
-                <span class="show-place-name">{{firstPlace.servicePointName}}</span>
-                <span class="show-place-point"><span class="icon iconfont point">&#xe63e;</span>{{(firstPlace.distance/1000).toFixed(2)}}km</span>
+        <div class="fixed-panel">
+            <div class="pin-center-btn" @click="setCenter"></div>
+            <div class="show-place">
+                <div class="show-place-header" flex="dir:left cross:center main:justify">
+                    <span class="show-place-name">{{firstPlace.servicePointName}}</span>
+                    <span class="show-place-point"><span class="icon iconfont point">&#xe63e;</span>{{(firstPlace.distance/1000).toFixed(2)}}km</span>
+                </div>
+                <div class="text-panel"><span>地址：</span><span>{{firstPlace.address}}</span></div>
+                <div class="text-panel"><span>服务时间：</span><span>{{firstPlace.serviceTime}}</span></div>
             </div>
-            <div class="text-panel"><span>地址：</span><span>{{firstPlace.address}}</span></div>
-            <div class="text-panel"><span>服务时间：</span><span>{{firstPlace.serviceTime}}</span></div>
         </div>
         <div class="hidden-place" ref="hiddenPanel" :class="{h1170:showAll}">
             <div class="hidden-place-header" flex="dir:top cross:center main:center"
@@ -67,12 +74,17 @@
                 firstPlace: {
                     id: ''
                 },
+                //当前的位置
+                pinLon: '',
+                pinLat: '',
                 mapMaskerList: [],
                 totalShowSize: 0,
                 startY: 0
             }
         },
         mounted(){
+            this.pinLon = this.$store.getters['originLon'];
+            this.pinLat = this.$store.getters['originLat'];
             this.firstPlace = this.$store.getters['service/pointInfo'];
         },
         watch:{
@@ -91,7 +103,7 @@
                     return acc
                 }, []);
                 console.log('mapMaskerList', this.mapMaskerList);
-            },
+            }
         },
         methods:{
             //地图ready之后操作
@@ -144,6 +156,11 @@
                 this.center.lng = this.firstPlace.originLon;
                 this.center.lat = this.firstPlace.originLat;
                 this.showAll = false;
+            },
+            //设置当前位置为中心位置
+            setCenter(){
+                this.center.lng = this.pinLon;
+                this.center.lat = this.pinLat;
             }
         }
     }
@@ -163,55 +180,66 @@
                 height: 100%;
             }
         }
-        .show-place{
+        .fixed-panel{
             position: fixed;
             bottom: 138px;
             left: 24px;
             right: 24px;
             z-index: 2;
-            min-height: 190px;
-            background-color: #ffffff;
-            box-shadow: 0px 3px 7px 0px rgba(192, 192, 192, 0.35);
-            border-radius: 10px;
-            padding: 20px;
-            .show-place-header{
-                .show-place-name{
-                    font-family: PingFang-SC-Bold;
-                    font-size: 28px;
-                    font-weight: bold;
-                    line-height: 50px;
-                    letter-spacing: 0px;
-                    color: #333333;
-                }
-                .show-place-point{
-                    font-family: PingFang-SC-Medium;
-                    font-size: 28px;
-                    line-height: 40px;
-                    letter-spacing: 0px;
-                    color: #4d4d4d;
-                    .point{
-                        font-size: 30px;
-                        color: #306ce7;
-                        margin-right: 10px;
+            .pin-center-btn{
+                width: 80px;
+                height: 80px;
+                box-shadow: 0px 3px 7px 0px rgba(192, 192, 192, 0.35);
+                border-radius: 10px;
+                @include bg-image("~assets/images/center");
+                background-size: 100% 100%;
+                margin-bottom: 20px;
+            }
+            .show-place{
+                min-height: 190px;
+                background-color: #ffffff;
+                box-shadow: 0px 3px 7px 0px rgba(192, 192, 192, 0.35);
+                border-radius: 10px;
+                padding: 20px;
+                .show-place-header{
+                    .show-place-name{
+                        font-family: PingFang-SC-Bold;
+                        font-size: 28px;
+                        font-weight: bold;
+                        line-height: 50px;
+                        letter-spacing: 0px;
+                        color: #333333;
+                    }
+                    .show-place-point{
+                        font-family: PingFang-SC-Medium;
+                        font-size: 28px;
+                        line-height: 40px;
+                        letter-spacing: 0px;
+                        color: #4d4d4d;
+                        .point{
+                            font-size: 30px;
+                            color: #306ce7;
+                            margin-right: 10px;
+                        }
                     }
                 }
-            }
-            .text-panel{
-                &:nth-child(n+1){
-                    line-height: 45px;
-                }
-                span:first-child{
-                    font-family: PingFang-SC-Medium;
-                    font-size: 26px;
-                    line-height: 28px;
-                    letter-spacing: 0px;
-                    color: #1e1e1e;
-                }
-                span:last-child{
-                    font-family: PingFang-SC-Regular;
-                    font-size: 26px;
-                    letter-spacing: 0px;
-                    color: #4d4d4d;
+                .text-panel{
+                    &:nth-child(n+1){
+                        line-height: 45px;
+                    }
+                    span:first-child{
+                        font-family: PingFang-SC-Medium;
+                        font-size: 26px;
+                        line-height: 28px;
+                        letter-spacing: 0px;
+                        color: #1e1e1e;
+                    }
+                    span:last-child{
+                        font-family: PingFang-SC-Regular;
+                        font-size: 26px;
+                        letter-spacing: 0px;
+                        color: #4d4d4d;
+                    }
                 }
             }
         }

@@ -30,12 +30,12 @@ export default new Vuex.Store({
       // originLon: '120.492736', // 默认绍兴柯桥区的经度
       // originLat: '30.08763', // 默认绍兴柯桥区的纬度
       // areaCode: '330603' //默认绍兴柯桥区的区域Code
-      originLon: '120.5819', // 默认绍兴越城区的经度
-      originLat: '29.98895', // 默认绍兴越城区的纬度
-      areaCode: '330602' //默认绍兴越城区的区域Code
-      // originLon: '120.13', // 默认杭州西湖区的经度
-      // originLat: '30.28', // 默认杭州西湖区的纬度
-      // areaCode: '330106' //默认杭州西湖区的区域Code
+      // originLon: '120.5819', // 默认绍兴越城区的经度
+      // originLat: '29.98895', // 默认绍兴越城区的纬度
+      // areaCode: '330602' //默认绍兴越城区的区域Code
+      originLon: '120.13', // 默认杭州西湖区的经度
+      originLat: '30.28', // 默认杭州西湖区的纬度
+      areaCode: '330106' //默认杭州西湖区的区域Code
   },
   getters: {
       isWX: state => {

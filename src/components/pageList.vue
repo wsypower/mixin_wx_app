@@ -6,8 +6,8 @@
             @load="onLoad"
             class="list-panel"
     >
-        <div class="article-item" flex="dir:left cross:center main:justify" v-for="(item,index) in dataList" :key="item.id" @click="itemClickHandle(item)">
-            <div class="top-flag" v-if="index===0">
+        <div class="article-item" flex="dir:left cross:center main:justify" v-for="item in dataList" :key="item.id" @click="itemClickHandle(item)">
+            <div class="top-flag" v-if="item.stick===1">
                 <span class="icon iconfont icon-zhiding"></span><span>置顶</span>
             </div>
             <div class="message" flex="dir:top main:justify">
@@ -16,7 +16,7 @@
                 <div class="time">{{item.publishTime|timeFormatter('YYYY-MM-DD')}}</div>
             </div>
             <div class="img-panel" flex="cross:center main:center">
-                <img :src="item.imageUrl" />
+                <img :src="item.imageUrl" @error="imgError()"/>
             </div>
         </div>
     </van-list>
@@ -27,7 +27,7 @@
     export default {
         name: 'pageList',
         components:{
-            [List.name]: List,
+            [List.name]: List
         },
         props:{
             type:{
@@ -41,6 +41,7 @@
                 loading: false,
                 finished: false,
                 totalSize: 0,
+                defaultImg: require('@/assets/images/default@3x.png'),
                 params:{
                     userId: '',
                     type: 0,  //0 制度法规 1犬类知识库
@@ -61,6 +62,11 @@
             this.params.type = this.type;
         },
         methods:{
+            imgError(){
+                let img = event.srcElement;
+                img.src = this.defaultImg;
+                img.onerror = null; //防止闪图
+            },
             //list加载数据
             onLoad() {
                 console.log('0009998887777666');
@@ -153,6 +159,8 @@
                 background-color: #666666;
                 border-radius: 10px;
                 overflow: hidden;
+                @include bg-image("~assets/images/default");
+                background-size: 100% 100%;
                 img{
                     width: 100%;
                 }
