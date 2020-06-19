@@ -5,7 +5,7 @@
             <div class="share-page-main-content">
                 <div class="dog-img-bg">
                     <div class="img-panel" flex="cross:center main:center">
-                        <img :src="dogDetail.dogPhotoFront" />
+                        <img :src="dogDetail.imgHost + dogDetail.dogPhotoFront" />
                     </div>
                 </div>
                 <div class="message-panel" flex="dir:left cross:center">
@@ -68,6 +68,8 @@
                 dogDetail:{
                     //犬昵称
                     dogName: '',
+                    //附件的IP以及端口
+                    imgHost: '',
                     //犬正面照
                     dogPhotoFront: '',
                     //犬性别
