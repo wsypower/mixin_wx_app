@@ -189,11 +189,9 @@
             .pin-center-btn{
                 width: 80px;
                 height: 80px;
-                box-shadow: 0px 3px 7px 0px rgba(192, 192, 192, 0.35);
-                border-radius: 10px;
                 @include bg-image("~assets/images/center");
                 background-size: 100% 100%;
-                margin-bottom: 20px;
+                margin-bottom: 10px;
             }
             .show-place{
                 min-height: 190px;

@@ -6,7 +6,7 @@
                 <span class="address">{{areaName}}</span>
             </div>
         </page-header>
-        <div class="main" flex="dir:top cross:center">
+        <div class="main">
             <top :dogCards="dogCards"></top>
             <operate></operate>
             <service-place></service-place>
