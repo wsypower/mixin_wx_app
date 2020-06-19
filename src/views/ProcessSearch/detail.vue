@@ -1,49 +1,51 @@
 <template>
     <div class="detail-page">
         <page-header title="预约单号查询"></page-header>
-        <div class="base-panel">
-            <div class="item-row" flex="dir:left cross:center main:justify">
-                <div class="item-row-left">预约单号：</div>
-                <div class="item-row-right">{{orderInfo.orderNo}}</div>
+        <div class="page-main">
+            <div class="base-panel">
+                <div class="item-row" flex="dir:left cross:center main:justify">
+                    <div class="item-row-left">预约单号：</div>
+                    <div class="item-row-right">{{orderInfo.orderNo}}</div>
+                </div>
+                <div class="item-row" flex="dir:left cross:center main:justify">
+                    <div class="item-row-left">办证类型：</div>
+                    <div class="item-row-right">{{orderInfo.cardType}}</div>
+                </div>
+                <div class="item-row" flex="dir:left cross:center main:justify">
+                    <div class="item-row-left">犬主姓名：</div>
+                    <div class="item-row-right">{{orderInfo.ownerName}}</div>
+                </div>
+                <div class="item-row" flex="dir:left cross:center main:justify">
+                    <div class="item-row-left">宠物昵称：</div>
+                    <div class="item-row-right">{{orderInfo.dogName}}</div>
+                </div>
+                <div class="item-row" flex="dir:left cross:center main:justify">
+                    <div class="item-row-left">宠物品种：</div>
+                    <div class="item-row-right">{{orderInfo.breed}}</div>
+                </div>
             </div>
-            <div class="item-row" flex="dir:left cross:center main:justify">
-                <div class="item-row-left">办证类型：</div>
-                <div class="item-row-right">{{orderInfo.cardType}}</div>
-            </div>
-            <div class="item-row" flex="dir:left cross:center main:justify">
-                <div class="item-row-left">犬主姓名：</div>
-                <div class="item-row-right">{{orderInfo.ownerName}}</div>
-            </div>
-            <div class="item-row" flex="dir:left cross:center main:justify">
-                <div class="item-row-left">宠物昵称：</div>
-                <div class="item-row-right">{{orderInfo.dogName}}</div>
-            </div>
-            <div class="item-row" flex="dir:left cross:center main:justify">
-                <div class="item-row-left">宠物品种：</div>
-                <div class="item-row-right">{{orderInfo.breed}}</div>
-            </div>
-        </div>
-        <div class="log-panel">
-            <div class="log-header" flex="dir:left cross:center">
-                <span class="header-left">申办进度</span>
-            </div>
-            <div class="log-body" flex="dir:top main:justify">
-                <div class="log-body-main">
-                    <div class="log-item" flex="dir:left" v-for="item in orderInfo.logList" :key="item.id">
-                        <div class="log-item-left">{{item.operatorTime||item.createtime|timeFormatter}}</div>
-                        <div class="log-item-right">
-                            <div class="dot"></div>
-                            <div class="message" :class="{wrong: item.stepCode==='25'||item.stepCode==='45'||item.stepCode==='85'}">
-                                <span v-if="item.stepCode==='25'||item.stepCode==='45'||item.stepCode==='85'">审核未通过，原因：</span>
-                                <span>{{item.remark||item.stepName}}</span>
-                                <span v-if="item.stepCode==='20'">，请到服务点申领狗牌</span>
-                                <div v-if="item.stepCode==='20'" @click="goToServicePage">服务点：<span class="icon iconfont icon-dingwei"></span><span class="service">{{orderInfo.serviceName}}</span></div>
+            <div class="log-panel">
+                <div class="log-header" flex="dir:left cross:center">
+                    <span class="header-left">申办进度</span>
+                </div>
+                <div class="log-body" flex="dir:top main:justify">
+                    <div class="log-body-main">
+                        <div class="log-item" flex="dir:left" v-for="item in orderInfo.logList" :key="item.id">
+                            <div class="log-item-left">{{item.operatorTime||item.createtime|timeFormatter}}</div>
+                            <div class="log-item-right">
+                                <div class="dot"></div>
+                                <div class="message" :class="{wrong: item.stepCode==='25'||item.stepCode==='45'||item.stepCode==='85'}">
+                                    <span v-if="item.stepCode==='25'||item.stepCode==='45'||item.stepCode==='85'">审核未通过，原因：</span>
+                                    <span>{{item.remark||item.stepName}}</span>
+                                    <span v-if="item.stepCode==='20'">，请到服务点申领狗牌</span>
+                                    <div v-if="item.stepCode==='20'" @click="goToServicePage">服务点：<span class="icon iconfont icon-dingwei"></span><span class="service">{{orderInfo.serviceName}}</span></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="btn-panel" flex="dir:top cross:center main:center" v-show="showButton">
-                    <van-button type="info" class="op-btn" @click="goToPage">{{buttonName}}</van-button>
+                    <div class="btn-panel" flex="dir:top cross:center main:center" v-show="showButton">
+                        <van-button type="info" class="op-btn" @click="goToPage">{{buttonName}}</van-button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -201,10 +203,13 @@
         background-color: #f5f5f5;
         display: flex;
         flex-direction: column;
+        .page-main{
+            flex:auto;
+            overflow-y: auto;
+        }
         .base-panel{
             width: 100%;
             background-color: #ffffff;
-            flex: none;
             .item-row{
                 height: 68px;
                 width: 100%;
@@ -234,8 +239,6 @@
             }
         }
         .log-panel{
-            flex: auto;
-            overflow-y: auto;
             .log-header{
                 height: 90px;
                 padding-left: 24px;
@@ -253,7 +256,6 @@
                 width: 100%;
                 background-color: #ffffff;
                 padding-top: 40px;
-                height: calc(100% - 90px);
                 .log-body-main{
                     height: 100%;
                     width: 100%;

@@ -202,6 +202,8 @@
     .page-main{
         width: 100%;
         padding: 0px 24px 0px 24px;
+        flex: auto;
+        overflow-y: auto;
     }
     .search-panel{
         width: 100%;
