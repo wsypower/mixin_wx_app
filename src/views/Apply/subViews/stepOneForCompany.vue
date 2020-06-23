@@ -418,6 +418,7 @@
                     userId: this.submitData.userId,
                     idCard: this.submitData.idCard
                 }
+                let imgHost = this.imageList.idCardFront.split(this.submitData.idCardFront)[0];
                 queryDogByOwnerIdCard(params).then(res => {
                     if (res.errno === 0) {
                         //验证码判断
@@ -427,6 +428,7 @@
                                 this.$store.commit('updateIsLoading', false);
                                 console.log(res, res);
                                 if (res.errno === 0) {
+                                    this.submitData.imgHost = imgHost;
                                     this.$store.commit('order/updateOrderInfo', {dogOrderId: res.data.orderId});
                                     this.$store.commit('order/updateOrderInfo', this.submitData);
                                     this.$router.push('/newApply/stepTwo');

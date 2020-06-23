@@ -301,7 +301,7 @@
             }
         },
         mounted(){
-            //从缓存中读入素有orderInfo数据，适用于新建与编辑
+            //从缓存中读入所有orderInfo数据，适用于新建与编辑
             const orderInfo = this.$store.getters['order/orderInfo'];
             console.log('orderInfo', orderInfo);
             Object.keys(this.submitData).forEach(key=>{
@@ -547,6 +547,8 @@
                     userId: this.submitData.userId,
                     idCard: this.submitData.idCard||this.submitData.passport
                 }
+                //新办时得到imgHost
+                let imgHost = this.imageList.idCardFront.split(this.submitData.idCardFront)[0];
                 queryDogByOwnerIdCard(params).then(res => {
                     if(res.errno===0){
                         //验证码判断
@@ -556,6 +558,7 @@
                                 this.$store.commit('updateIsLoading', false);
                                 console.log(res, res);
                                 if(res.errno === 0){
+                                    this.submitData.imgHost = imgHost;
                                     this.$store.commit('order/updateOrderInfo', this.submitData);
                                     this.$store.commit('order/updateOrderInfo', {dogOrderId: res.data.orderId});
                                     this.$router.push('/newApply/stepTwo');
