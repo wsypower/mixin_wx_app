@@ -160,7 +160,6 @@ class VueWechat {
         wx.ready(async function() {
           resolve(true);
           await store.dispatch("wechat/setLoginStatus", 1);
-          console.log("鉴权成功");
         });
         wx.error(function(res) {
           reject(res);

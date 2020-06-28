@@ -16,7 +16,7 @@ import vueWechatTitle from "vue-wechat-title";
 import service from "./request/index";
 // 淘宝的flexbile 增加一个修正字体字号大小的影响
 import "./flexbile/index";
-// TODO:微信鉴权（如果是微信环境才会执行内部鉴权，否则注册空插件）
+// 微信鉴权（如果是微信环境才会执行内部鉴权，否则打断注册页面）
 import wechatAuth from "@/plugins/environment/wx/wechatAuth";
 
 // 环境判断
