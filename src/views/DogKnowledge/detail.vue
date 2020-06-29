@@ -72,6 +72,9 @@
         }
         .content{
             padding: 25px;
+            ::v-deep img{
+                width: 100%;
+            }
         }
     }
 </style>

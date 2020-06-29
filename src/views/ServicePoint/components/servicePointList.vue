@@ -49,12 +49,22 @@
             userId: function(){
                 return this.$store.getters['userId'];
             },
+            areaCode: function(){
+                return this.$store.getters['areaCode'];
+            }
         },
         watch:{
             userId: function(newValue){
                 if(newValue!=='xxx'){
                     this.onLoad();
                 }
+            },
+            areaCode: function(){
+                this.currentPage = 0;
+                this.placeList = [];
+                this.loading = false;
+                this.finished = false;
+                this.onLoad();
             }
         },
         methods:{
@@ -66,41 +76,44 @@
                     this.loading = false;
                     return
                 }
-                // let Bmap = this.BMap;
                 //获取范围内的服务点
                 let originLon = this.$store.getters['originLon'];
                 let originLat = this.$store.getters['originLat'];
-                let areaCode = this.$store.getters['areaCode'];
                 let params = {
                     userId :this.userId,
                     originLon,
                     originLat,
-                    areaCode,
+                    areaCode: this.areaCode,
                     currentPage: ++this.currentPage,
                     pageSize: this.pageSize
                 }
                 queryDogServicePoint(params).then( res => {
                     this.totalSize = res.data.totalCount;
-                    this.placeList = res.data.list.reduce((acc,item) => {
-                        let temp = {
-                            id: item.id,
-                            servicePointName: item.servicePointName,
-                            originLat: item.latitude,
-                            originLon: item.longitude,
-                            distance: item.distance,
-                            address: item.address,
-                            serviceTime: item.serviceBeginTime + '至' + item.serviceEndTime + ' ' + item.serviceTime
-                        }
-                        acc.push(temp);
-                        return acc
-                    },this.placeList);
+                    if(res.data.list){
+                        this.placeList = res.data.list.reduce((acc,item) => {
+                            let temp = {
+                                id: item.id,
+                                servicePointName: item.servicePointName,
+                                originLat: item.latitude,
+                                originLon: item.longitude,
+                                distance: item.distance,
+                                address: item.address,
+                                serviceTime: item.serviceBeginTime + '至' + item.serviceEndTime + ' ' + item.serviceTime
+                            }
+                            acc.push(temp);
+                            return acc
+                        },this.placeList);
+                    }
+                    else{
+                        this.placeList = [];
+                    }
                     // 加载状态结束
                     this.loading = false;
                     // 数据全部加载完成
                     if (this.placeList.length >= this.totalSize) {
                         this.finished = true;
                     }
-                    if(this.needMakePoint){
+                    if(this.needMakePoint&&this.placeList.length>0){
                         let firstPlace = this.placeList[0];
                         let mapMaskerList = this.placeList.reduce((acc,item) => {
                             if(item.id !== firstPlace.id){

@@ -55,7 +55,6 @@
             width: 100%;
             border-bottom: 2px solid #e6e6e6;
             padding: 0px 32px 0px 32px;
-            flex: none;
             .title{
                 padding: 30px 0px;
                 font-family: PingFang-SC-Bold;
@@ -73,8 +72,9 @@
         }
         .content{
             padding: 25px;
-            flex: auto;
-            overflow-y: auto;
+            ::v-deep img{
+                width: 100%;
+            }
         }
     }
 </style>

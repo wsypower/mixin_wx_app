@@ -16,7 +16,7 @@
                 <div class="time">{{item.publishTime|timeFormatter('YYYY-MM-DD')}}</div>
             </div>
             <div class="img-panel" flex="cross:center main:center">
-                <img :src="item.imageUrl" @error="imgError()"/>
+                <img :src="item.picPath" @error="imgError()"/>
             </div>
         </div>
     </van-list>
@@ -162,7 +162,7 @@
                 @include bg-image("~assets/images/default");
                 background-size: 100% 100%;
                 img{
-                    width: 100%;
+                    height: 100%;
                 }
             }
         }

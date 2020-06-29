@@ -35,7 +35,8 @@ export default new Vuex.Store({
       // areaCode: '330602' //默认绍兴越城区的区域Code
       originLon: '120.13', // 默认杭州西湖区的经度
       originLat: '30.28', // 默认杭州西湖区的纬度
-      areaCode: '330106' //默认杭州西湖区的区域Code
+      areaCode: '330106', //默认杭州西湖区的区域Code
+      areaName: '西湖区'
   },
   getters: {
       isWX: state => {
@@ -55,6 +56,9 @@ export default new Vuex.Store({
       },
       areaCode: state =>{
           return state.areaCode
+      },
+      areaName: state =>{
+          return state.areaName
       }
   },
   mutations: {
@@ -85,6 +89,10 @@ export default new Vuex.Store({
       // 设置区域Code
       updateAreaCode(state, areaCode) {
           state.areaCode = areaCode;
+      },
+      //设置区域名称
+      updateAreaName(state, areaName) {
+          state.areaName = areaName;
       },
   },
   actions: {},

@@ -2,11 +2,20 @@
     <div class="home">
         <page-header title="养犬管理" :leftArrow="false">
             <div class="header-left" slot="left">
-                <span class="icon iconfont point">&#xe63e;</span>
-                <span class="address">{{areaName}}</span>
+<!--                <span class="icon iconfont point">&#xe63e;</span>-->
+                <span class="icon iconfont icon-dingwei point"></span>
+                <span class="address" @click="()=>{this.isNone=false;this.isDown=true;}">{{areaName}}</span>
+                <span class="icon iconfont icon-arrowBottom-fill"></span>
             </div>
         </page-header>
         <div class="main">
+            <div class="mask" v-show="isDown" @click="isDown=false"></div>
+            <ul class="city-choice animate__animated animate__faster" :class="{animate__fadeInDown: isDown, animate__fadeOutUp: !isDown, none: isNone}">
+                <li v-for="city in cityData"
+                    :key="city.code"
+                    :class="{active: city.code===isActiveCode}"
+                @click="changeCity(city)">{{city.name}}</li>
+            </ul>
             <top :dogCards="dogCards"></top>
             <operate></operate>
             <service-place></service-place>
@@ -35,23 +44,76 @@
                 interval: null,
                 dogCards: [],
                 servePlaceList: [],
-                areaName: '越城区',
+                isNone: true,
+                isDown: false,
+                cityData:[
+                    {
+                        name: '越城区',
+                        code: '330602',
+                        latitude: '29.98895',
+                        longitude: '120.5819'
+                    },
+                    {
+                        name: '柯桥区',
+                        code: '330603',
+                        latitude: '30.08763',
+                        longitude: '120.492736'
+                    },
+                    {
+                        name: '上虞区',
+                        code: '330604',
+                        latitude: '30.078038',
+                        longitude: '120.476075'
+                    },
+                    {
+                        name: '诸暨市',
+                        code: '330681',
+                        latitude: '29.71358',
+                        longitude: '120.23629'
+                    },
+                    {
+                        name: '嵊州市',
+                        code: '330683',
+                        latitude: '29.58854',
+                        longitude: '120.82174'
+                    },
+                    {
+                        name: '新昌县',
+                        code: '330624',
+                        latitude: '29.49991',
+                        longitude: '120.90435'
+                    }
+                ]
+            }
+        },
+        computed: {
+            areaName: function(){
+                return this.$store.getters['areaName']
+            },
+            isActiveCode: function(){
+                return this.$store.getters['areaCode']
             }
         },
         mounted(){
-            externalMethods.getPosition().then(res =>{
-                console.log('position', res)
-                this.areaName = res.district;
-                this.$store.commit('updateOriginLat',res.latitude);
-                this.$store.commit('updateOriginLon',res.longitude);
-                this.$store.commit('updateAreaCode',res.adcode);
+            //定位只使用一次
+            if(this.isActiveCode==='330106'){
+                externalMethods.getPosition().then(res =>{
+                    console.log('position', res)
+                    this.$store.commit('updateOriginLat',res.latitude);
+                    this.$store.commit('updateOriginLon',res.longitude);
+                    this.$store.commit('updateAreaCode',res.adcode);
+                    this.$store.commit('updateAreaName',res.district);
+                    this.getData();
+                }).catch(err => {
+                    console.log('getPosition', err);
+                    this.getData();
+                });
+                // this.getData();
+                // this.cycleTime();
+            }
+            else{
                 this.getData();
-            }).catch(err => {
-                console.log('getPosition', err);
-                this.getData();
-            });
-            // this.getData();
-            // this.cycleTime();
+            }
         },
 
         methods: {
@@ -85,6 +147,13 @@
                     this.getDogCard(this.$store.getters['userId'])
                 }, 1800000);
             },
+            changeCity(city){
+                this.$store.commit('updateOriginLat',city.latitude);
+                this.$store.commit('updateOriginLon',city.longitude);
+                this.$store.commit('updateAreaCode',city.code);
+                this.$store.commit('updateAreaName',city.name);
+                this.isDown = false;
+            }
         }
     }
 </script>
@@ -111,6 +180,95 @@
             padding: 20px 24px;
             flex: auto;
             overflow-y: auto;
+            .mask{
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                z-index: 2;
+                background-color: transparent;
+            }
+            .city-choice{
+                position: absolute;
+                z-index: 3;
+                left: 44px;
+                top: 88px;
+                width: 130px;
+                background-color: #ffffff;
+                box-shadow: 0px 3px 7px 0px rgba(153, 153, 153, 0.5);
+                border-radius: 0px 0px 4px 4px;
+                &.none{
+                    display: none;
+                }
+                li{
+                    height: 59px;
+                    width: 100%;
+                    line-height: 59px;
+                    border-bottom: 2px solid #e6e6e6;
+                    text-align: center;
+                    font-family: PingFang-SC-Regular;
+                    font-size: 28px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    letter-spacing: 0px;
+                    color: #666666;
+                    &.active{
+                        color: #306ce7;
+                    }
+                    &:last-child{
+                        border-bottom: 0px;
+                    }
+                }
+            }
+        }
+    }
+</style>
+<style lang="scss">
+    @-webkit-keyframes fadeOutUp {
+        from {
+            display: block;
+        }
+
+        to {
+            display:none;
+            -webkit-transform: translate3d(0, -150%, 0);
+            transform: translate3d(0, -150%, 0);
+        }
+    }
+    @keyframes fadeOutUp {
+        from {
+            display: block;
+        }
+
+        to {
+            display:none;
+            -webkit-transform: translate3d(0, -150%, 0);
+            transform: translate3d(0, -150%, 0);
+        }
+    }
+    @-webkit-keyframes fadeInDown {
+        from {
+            display:none;
+            -webkit-transform: translate3d(0, -100%, 0);
+            transform: translate3d(0, -100%, 0);
+        }
+
+        to {
+            display: block;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+        }
+    }
+    @keyframes fadeInDown {
+        from {
+            display:none;
+            -webkit-transform: translate3d(0, -100%, 0);
+            transform: translate3d(0, -100%, 0);
+        }
+
+        to {
+            display: block;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
         }
     }
 </style>

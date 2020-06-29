@@ -47,6 +47,7 @@
 </script>
 <style lang="scss">
 .van-nav-bar{
+    z-index: 5;
     height: 88px;
     background-color: #306ce7;
     flex: none;
