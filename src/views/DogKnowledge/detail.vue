@@ -73,7 +73,19 @@
         .content{
             padding: 25px;
             ::v-deep img{
-                width: 100%;
+                max-width: 100%;
+            }
+            ::v-deep p{
+                font-size: 24px;
+                line-height: 32px;
+                margin: 0px !important;
+            }
+            ::v-deep p img{
+                margin: 0 auto;
+                display: block;
+            }
+            ::v-deep span{
+                font-size: 24px;
             }
         }
     }
