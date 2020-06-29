@@ -83,8 +83,8 @@
             }
         },
         mounted(){
-            this.pinLon = this.$store.getters['originLon'];
-            this.pinLat = this.$store.getters['originLat'];
+            this.pinLon = this.$store.getters['curOriginLon'];
+            this.pinLat = this.$store.getters['curOriginLat'];
             this.firstPlace = this.$store.getters['service/pointInfo'];
         },
         watch:{

@@ -36,7 +36,9 @@ export default new Vuex.Store({
       originLon: '120.13', // 默认杭州西湖区的经度
       originLat: '30.28', // 默认杭州西湖区的纬度
       areaCode: '330106', //默认杭州西湖区的区域Code
-      areaName: '西湖区'
+      areaName: '西湖区',
+      curOriginLon: '', // 当前位置的经度
+      curOriginLat: '', // 当前位置的纬度
   },
   getters: {
       isWX: state => {
@@ -59,6 +61,12 @@ export default new Vuex.Store({
       },
       areaName: state =>{
           return state.areaName
+      },
+      curOriginLon: state =>{
+          return state.curOriginLon
+      },
+      curOriginLat: state =>{
+          return state.curOriginLat
       }
   },
   mutations: {
@@ -93,6 +101,14 @@ export default new Vuex.Store({
       //设置区域名称
       updateAreaName(state, areaName) {
           state.areaName = areaName;
+      },
+      //设置当前位置的经度
+      updateCurOriginLon(state, curOriginLon) {
+          state.curOriginLon = curOriginLon;
+      },
+      //设置当前位置的纬度
+      updateCurOriginLat(state, curOriginLat) {
+          state.curOriginLat = curOriginLat;
       },
   },
   actions: {},

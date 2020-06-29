@@ -58,8 +58,15 @@
         },
         mounted(){
             this.params.userId = this.$store.getters['userId'];
-            this.params.areaCode = this.$store.getters['areaCode'];
             this.params.type = this.type;
+            if(this.params.type===1){
+                this.params.areaCode = '';
+            }
+            else{
+                this.params.areaCode = this.$store.getters['areaCode'];
+            }
+
+
         },
         methods:{
             imgError(){

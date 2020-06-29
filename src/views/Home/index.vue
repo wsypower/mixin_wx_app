@@ -5,7 +5,7 @@
 <!--                <span class="icon iconfont point">&#xe63e;</span>-->
                 <span class="icon iconfont icon-dingwei point"></span>
                 <span class="address" @click="()=>{this.isNone=false;this.isDown=true;}">{{areaName}}</span>
-                <span class="icon iconfont icon-arrowBottom-fill"></span>
+                <span class="icon iconfont icon-arrowBottom-fill jt-down" :class="{rotate90: isDown}"></span>
             </div>
         </page-header>
         <div class="main">
@@ -103,6 +103,8 @@
                     this.$store.commit('updateOriginLon',res.longitude);
                     this.$store.commit('updateAreaCode',res.adcode);
                     this.$store.commit('updateAreaName',res.district);
+                    this.$store.commit('updateCurOriginLat',res.latitude);
+                    this.$store.commit('updateCurOriginLon',res.longitude);
                     this.getData();
                 }).catch(err => {
                     console.log('getPosition', err);
@@ -173,6 +175,18 @@
                 font-family: PingFang-SC-Medium;
                 font-size: 28px;
                 letter-spacing: 1px;
+            }
+            .jt-down{
+                display: inline-block;
+                font-size: 28px;
+                transition: transform 0.3s;
+                &.rotate90{
+                    transform:rotate(180deg);
+                    -ms-transform:rotate(180deg); 	/* IE 9 */
+                    -moz-transform:rotate(180deg); 	/* Firefox */
+                    -webkit-transform:rotate(180deg); /* Safari 和 Chrome */
+                    -o-transform:rotate(180deg); 	/* Opera */
+                }
             }
         }
         .main{
