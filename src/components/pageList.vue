@@ -16,7 +16,7 @@
                 <div class="time">{{item.publishTime|timeFormatter('YYYY-MM-DD')}}</div>
             </div>
             <div class="img-panel" flex="cross:center main:center">
-                <img :src="item.picPath" @error="imgError()"/>
+                <img :src="item.picPath" :onerror="defaultImg"/>
             </div>
         </div>
     </van-list>
@@ -41,7 +41,7 @@
                 loading: false,
                 finished: false,
                 totalSize: 0,
-                defaultImg: require('@/assets/images/default@3x.png'),
+                defaultImg: 'this.src="' + require('@/assets/images/default@3x.png') + '"',
                 params:{
                     userId: '',
                     type: 0,  //0 制度法规 1犬类知识库
@@ -65,15 +65,8 @@
             else{
                 this.params.areaCode = this.$store.getters['areaCode'];
             }
-
-
         },
         methods:{
-            imgError(){
-                let img = event.srcElement;
-                img.src = this.defaultImg;
-                img.onerror = null; //防止闪图
-            },
             //list加载数据
             onLoad() {
                 console.log('0009998887777666');
@@ -81,6 +74,7 @@
                 queryArticle(this.params).then( res => {
                     this.totalSize = res.data.count;
                     this.dataList = res.data.queryList.reduce((acc, item) => {
+                        item.picPath = item.picPath||'123';
                         acc.push(item);
                         return acc
                     },this.dataList);
@@ -163,10 +157,9 @@
             .img-panel{
                 width: 200px;
                 height: 150px;
-                background-color: #666666;
+                background-color: #aaaaaa;
                 border-radius: 10px;
                 overflow: hidden;
-                @include bg-image("~assets/images/default");
                 background-size: 100% 100%;
                 img{
                     height: 100%;
