@@ -228,6 +228,45 @@
         mixins: [myMixin],
         data(){
             return {
+                // 所有区县的集合
+                cityData:[
+                    {
+                        name: '越城区',
+                        code: '330602',
+                        latitude: '29.98895',
+                        longitude: '120.5819'
+                    },
+                    {
+                        name: '柯桥区',
+                        code: '330603',
+                        latitude: '30.08763',
+                        longitude: '120.492736'
+                    },
+                    {
+                        name: '上虞区',
+                        code: '330604',
+                        latitude: '30.078038',
+                        longitude: '120.476075'
+                    },
+                    {
+                        name: '诸暨市',
+                        code: '330681',
+                        latitude: '29.71358',
+                        longitude: '120.23629'
+                    },
+                    {
+                        name: '嵊州市',
+                        code: '330683',
+                        latitude: '29.58854',
+                        longitude: '120.82174'
+                    },
+                    {
+                        name: '新昌县',
+                        code: '330624',
+                        latitude: '29.49991',
+                        longitude: '120.90435'
+                    }
+                ],
                 //展示时间选择（出生日期、领养日期、免疫登记日期）
                 showBirthdatePicker: false,
                 showAdoptTimePicker: false,
@@ -332,11 +371,13 @@
                     return acc
                 },[]);
             });
+            let region = this.$store.getters['order/orderInfo'].region;
+            let city = this.cityData.find(item => item.name===region);
             let paramsService = {
                 userId,
-                originLon,
-                originLat,
-                areaCode,
+                originLon: city.longitude,
+                originLat: city.latitude,
+                areaCode: city.code,
                 currentPage: -1,
                 pageSize: -1
             }

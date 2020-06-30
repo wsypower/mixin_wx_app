@@ -2,7 +2,6 @@
     <div class="home">
         <page-header title="养犬管理" :leftArrow="false">
             <div class="header-left" slot="left">
-<!--                <span class="icon iconfont point">&#xe63e;</span>-->
                 <span class="icon iconfont icon-dingwei point"></span>
                 <span class="address" @click="()=>{this.isNone=false;this.isDown=!this.isDown}">{{areaName}}</span>
                 <span class="icon iconfont icon-arrowBottom-fill jt-down" :class="{rotate90: isDown}"></span>
