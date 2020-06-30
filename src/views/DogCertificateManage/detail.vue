@@ -60,7 +60,7 @@
                     dogCardNumber: ''
                 },
                 dogData: {
-                    qRCodePath: require('@/assets/images/no_data@2x.png')
+                    qrCodePath: require('@/assets/images/no_data@2x.png')
                 }
             }
         },
@@ -91,7 +91,7 @@
                             chipNumber: res.data.chipNumber,
                             ownerName: res.data.ownerName,
                             phone: res.data.phone,
-                            qRCodePath: res.data.qRCodePath,
+                            qrCodePath: res.data.qrCodePath,
                             makeTime: res.data.makeTime
                         }
                         this.$store.commit('dog/updateDogInfo', this.dogData);

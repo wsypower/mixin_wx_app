@@ -4,7 +4,7 @@
             <div class="header-left" slot="left">
 <!--                <span class="icon iconfont point">&#xe63e;</span>-->
                 <span class="icon iconfont icon-dingwei point"></span>
-                <span class="address" @click="()=>{this.isNone=false;this.isDown=true;}">{{areaName}}</span>
+                <span class="address" @click="()=>{this.isNone=false;this.isDown=!this.isDown}">{{areaName}}</span>
                 <span class="icon iconfont icon-arrowBottom-fill jt-down" :class="{rotate90: isDown}"></span>
             </div>
         </page-header>
@@ -99,10 +99,20 @@
             if(this.isActiveCode==='330106'){
                 externalMethods.getPosition().then(res =>{
                     console.log('position', res)
-                    this.$store.commit('updateOriginLat',res.latitude);
-                    this.$store.commit('updateOriginLon',res.longitude);
-                    this.$store.commit('updateAreaCode',res.adcode);
-                    this.$store.commit('updateAreaName',res.district);
+                    //当定位区域不在这个cityData范围内，则默认定位到越城区
+                    let index = this.cityData.findIndex(item => item.name === res.district);
+                    if(index<0){
+                        this.$store.commit('updateOriginLat','29.98895');
+                        this.$store.commit('updateOriginLon','120.5819');
+                        this.$store.commit('updateAreaCode','330602');
+                        this.$store.commit('updateAreaName','越城区');
+                    }
+                    else{
+                        this.$store.commit('updateOriginLat',res.latitude);
+                        this.$store.commit('updateOriginLon',res.longitude);
+                        this.$store.commit('updateAreaCode',res.adcode);
+                        this.$store.commit('updateAreaName',res.district);
+                    }
                     this.$store.commit('updateCurOriginLat',res.latitude);
                     this.$store.commit('updateCurOriginLon',res.longitude);
                     this.getData();
