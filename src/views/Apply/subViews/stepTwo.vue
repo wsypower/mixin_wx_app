@@ -351,26 +351,25 @@
         },
         mounted(){
             let userId = this.$store.getters['userId'];
-            let originLon = this.$store.getters['originLon'];
-            let originLat = this.$store.getters['originLat'];
-            let areaCode = this.$store.getters['areaCode'];
+            //获取免疫点数据：免疫地点不受区县的限制，所以areaCode传空代表查询全部数据
             let paramsImmuneSite = {
                 userId,
-                areaCode,
+                areaCode: ''
             }
-            //获取免疫点数据
             queryImmuneSite(paramsImmuneSite).then( res => {
                 this.immuneAddressColumns = res.data.reduce((acc,item) => {
                     acc.push(item.servicePointName);
                     return acc
                 },[]);
             });
+            //获取犬类数据
             queryDogType().then( res => {
                 this.breedColumns = res.data.reduce((acc,item) => {
                     acc.push(item.name);
                     return acc
                 },[]);
             });
+            //获取意向点数据：数据范围根据现居住地改变
             let region = this.$store.getters['order/orderInfo'].region;
             let city = this.cityData.find(item => item.name===region);
             let paramsService = {
@@ -381,7 +380,6 @@
                 currentPage: -1,
                 pageSize: -1
             }
-            //获取意向点数据
             queryDogServicePoint(paramsService).then( res => {
                 this.siteColumns = res.data.reduce((acc, item) => {
                     let temp = {
