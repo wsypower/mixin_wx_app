@@ -11,7 +11,7 @@ export default {
   wx: {
     wechatId: "af21e2c0033e11e96b2df410224d169f",
     debug: false,
-    jsApiList: ["chooseImage"],
+    jsApiList: ["chooseImage", "getLocalImgData"],
     getJsdkMdUrl: "http://wyf.vipgz4.idcfengye.com/wechat/stage/jump/getJsdkMd",
   },
 
