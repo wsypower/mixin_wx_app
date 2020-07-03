@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     clickHandler() {
-      native.camera({ count: 5 });
+      native.album({ count: 5 });
     }
   }
 };

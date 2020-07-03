@@ -19,7 +19,7 @@ class WxPro {
    *
    * ------------------------------------------
    * TODO：
-   * 本想用Promise.all 做并发处理，但是发现就没返回值
+   * 本想用Promise.all 做并发处理getLocalImgData，但是发现就没返回值
    * @example
    * const imgDataBase = localIds.map((id) => {
    *  return this.getLocalImgData({ localId: id });
@@ -28,29 +28,60 @@ class WxPro {
    *
    * --------------------------------------------
    */
-  async camera({ count } = {}) {
+  // 192.168.33:9000/file/file/uploadBase64,//uploadBase64
+  async album({ count } = {}) {
     try {
-      // 等待徐图片选择完毕，取得localIds数组
-      const { localIds } = await this.chooseImage({
-        count: count, // 默认9
-        sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: ["album"], // 可以指定来源是相册还是相机，默认二者都有
-      });
-      // localIds数组变为获取本地图片的promise函数在promise.all中做并发处理;
-      const baseImagesResult = [];
-      for (let i = 0; i < localIds.length; i++) {
-        const res = await this.getLocalImgData({ localId: localIds[i] });
-        baseImagesResult.push(res);
-      }
-
-      console.log("result=======>", baseImagesResult);
+      const { localIds } = await this._wx_album(count);
+      const base64Images = await this._wx_Base64(localIds);
+      console.log("result=======>", base64Images);
     } catch (error) {
       console.log(error);
     }
   }
+
   // ====================================================== //
   // ======================== 私有方法 ======================== //
   // ====================================================== //
+  /**
+   * @description
+   * 网络请求
+   */
+  _request() {}
+  /**
+   * @description
+   * wx相册选择
+   */
+  _wx_album(count) {
+    // 等待徐图片选择完毕，取得localIds数组
+    return this.chooseImage({
+      count: count, // 默认9
+      sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
+      sourceType: ["album"], // 可以指定来源是相册还是相机，默认二者都有
+    });
+  }
+  /**
+   * @description
+   * 转换为base64
+   */
+  async _wx_Base64(localIds) {
+    try {
+      const baseImagesResult = [];
+      for (let i = 0; i < localIds.length; i++) {
+        const { localData } = await this.getLocalImgData({
+          localId: localIds[i],
+        });
+        //判断是否有这样的头部
+        // ios/安卓适配
+        if (localData.indexOf("data:image") != 0) {
+          localData += "data:image/jpg;base64,";
+        }
+        baseImagesResult.push(localData);
+      }
+      return baseImagesResult;
+    } catch (error) {
+      console.log(error);
+    }
+  }
   /**
    * @description
    * 将需要promise化的属性放入asyncMethods中,自动修改为promise Api

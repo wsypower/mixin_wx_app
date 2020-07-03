@@ -25,8 +25,8 @@ class Native {
    * @date 2020-06-30  16:29:59
    * @param {Number} count
    */
-  camera({ count = 9 } = {}) {
-    return this.env.camera({ count });
+  album({ count = 9 } = {}) {
+    return this.env.album({ count });
   }
   // 判断环境并返回当前环境的jsApi
   isNavigator() {
