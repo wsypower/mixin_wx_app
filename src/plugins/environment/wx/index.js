@@ -50,6 +50,7 @@ class WxPro {
   /**
    * @description
    * wx相册选择
+   * @param { Number } count
    */
   _wx_album(count) {
     // 等待徐图片选择完毕，取得localIds数组
