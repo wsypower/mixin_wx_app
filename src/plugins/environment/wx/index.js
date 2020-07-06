@@ -1,5 +1,6 @@
 import wx from "weixin-js-sdk";
-
+import axios from "axios";
+import qs from "qs";
 // 需要变为promise的方法
 const asyncMethods = ["chooseImage", "getLocalImgData"];
 
@@ -13,51 +14,96 @@ class WxPro {
   }
   /**
    * @description
+   * 手机相册中选图接口
+   * @author wsy
+   * @date 2020-06-28  17:08:51
+   */
+  album({ count, url } = {}) {
+    return new Promise((resolve, reject) => {
+      return this.mediaSelect("album", { count, url })
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+  //
+  /**
+   * @description
+   * 拍照选图接口
+   * @author wsy
+   * @date 2020-06-28  17:08:51
+   */
+  camera({ count = 1, url } = {}) {
+    return new Promise((resolve, reject) => {
+      return this.mediaSelect("camera", { count, url })
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+  /**
+   * @description
    * 拍照或从手机相册中选图接口
    * @author wsy
    * @date 2020-06-28  17:08:51
-   *
-   * ------------------------------------------
-   * TODO：
-   * 本想用Promise.all 做并发处理getLocalImgData，但是发现就没返回值
-   * @example
-   * const imgDataBase = localIds.map((id) => {
-   *  return this.getLocalImgData({ localId: id });
-   * });
-   * const result = await Promise.all(imgDataBase);
-   *
-   * --------------------------------------------
    */
-  // 192.168.33:9000/file/file/uploadBase64,//uploadBase64
-  async album({ count } = {}) {
+  async mediaSelect(media, { count, url } = {}) {
     try {
-      const { localIds } = await this._wx_album(count);
+      // 获取微信本地localIds数组
+      const { localIds } = await this._wx_album(count, media);
+      // 调用微信格式转换 将id转为base64
       const base64Images = await this._wx_Base64(localIds);
-      console.log("result=======>", base64Images);
+      // 并发处理上传服务器
+      const imgDataBase = base64Images.map((base64Image) => {
+        return this._request(url, qs.stringify({ base64Data: base64Image }));
+      });
+      const result = await Promise.all(imgDataBase);
+      return result.map((imgs) => imgs[0]);
     } catch (error) {
-      console.log(error);
+      throw new Error(error);
     }
   }
-
   // ====================================================== //
   // ======================== 私有方法 ======================== //
   // ====================================================== //
   /**
    * @description
-   * 网络请求
+   * 附件服务器请求
    */
-  _request() {}
+  _request(url, data) {
+    return new Promise((resolve, reject) => {
+      axios({
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        url,
+        data,
+      })
+        .then(({ data }) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    });
+  }
   /**
    * @description
-   * wx相册选择
+   * wx相册选择、相机
    * @param { Number } count
    */
-  _wx_album(count) {
+  _wx_album(count, media = "album") {
     // 等待徐图片选择完毕，取得localIds数组
+    let mediaSelect = media === "album" ? ["album"] : ["camera"];
     return this.chooseImage({
       count: count, // 默认9
       sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
-      sourceType: ["album"], // 可以指定来源是相册还是相机，默认二者都有
+      sourceType: mediaSelect, // 可以指定来源是相册还是相机，默认二者都有
     });
   }
   /**
