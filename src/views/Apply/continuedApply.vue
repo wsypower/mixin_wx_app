@@ -101,6 +101,7 @@
     import { queryImmuneSite } from '@/api/common.js'
     import { bidDogCard } from '@/api/apply.js'
     import { queryPidDogCard } from '@/api/process.js'
+    import myMixin from '@/utils/mixin.js';
     export default{
         name: 'continuedApply',
         components:{
@@ -114,6 +115,7 @@
             [DatetimePicker.name]: DatetimePicker,
             UploadImage
         },
+        mixins: [myMixin],
         data(){
             return {
                 //展示免疫地点选项

@@ -545,7 +545,8 @@
                 //身份证判断
                 let params = {
                     userId: this.submitData.userId,
-                    idCard: this.submitData.idCard||this.submitData.passport
+                    idCard: this.submitData.idCard||this.submitData.passport,
+                    phone: this.submitData.phone
                 }
                 //新办时得到imgHost
                 let imgHost = this.imageList.idCardFront.split(this.submitData.idCardFront)[0];

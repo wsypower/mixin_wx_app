@@ -416,7 +416,8 @@
                 }
                 let params = {
                     userId: this.submitData.userId,
-                    idCard: this.submitData.idCard
+                    idCard: this.submitData.idCard,
+                    phone: this.submitData.phone
                 }
                 let imgHost = this.imageList.idCardFront.split(this.submitData.idCardFront)[0];
                 queryDogByOwnerIdCard(params).then(res => {
