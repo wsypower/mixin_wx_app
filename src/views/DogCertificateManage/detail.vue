@@ -16,15 +16,15 @@
                     <div class="row_left">办理时间：</div>
                     <div class="row_right">{{dogData.makeTime|timeFormatter('YYYY-MM-DD')}}</div>
                 </div>
-                <div class="row" flex="dir:left cross:center main:justify">
+                <div class="row" flex="dir:left cross:center main:justify" @click="goToPage('ns')">
                     <div class="row_left">年审记录：</div>
-                    <div class="row_right" @click="goToPage('ns')">
+                    <div class="row_right">
                         <span class="icon iconfont icon-arrowRight-fill"></span>
                     </div>
                 </div>
-                <div class="row" flex="dir:left cross:center main:justify">
+                <div class="row" flex="dir:left cross:center main:justify" @click="goToPage('wg')">
                     <div class="row_left">违规记录：</div>
-                    <div class="row_right" @click="goToPage('wg')">
+                    <div class="row_right">
                         <span class="icon iconfont icon-arrowRight-fill"></span>
                     </div>
                 </div>
@@ -190,6 +190,9 @@
                     }
                     .text_btn{
                         color: #306ce7;
+                    }
+                    .icon-arrowRight-fill{
+                        font-size: 28px;
                     }
                 }
             }

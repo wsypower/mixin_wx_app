@@ -48,9 +48,9 @@ Vue.use(vuescroll, {
     },
     name: 'myScroll' // 在这里自定义组件名字，默认是vueScroll
 });
-// import Vconsole from 'vconsole'
-// let vConsole = new Vconsole()
-// Vue.use(vConsole)
+import Vconsole from 'vconsole'
+let vConsole = new Vconsole()
+Vue.use(vConsole)
 // Vue.config.productionTip = false;
 new Vue({
   router,

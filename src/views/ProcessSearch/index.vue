@@ -1,7 +1,7 @@
 <template>
     <div class="process-search-page">
-        <page-header title="进度查询" @clickRight="showSearchPanel">
-            <div class="header-right" slot="right">
+        <page-header title="进度查询">
+            <div class="header-right" slot="right" @click="showSearchPanel">
                 <span class="icon iconfont icon-sousuo1"></span>
             </div>
         </page-header>

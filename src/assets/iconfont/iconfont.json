@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "10019542",
+      "name": "退出",
+      "font_class": "exittuichu",
+      "unicode": "e6cb",
+      "unicode_decimal": 59083
+    },
+    {
+      "icon_id": "1362400",
+      "name": "放大",
+      "font_class": "fangda",
+      "unicode": "e826",
+      "unicode_decimal": 59430
+    },
+    {
       "icon_id": "8802640",
       "name": "置顶",
       "font_class": "zhiding",

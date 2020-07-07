@@ -6,6 +6,10 @@
                 <span class="address" @click="()=>{this.isNone=false;this.isDown=!this.isDown}">{{areaName}}</span>
                 <span class="icon iconfont icon-arrowBottom-fill jt-down" :class="{rotate90: isDown}"></span>
             </div>
+            <div class="header-right" slot="right" flex="dir:left cross:center main:center" @click="toParentPage">
+                <span class="icon iconfont icon-exittuichu"></span>
+                <span>退出</span>
+            </div>
         </page-header>
         <div class="main">
             <div class="mask" v-show="isDown" @click="isDown=false"></div>
@@ -164,6 +168,9 @@
                 this.$store.commit('updateAreaCode',city.code);
                 this.$store.commit('updateAreaName',city.name);
                 this.isDown = false;
+            },
+            toParentPage(){
+                window.location.href = URL_CONFIG.csgjUrl;
             }
         }
     }
@@ -196,6 +203,21 @@
                     -webkit-transform:rotate(180deg); /* Safari 和 Chrome */
                     -o-transform:rotate(180deg); 	/* Opera */
                 }
+            }
+        }
+        .header-right{
+            color: #ffffff;
+            border-radius: 20px;
+            border: solid 1px #ffffff;
+            padding: 0px 10px;
+            span{
+                font-family: PingFang-SC-Medium;
+                font-size: 26px;
+                letter-spacing: 0.5px;
+                color: #ffffff;
+            }
+            .icon-exittuichu{
+                margin-right:4px;
             }
         }
         .main{
