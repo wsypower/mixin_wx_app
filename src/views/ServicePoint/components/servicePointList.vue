@@ -11,6 +11,7 @@
                 <span class="place-item-point"><span class="icon iconfont point">&#xe63e;</span>{{(item.distance/1000).toFixed(2)}}km</span>
             </div>
             <div class="text-panel"><span>地址：</span><span>{{item.address}}</span></div>
+            <div class="text-panel"><span>电话：</span><span>{{item.servicePhone}}</span></div>
             <div class="text-panel"><span>服务时间：</span><span>{{item.serviceTime}}</span></div>
         </div>
     </van-list>
@@ -94,6 +95,7 @@
                             let temp = {
                                 id: item.id,
                                 servicePointName: item.servicePointName,
+                                servicePhone: item.phone,
                                 originLat: item.latitude,
                                 originLon: item.longitude,
                                 distance: item.distance,

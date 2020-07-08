@@ -23,6 +23,7 @@
                 let pointInfo = {
                     id: place.id,
                     servicePointName: place.servicePointName,
+                    servicePhone: place.servicePhone,
                     distance: place.distance,
                     address: place.address,
                     serviceTime: place.serviceTime,

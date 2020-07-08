@@ -5,6 +5,7 @@ export default {
         pointInfo:{
             id: '',
             servicePointName: '',
+            servicePhone: '',
             distance: 0,
             address: '',
             serviceTime: '',

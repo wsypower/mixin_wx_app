@@ -132,6 +132,7 @@
                                 let pointInfo = {
                                     id: item.dogServicePoint.id,
                                     servicePointName: item.dogServicePoint.servicePointName,
+                                    servicePhone: item.phone,
                                     distance: item.dogServicePoint.distance,
                                     address: item.dogServicePoint.address,
                                     serviceTime: item.dogServicePoint.serviceTime,
