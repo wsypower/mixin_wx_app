@@ -83,7 +83,7 @@
                     dogSex: item.dogSex,
                     hairColor: item.hairColor,
                     adoptServiceName: item.adoptServiceName,
-                    phone: item.phone,
+                    servicePhone: item.servicePhone,
                     adoptBeginTime: item.adoptBeginTime,
                     adoptEndTime: item.adoptEndTime,
                     dogPhotoFront: item.dogPhotoFront,

@@ -15,7 +15,7 @@
             </div>
             <div class="row" flex="dir:left cross:center">
                 <span>联系电话：</span>
-                <span>{{dogInfo.phone}}</span>
+                <span>{{dogInfo.servicePhone}}</span>
             </div>
             <div class="row" flex="dir:left cross:center">
                 <span>领养时间：</span>

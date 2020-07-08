@@ -9,7 +9,7 @@ export default {
             dogSex: "",
             hairColor: "",
             adoptServiceName: "",
-            phone: "",
+            servicePhone: "",
             adoptBeginTime: "",
             adoptEndTime: "",
             dogPhotoFront: "",
