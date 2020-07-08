@@ -30,7 +30,7 @@
                 },{
                     iconClass: 'cwly',
                     name: '宠物领养',
-                    path: ''
+                    path: '' ///dogAdopt
                 },{
                     iconClass: 'zdfg',
                     name: '制度法规',
