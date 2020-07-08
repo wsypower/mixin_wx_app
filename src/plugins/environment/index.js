@@ -1,19 +1,26 @@
 import WxJSApi from "./wx";
-import { hesc } from "hesc-jsapi";
+// import { hesc } from "hesc-jsapi";
+import hescJSApi from "./hesc";
 // 浏览器环境
 const environment = {
   micromessenger: WxJSApi,
-  hesc: hesc,
+  hesc: hescJSApi,
 };
 
 class Native {
   constructor() {
     this.env = null;
     this.inti();
-    console.log("this.env", this.env);
+    console.log(this.env);
   }
   inti() {
     this.env = this.isNavigator();
+  }
+  // ====================================================== //
+  // ====================== 获取地理位置接口 ====================== //
+  // ====================================================== //
+  getLocation({ type = "wgs84" } = {}) {
+    return this.env.getLocation({ type: type });
   }
   // ====================================================== //
   // ======================== 调用相册 ======================== //
@@ -31,14 +38,54 @@ class Native {
   } = {}) {
     return this.env.album({ count, url });
   }
-  camera({ url = "http://192.168.71.33:50000/file/file/uploadBase64" } = {}) {
-    return this.env.camera({ url });
-  }
-
   // ====================================================== //
   // ======================== 调用相机 ======================== //
   // ====================================================== //
-  // 判断环境并返回当前环境的jsApi
+  camera({ url = "http://192.168.71.33:50000/file/file/uploadBase64" } = {}) {
+    return this.env.camera({ url });
+  }
+  // ====================================================== //
+  // ============== 自定义“分享给朋友”及“分享到QQ”按钮的分享内容 ========== //
+  // ====================================================== //
+
+  updateAppMessageShareData({
+    title = "", // 分享标题
+    desc = "", // 分享描述
+    link = "", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+    imgUrl = "", // 分享图标
+  } = {}) {
+    return this.env.updateAppMessageShareData({
+      title,
+      desc,
+      link,
+      imgUrl,
+    });
+  }
+  // ====================================================== //
+  // ============ 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容 ============ //
+  // ====================================================== //
+  updateTimelineShareData({
+    title = "", // 分享标题
+    link = "", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+    imgUrl = "", // 分享图标
+  } = {}) {
+    return new Promise((resolve, reject) => {
+      this.env.ready(() => {
+        this.env
+          .updateTimelineShareData({
+            title,
+            link,
+            imgUrl,
+          })
+          .then((res) => {
+            resolve(res);
+          });
+      });
+    });
+  }
+  // ====================================================== //
+  // ================== 判断环境并返回当前环境的jsApi ============= //
+  // ====================================================== //
   isNavigator() {
     if (typeof navigator === "undefined") return;
     var ua = navigator.userAgent.toLowerCase();

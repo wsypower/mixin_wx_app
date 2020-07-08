@@ -19,7 +19,16 @@
       class="ceshi"
       @click="clickHandlerCamera"
     >测试打开摄像机</div>
+    <div
+      class="ceshi"
+      @click="getLocation"
+    >测试获取点位</div>
+    <div
+      class="ceshi"
+      @click="updateAppMessageShareData"
+    >测试分享</div>
   </div>
+
 </template>
 
 <script>
@@ -40,6 +49,9 @@ export default {
   created() {
     console.log("首页开始");
   },
+  mounted() {
+    //this.updateAppMessageShareData();
+  },
   activated() {
     console.log("复用的页面");
   },
@@ -48,7 +60,7 @@ export default {
   },
   methods: {
     clickHandler({
-      count = 1,
+      count = 9,
       url = "http://192.168.71.33:50000/file/file/uploadBase64"
     }) {
       native.album({ count, url }).then(res => {
@@ -66,6 +78,22 @@ export default {
         this.imgs = res.map(v => v.newPath);
         console.log(this.imgs);
       });
+    },
+    getLocation() {
+      native.getLocation().then(res => {
+        console.log("这是点位坐标点", res);
+      });
+    },
+    updateAppMessageShareData() {
+      native
+        .updateTimelineShareData({
+          title: "测试123123",
+          link: "http://192.168.86.10:9527/#/",
+          imgUrl: "../assets/images/no_data@2x.png"
+        })
+        .then(res => {
+          console.log(res);
+        });
     }
   }
 };

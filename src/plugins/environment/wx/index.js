@@ -1,8 +1,9 @@
 import wx from "weixin-js-sdk";
 import axios from "axios";
 import qs from "qs";
+import def from "@/settings.js";
 // 需要变为promise的方法
-const asyncMethods = ["chooseImage", "getLocalImgData"];
+const asyncMethods = def.wx["jsApiList"];
 
 class WxPro {
   constructor(wx) {
@@ -69,6 +70,22 @@ class WxPro {
       throw new Error(error);
     }
   }
+  // ====================================================== //
+  // ====================== 获取地理位置接口 ====================== //
+  // ====================================================== //
+  // getLocation({ type = "wgs84" } = {}) {
+  //   return new Promise((resolve, reject) => {
+  //     this.wx.getLocation({
+  //       type: type, // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+  //       success: function(res) {
+  //         var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+  //         var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+  //         var speed = res.speed; // 速度，以米/每秒计
+  //         var accuracy = res.accuracy; // 位置精度
+  //       },
+  //     });
+  //   });
+  // }
   // ====================================================== //
   // ======================== 私有方法 ======================== //
   // ====================================================== //
