@@ -15,10 +15,10 @@
                     </div>
                     <div class="message" flex="dir:top main:justify">
                         <div flex="dir:left main:justify"><span class="title">{{item.dogName}}</span><span class="message-text">品种：{{item.breed}}</span></div>
-                        <div class="message-text">领养服务点：{{item.address}}</div>
+                        <div class="message-text">领养服务点：{{item.adoptServiceName}}</div>
                     </div>
                     <div class="img-panel" flex="cross:center main:center">
-                        <img :src="item.dogPhoto[0]" :onerror="defaultImg"/>
+                        <img :src="item.picPath" :onerror="defaultImg"/>
                     </div>
                 </div>
             </van-list>
@@ -45,7 +45,6 @@
                 defaultImg: 'this.src="' + require('@/assets/images/default@3x.png') + '"',
                 params:{
                     userId: '',
-                    areaCode: '',
                     currentPage: 0,
                     pageSize: 10
                 }
@@ -59,66 +58,38 @@
             onLoad() {
                 console.log('adopt dog list data');
                 this.params.currentPage = this.params.currentPage + 1;
-                let temp1 = {
-                    id: '001',
-                    dogName: '花花1',
-                    breed: '柴犬',
-                    dogSex: '母',
-                    hairColor: '红色',
-                    address: 'xxxx服务点',
-                    phone: '18909867876',
-                    time: '2020-07-07',
-                    starttime: '2020-07-07',
-                    endtime: '',
-                    dogPhoto: ['123','']
-                }
-                let temp2 = {
-                    id: '002',
-                    dogName: '花花公子',
-                    breed: '阿拉斯加',
-                    dogSex: '公',
-                    hairColor: '土黄色',
-                    address: 'xxxxx服务点',
-                    phone: '18765789090x',
-                    starttime: '2020-07-07',
-                    endtime: '',
-                    dogPhoto: ['123']
-                }
-                let temp3 = {
-                    id: '003',
-                    dogName: '花花3',
-                    breed: '田园犬',
-                    dogSex: '公',
-                    hairColor: '黄白相间',
-                    address: 'yyyy服务点',
-                    phone: '12098979000',
-                    starttime: '2020-07-07',
-                    endtime: '',
-                    dogPhoto: ['123']
-                }
-                this.adoptDogList.push(temp1);
-                this.adoptDogList.push(temp2);
-                this.adoptDogList.push(temp3);
-                this.totalSize = 3;
-                this.loading = false;
-                this.finished = true;
-                // queryArticle(this.params).then( res => {
-                //     this.totalSize = res.data.count;
-                //     this.dataList = res.data.queryList.reduce((acc, item) => {
-                //         item.picPath = item.picPath||'123';
-                //         acc.push(item);
-                //         return acc
-                //     },this.dataList);
-                //     // 加载状态结束
-                //     this.loading = false;
-                //     // 数据全部加载完成
-                //     if (this.dataList.length >= this.totalSize) {
-                //         this.finished = true;
-                //     }
-                // });
+                queryAllAdoptDog(this.params).then( res => {
+                    this.totalSize = res.data.count;
+                    this.adoptDogList = res.data.queryList.reduce((acc, item) => {
+                        item.picPath = item.imgHost + (item.dogPhotoFront || item.dogPhotoBack);
+                        item.dogPhotoFront = item.imgHost + item.dogPhotoFront;
+                        item.dogPhotoBack = item.imgHost + item.dogPhotoBack;
+                        acc.push(item);
+                        return acc
+                    },this.adoptDogList);
+                    // 加载状态结束
+                    this.loading = false;
+                    // 数据全部加载完成
+                    if (this.adoptDogList.length >= this.totalSize) {
+                        this.finished = true;
+                    }
+                });
             },
             itemClickHandle(item){
-                this.$store.commit('adoptdog/updateDogInfo',item);
+                let temp = {
+                    id: item.id,
+                    dogName: item.dogName,
+                    breed: item.breed,
+                    dogSex: item.dogSex,
+                    hairColor: item.hairColor,
+                    adoptServiceName: item.adoptServiceName,
+                    phone: item.phone,
+                    adoptBeginTime: item.adoptBeginTime,
+                    adoptEndTime: item.adoptEndTime,
+                    dogPhotoFront: item.dogPhotoFront,
+                    dogPhotoBack: item.dogPhotoBack
+                }
+                this.$store.commit('adoptdog/updateDogInfo',temp);
                 this.$router.push('/dogAdopt/detail');
             }
         }

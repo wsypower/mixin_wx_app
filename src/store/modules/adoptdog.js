@@ -8,11 +8,12 @@ export default {
             breed: "",
             dogSex: "",
             hairColor: "",
-            address: "",
+            adoptServiceName: "",
             phone: "",
-            starttime: "",
-            endtime: "",
-            dogPhoto: [],
+            adoptBeginTime: "",
+            adoptEndTime: "",
+            dogPhotoFront: "",
+            dogPhotoBack: ""
         }
     },
     getters: {

@@ -7,7 +7,7 @@ import request from '@/plugins/request/index'
  */
 export const queryArticle = data => {
     return request({
-        url: `/dogKnowledge/queryDogCard/${data.userId}`,
+        url: `/dogKnowledge/queryDogKnowledge/${data.userId}`,
         method: 'post',
         params: data
     })

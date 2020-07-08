@@ -11,7 +11,7 @@
                 <div class="col" flex="dir:left cross:center"><span>毛色：</span><span class="value-text">{{dogInfo.hairColor}}</span></div>
             </div>
             <div class="row" flex="dir:left cross:center">
-                <span>领养服务点：</span><span>{{dogInfo.address}}</span>
+                <span>领养服务点：</span><span>{{dogInfo.adoptServiceName}}</span>
             </div>
             <div class="row" flex="dir:left cross:center">
                 <span>联系电话：</span>
@@ -19,12 +19,13 @@
             </div>
             <div class="row" flex="dir:left cross:center">
                 <span>领养时间：</span>
-                <span>{{dogInfo.starttime}}~{{dogInfo.endtime}}</span>
+                <span>{{dogInfo.adoptBeginTime|timeFormatter('YYYY-MM-DD')}}~{{dogInfo.adoptEndTime|timeFormatter('YYYY-MM-DD')}}</span>
             </div>
             <div class="row" flex="dir:top">
                 <span>宠物照片：</span>
                 <div class="photo-panel" flex="dir:top cross:center">
-                    <img v-for="(pic, index) in dogInfo.dogPhoto" :key="index"  :src="pic" :onerror="defaultImg"/>
+                    <img :src="dogInfo.dogPhotoFront" :onerror="defaultImg"/>
+                    <img :src="dogInfo.dogPhotoBack" :onerror="defaultImg"/>
                 </div>
             </div>
         </div>
@@ -47,9 +48,7 @@ export default {
             return this.$store.getters['adoptdog/dogInfo'];
         }
     },
-    mounted() {
-
-    },
+    mounted() {}
 }
 </script>
 <style lang="scss" scoped>

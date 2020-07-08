@@ -112,18 +112,18 @@
                 this.center.lng = this.firstPlace.originLon || this.$store.getters['originLon'];
                 this.center.lat = this.firstPlace.originLat || this.$store.getters['originLat'];
                 this.zoom = 15;
-                console.log('this.center',this.center.lng,  this.center.lat);
+                //console.log('this.center',this.center.lng,  this.center.lat);
             },
             touchStart(e){
-                console.log('touchStart', e);
+                //console.log('touchStart', e);
                 let touch = e.touches[0]; //获取第一个触点
                 this.startY = Number(touch.pageY);
             },
             touchEnd(e){
-                console.log('touchEnd', e);
+                //console.log('touchEnd', e);
                 let touch = e.changedTouches[0]; //获取最后一个触点
                 let y = Number(touch.pageY);
-                console.log(this.startY - y);
+                //console.log(this.startY - y);
                 let panelHeight = this.$refs.hiddenPanel.offsetHeight;
                 if(this.startY - y >0){
                     this.showAll = true;

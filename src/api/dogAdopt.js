@@ -7,7 +7,7 @@ import request from '@/plugins/request/index'
  */
 export const queryAllAdoptDog = data => {
     return request({
-        url: `/dogCard/queryDogCard/${data.userId}`,
+        url: `/dogKnowledge/queryDogAdopt/${data.userId}`,
         method: 'post',
         params: data
     })
