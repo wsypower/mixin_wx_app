@@ -11,13 +11,14 @@
                 <span class="place-item-point"><span class="icon iconfont point">&#xe63e;</span>{{(item.distance/1000).toFixed(2)}}km</span>
             </div>
             <div class="text-panel"><span>地址：</span><span>{{item.address}}</span></div>
-            <div class="text-panel"><span>电话：</span><span>{{item.servicePhone}}</span></div>
+            <div class="text-panel"><span>电话：</span><span @click="phoneToService(item.servicePhone)">{{item.servicePhone}}</span></div>
             <div class="text-panel"><span>服务时间：</span><span>{{item.serviceTime}}</span></div>
         </div>
     </van-list>
 </template>
 <script type="text/ecmascript-6">
     import { List } from 'vant';
+    import externalMethods from '@/utils/externalMethods/index.js'
     import { queryDogServicePoint } from '@/api/home.js'
     export default {
         name: 'servicePointList',
@@ -71,7 +72,7 @@
         methods:{
             //list加载数据
             onLoad() {
-                console.log('777777777777777777777777');
+                //console.log('777777777777777777777777');
                 if(this.userId === 'xxx'){
                     // 加载状态结束
                     this.loading = false;
@@ -135,6 +136,10 @@
             },
             itemClickHandle(point){
                 this.$emit('itemClickHandle', point);
+            },
+            phoneToService(servicePhone){
+                //服务中心电话
+                externalMethods.telephone(servicePhone).then(()=>{})
             }
         }
     }

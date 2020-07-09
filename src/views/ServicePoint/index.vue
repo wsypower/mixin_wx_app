@@ -34,7 +34,7 @@
                     <span class="show-place-point"><span class="icon iconfont point">&#xe63e;</span>{{(firstPlace.distance/1000).toFixed(2)}}km</span>
                 </div>
                 <div class="text-panel"><span>地址：</span><span>{{firstPlace.address}}</span></div>
-                <div class="text-panel"><span>电话：</span><span>{{firstPlace.servicePhone}}</span></div>
+                <div class="text-panel"><span>电话：</span><span @click="phoneToService(firstPlace.servicePhone)">{{firstPlace.servicePhone}}</span></div>
                 <div class="text-panel"><span>服务时间：</span><span>{{firstPlace.serviceTime}}</span></div>
             </div>
         </div>
@@ -57,6 +57,7 @@
     import bmMarker from 'vue-baidu-map/components/overlays/Marker.vue'
     import bmLabel from 'vue-baidu-map/components/overlays/Label.vue'
     import ServicePointList from './components/servicePointList.vue';
+    import externalMethods from '@/utils/externalMethods/index.js'
     export default {
         name: 'service',
         components:{
@@ -103,13 +104,13 @@
                     acc.push(item);
                     return acc
                 }, []);
-                console.log('mapMaskerList', this.mapMaskerList);
+                //console.log('mapMaskerList', this.mapMaskerList);
             }
         },
         methods:{
             //地图ready之后操作
             mapReadyHandler({BMap, map}) {
-                console.log(BMap, map);
+                //console.log(BMap, map);
                 this.center.lng = this.firstPlace.originLon || this.$store.getters['originLon'];
                 this.center.lat = this.firstPlace.originLat || this.$store.getters['originLat'];
                 this.zoom = 15;
@@ -121,11 +122,8 @@
                 this.startY = Number(touch.pageY);
             },
             touchEnd(e){
-                //console.log('touchEnd', e);
                 let touch = e.changedTouches[0]; //获取最后一个触点
                 let y = Number(touch.pageY);
-                //console.log(this.startY - y);
-                let panelHeight = this.$refs.hiddenPanel.offsetHeight;
                 if(this.startY - y >0){
                     this.showAll = true;
                 }
@@ -133,12 +131,7 @@
                     this.showAll = false;
                 }
                 else{
-                    if(panelHeight<100){
-                        this.showAll = true;
-                    }
-                    else{
-                        this.showAll = false;
-                    }
+                    this.showAll = !this.showAll;
                 }
             },
             //得到所有地图点位
@@ -162,6 +155,11 @@
             setCenter(){
                 this.center.lng = this.pinLon;
                 this.center.lat = this.pinLat;
+            },
+            //打电话至服务点
+            phoneToService(servicePhone){
+                //服务中心电话
+                externalMethods.telephone(servicePhone).then(()=>{})
             }
         }
     }
@@ -252,7 +250,7 @@
             background-color: #f0f1f8;
             box-shadow: 0px 10px 18px 2px rgba(0, 0, 0, 0.8);
             border-radius: 20px 20px 0px 0px;
-            transition: height 0.5s;
+            transition: height 0.3s;
             &.h1170{
                 height: 1170px;
             }

@@ -15,7 +15,7 @@
             </div>
             <div class="row" flex="dir:left cross:center">
                 <span>联系电话：</span>
-                <span>{{dogInfo.servicePhone}}</span>
+                <span @click="phoneToService(dogInfo.servicePhone)">{{dogInfo.servicePhone}}</span>
             </div>
             <div class="row" flex="dir:left cross:center">
                 <span>领养时间：</span>
@@ -33,6 +33,7 @@
 </template>
 <script type="text/ecmascript-6">
 import PageHeader from '@/components/pageHeader.vue';
+import externalMethods from '@/utils/externalMethods/index.js'
 export default {
     name: 'detail',
     components:{
@@ -48,7 +49,14 @@ export default {
             return this.$store.getters['adoptdog/dogInfo'];
         }
     },
-    mounted() {}
+    mounted() {},
+    methods:{
+        //打电话至服务点
+        phoneToService(servicePhone){
+            //服务中心电话
+            externalMethods.telephone(servicePhone).then(()=>{})
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>
