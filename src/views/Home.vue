@@ -50,7 +50,9 @@ export default {
     console.log("首页开始");
   },
   mounted() {
-    //this.updateAppMessageShareData();
+    native.getNetworkType().then(res => {
+      console.log(res);
+    });
   },
   activated() {
     console.log("复用的页面");
@@ -60,27 +62,26 @@ export default {
   },
   methods: {
     clickHandler({
-      count = 9,
+      count = 1,
       url = "http://192.168.71.33:50000/file/file/uploadBase64"
     }) {
-      native.album({ count, url }).then(res => {
+      native.ty_album({ count, url }).then(res => {
         console.log("调用结果回调", res);
         this.imgs = res.map(v => v.newPath);
         console.log(this.imgs);
       });
     },
     clickHandlerCamera({
-      count = 1,
       url = "http://192.168.71.33:50000/file/file/uploadBase64"
     }) {
-      native.camera({ count, url }).then(res => {
+      native.ty_camera({ url }).then(res => {
         console.log("调用结果回调", res);
         this.imgs = res.map(v => v.newPath);
         console.log(this.imgs);
       });
     },
     getLocation() {
-      native.getLocation().then(res => {
+      native.ty_getLocation().then(res => {
         console.log("这是点位坐标点", res);
       });
     },

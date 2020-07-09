@@ -6,12 +6,26 @@ import def from "@/settings.js";
 const asyncMethods = def.wx["jsApiList"];
 
 class WxPro {
-  constructor(wx) {
+  constructor() {
     this.wx = wx;
     this.init();
   }
   init() {
     this._promisifyAll();
+  }
+  // ====================================================== //
+  // ======================= 拍照和打开相册 ====================== //
+  // ====================================================== //
+  wx_chooseImage({ count, url } = {}) {
+    return new Promise((resolve, reject) => {
+      return this.mediaSelect(["album", "camera"], { count, url })
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
   }
   /**
    * @description
@@ -37,9 +51,9 @@ class WxPro {
    * @author wsy
    * @date 2020-06-28  17:08:51
    */
-  camera({ count = 1, url } = {}) {
+  camera({ url } = {}) {
     return new Promise((resolve, reject) => {
-      return this.mediaSelect("camera", { count, url })
+      return this.mediaSelect("camera", { url })
         .then((res) => {
           resolve(res);
         })
@@ -58,9 +72,11 @@ class WxPro {
     try {
       // 获取微信本地localIds数组
       const { localIds } = await this._wx_album(count, media);
+
       // 调用微信格式转换 将id转为base64
       const base64Images = await this._wx_Base64(localIds);
       // 并发处理上传服务器
+
       const imgDataBase = base64Images.map((base64Image) => {
         return this._request(url, qs.stringify({ base64Data: base64Image }));
       });
@@ -70,22 +86,6 @@ class WxPro {
       throw new Error(error);
     }
   }
-  // ====================================================== //
-  // ====================== 获取地理位置接口 ====================== //
-  // ====================================================== //
-  // getLocation({ type = "wgs84" } = {}) {
-  //   return new Promise((resolve, reject) => {
-  //     this.wx.getLocation({
-  //       type: type, // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-  //       success: function(res) {
-  //         var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-  //         var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-  //         var speed = res.speed; // 速度，以米/每秒计
-  //         var accuracy = res.accuracy; // 位置精度
-  //       },
-  //     });
-  //   });
-  // }
   // ====================================================== //
   // ======================== 私有方法 ======================== //
   // ====================================================== //
@@ -114,9 +114,13 @@ class WxPro {
    * wx相册选择、相机
    * @param { Number } count
    */
-  _wx_album(count, media = "album") {
+  _wx_album(count = 9, media = "album") {
     // 等待徐图片选择完毕，取得localIds数组
-    let mediaSelect = media === "album" ? ["album"] : ["camera"];
+    let mediaSelect = Array.isArray(media)
+      ? media
+      : media === "album"
+      ? ["album"]
+      : ["camera"];
     return this.chooseImage({
       count: count, // 默认9
       sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
@@ -135,9 +139,11 @@ class WxPro {
           localId: localIds[i],
         });
         //判断是否有这样的头部
-        // ios/安卓适配
-        if (localData.indexOf("data:image") != 0) {
-          localData += "data:image/jpg;base64,";
+        // ios/安卓适配 (安卓没有前缀，且夹杂大量换行符)
+        if (!localData.startsWith("data:image")) {
+          localData = "data:image/jpg;base64," + localData;
+          // 去掉所以换行符
+          localData = localData.replace(/\r|\n/g, "");
         }
         baseImagesResult.push(localData);
       }
@@ -182,5 +188,5 @@ class WxPro {
     };
   }
 }
-const WxJSApi = new WxPro(wx);
+const WxJSApi = WxPro;
 export default WxJSApi;

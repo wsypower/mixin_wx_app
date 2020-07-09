@@ -5,7 +5,7 @@ import qs from "qs";
 
 class hescPro {
   constructor() {
-    this.hesc = null;
+    this.hesc = hesc;
     this.init();
   }
   init() {
@@ -35,15 +35,10 @@ class hescPro {
    * @author wsy
    * @date 2020-06-28  17:08:51
    */
-  camera({ count = 1, url } = {}) {
-    return new Promise((resolve, reject) => {
-      return this.mediaSelect("camera", { count, url })
-        .then((res) => {
-          resolve(res);
-        })
-        .catch((err) => {
-          reject(err);
-        });
+  camera({ url } = {}) {
+    return this.hesc.device.media.capture({
+      compress: true,
+      mediaUrl: url,
     });
   }
   /**
@@ -155,7 +150,7 @@ class hescPro {
     return this._deepMapKeys(hesc, this._promisify);
   }
   // ====================================================== //
-  // =============== 递归遍所有回调函数转为promise函数 =============== //
+  // =============== 递归遍历讲所有回调函数转为promise函数 =============== //
   // ====================================================== //
   _deepMapKeys(obj, fn) {
     return typeof obj === "object"
@@ -193,5 +188,5 @@ class hescPro {
     };
   }
 }
-const hescJSApi = new hescPro();
+const hescJSApi =  hescPro;
 export default hescJSApi;
