@@ -24,8 +24,8 @@ FastClick.attach(document.body);
 //
 // ─── PLUGINS ────────────────────────────────────────────────────────────────────
 //
-import Vconsole from "vconsole";
-new Vconsole();
+// import Vconsole from "vconsole";
+// new Vconsole();
 import Plugins from "@/plugins";
 Vue.use(Plugins);
 new Vue({

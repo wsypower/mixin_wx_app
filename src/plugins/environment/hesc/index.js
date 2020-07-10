@@ -5,7 +5,7 @@ import qs from "qs";
 
 class hescPro {
   constructor() {
-    this.hesc = hesc;
+    this.hesc = null;
     this.init();
   }
   init() {
@@ -36,7 +36,8 @@ class hescPro {
    * @date 2020-06-28  17:08:51
    */
   camera({ url } = {}) {
-    return this.hesc.device.media.capture({
+    console.log("asdasd", "123");
+    this.hesc.device.media.capture({
       compress: true,
       mediaUrl: url,
     });
@@ -188,5 +189,5 @@ class hescPro {
     };
   }
 }
-const hescJSApi =  hescPro;
+const hescJSApi = hescPro;
 export default hescJSApi;

@@ -49,11 +49,7 @@ export default {
   created() {
     console.log("首页开始");
   },
-  mounted() {
-    native.getNetworkType().then(res => {
-      console.log(res);
-    });
-  },
+  mounted() {},
   activated() {
     console.log("复用的页面");
   },
@@ -74,6 +70,7 @@ export default {
     clickHandlerCamera({
       url = "http://192.168.71.33:50000/file/file/uploadBase64"
     }) {
+      console.log(123123);
       native.ty_camera({ url }).then(res => {
         console.log("调用结果回调", res);
         this.imgs = res.map(v => v.newPath);
