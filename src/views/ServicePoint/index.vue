@@ -2,7 +2,7 @@
     <div class="service-point-page">
         <page-header title="服务点"></page-header>
         <div class="map-panel">
-            <baidu-map class="bm-view" ak="fyqKIIAp1Vg3BN5KGd4ZBbhpUeuYhZW7" :center="center" :zoom="zoom" @ready="mapReadyHandler">
+            <baidu-map class="bm-view" @ready="mapReadyHandler">
                 <bm-marker :key="-1"
                            :position="{lng: pinLon, lat: pinLat}"
                            :icon="{url: require('@/assets/images/pin.png'), size: {width: 30, height: 30}}">
@@ -34,7 +34,7 @@
                     <span class="show-place-point"><span class="icon iconfont point">&#xe63e;</span>{{(firstPlace.distance/1000).toFixed(2)}}km</span>
                 </div>
                 <div class="text-panel"><span>地址：</span><span>{{firstPlace.address}}</span></div>
-                <div class="text-panel"><span>电话：</span><span @click="phoneToService(firstPlace.servicePhone)">{{firstPlace.servicePhone}}</span></div>
+                <div class="text-panel"><span>电话：</span><span @click.stop="phoneToService(firstPlace.servicePhone)">{{firstPlace.servicePhone}}</span></div>
                 <div class="text-panel"><span>服务时间：</span><span>{{firstPlace.serviceTime}}</span></div>
             </div>
         </div>
@@ -53,25 +53,27 @@
 </template>
 <script type="text/ecmascript-6">
     import PageHeader from '@/components/pageHeader.vue';
-    import BaiduMap from 'vue-baidu-map/components/map/Map.vue';
-    import bmMarker from 'vue-baidu-map/components/overlays/Marker.vue'
-    import bmLabel from 'vue-baidu-map/components/overlays/Label.vue'
+    // import BaiduMap from 'vue-baidu-map/components/map/Map.vue';
+    // import bmMarker from 'vue-baidu-map/components/overlays/Marker.vue'
+    // import bmLabel from 'vue-baidu-map/components/overlays/Label.vue'
     import ServicePointList from './components/servicePointList.vue';
     import externalMethods from '@/utils/externalMethods/index.js'
     export default {
         name: 'service',
         components:{
             PageHeader,
-            BaiduMap,
-            bmMarker,
-            bmLabel,
+            // BaiduMap,
+            // bmMarker,
+            // bmLabel,
             ServicePointList
         },
         data(){
             return {
                 //地图使用参数
+                BMap: null,
+                map: null,
                 center: {lng: 120.59, lat: 29.98},
-                zoom: 3,
+                // zoom: 3,
                 showAll: false,
                 firstPlace: {
                     id: ''
@@ -111,9 +113,15 @@
             //地图ready之后操作
             mapReadyHandler({BMap, map}) {
                 //console.log(BMap, map);
-                this.center.lng = this.firstPlace.originLon || this.$store.getters['originLon'];
-                this.center.lat = this.firstPlace.originLat || this.$store.getters['originLat'];
-                this.zoom = 15;
+                this.BMap = BMap;
+                this.map = map;
+                // this.center.lng = this.firstPlace.originLon || this.$store.getters['originLon'];
+                let lng = this.firstPlace.originLon || this.$store.getters['originLon'];
+                // this.center.lat = this.firstPlace.originLat || this.$store.getters['originLat'];
+                let lat = this.firstPlace.originLat || this.$store.getters['originLat'];
+                let point = new BMap.Point(lng, lat);
+                map.centerAndZoom(point, 15);
+                //this.zoom = 15;
                 //console.log('this.center',this.center.lng,  this.center.lat);
             },
             touchStart(e){
@@ -142,6 +150,8 @@
                     this.firstPlace = data.firstPlace;
                     this.center.lng = this.firstPlace.originLon;
                     this.center.lat = this.firstPlace.originLat;
+                    let point = new this.BMap.Point(this.center.lng, this.center.lat);
+                    this.map.centerAndZoom(point, 15);
                 }
             },
             //跳转到点击的点位
@@ -150,11 +160,15 @@
                 this.center.lng = this.firstPlace.originLon;
                 this.center.lat = this.firstPlace.originLat;
                 this.showAll = false;
+                let point = new this.BMap.Point(this.center.lng, this.center.lat);
+                this.map.centerAndZoom(point, 15);
             },
             //设置当前位置为中心位置
             setCenter(){
                 this.center.lng = this.pinLon;
                 this.center.lat = this.pinLat;
+                let point = new this.BMap.Point(this.center.lng, this.center.lat);
+                this.map.centerAndZoom(point, 15);
             },
             //打电话至服务点
             phoneToService(servicePhone){
