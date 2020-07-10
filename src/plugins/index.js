@@ -16,21 +16,9 @@ import vueWechatTitle from "vue-wechat-title";
 import service from "./request/index";
 // 淘宝的flexbile 增加一个修正字体字号大小的影响
 import "./flexbile/index";
-// 微信鉴权（如果是微信环境才会执行内部鉴权，否则打断注册页面）
-import wechatAuth from "@/plugins/environment/wx/wechatAuth";
-
-// 环境判断
-// import browser from "./environment/index";
-// console.log("browser", browser);
-
-// const wx = () => import(/* webpackChunkName: "wx-sdk" */ "weixin-js-sdk");
-// const hesc = () => import(/* webpackChunkName: "wx-sdk" */ "hesc-jsapi");
-// wx().then((w) => {
-//   console.log(w);
-// });
-// import '@/plugins/environment/wx/wechatAuth/index'
+// 微信鉴权（如果是微信环境才会执行内部鉴权，否则不会执行）
+import wechatAuth from "@/plugins/environment/authentication/wechatAuth";
 import defaultSettings from "@/settings.js";
-console.log(defaultSettings.wx);
 
 export default {
   install(Vue) {

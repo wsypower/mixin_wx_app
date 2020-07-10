@@ -14,7 +14,7 @@ import axios from "axios";
 import qs from "qs";
 import router from "@/router";
 import store from "@/store";
-import wechatStore from "./store";
+import wechatStore from "../wx/store";
 import wx from "weixin-js-sdk";
 class VueWechat {
   constructor() {

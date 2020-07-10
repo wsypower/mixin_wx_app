@@ -1,43 +1,20 @@
-import WxJSApi from "./wx";
-import hescJSApi from "./hesc";
+/* ********************************************************************************************************* */
+/*                                                                                                           */
+/*                                                              :::::::::: ::::::::   :::::::: :::::::::::   */
+/*   index.js                                                  :+:       :+:    :+: :+:    :+:    :+:        */
+/*                                                            +:+       +:+        +:+           +:+         */
+/*   By: wsy <2553241022@qq.com>                             +#++:++#  +#++:++#++ :#:           +#+          */
+/*                                                          +#+              +#+ +#+   +#+#    +#+           */
+/*   Created: 2020/06/10 15:45:56 by wsy                   #+#       #+#    #+# #+#    #+#    #+#            */
+/*   Updated: 2020/07/10 15:46:29 by wsy                  ########## ########   ######## ###########         */
+/*                                                                                                           */
+/* ********************************************************************************************************* */
 
-// 浏览器环境
-const environment = {
-  micromessenger: WxJSApi,
-  hesc: hescJSApi,
-};
-
-/**
- * @description
- * 返回一个符合环境的父类
- * @author wsy
- * @date 2020-07-09  18:26:21
- */
-
-const isNavigator = () => {
-  if (typeof navigator === "undefined") return;
-  var ua = navigator.userAgent.toLowerCase();
-  return _transform(
-    environment,
-    (previous, current) =>
-      !!~ua.indexOf(current) ? environment[current] : previous,
-    environment["hesc"]
-  );
-};
-/**
- * @description
- * 对累加器和对象属性应用函数
- * @author wsy
- * @date 2020-06-29  16:52:39
- */
-
-const _transform = (obj, fn, acc) => {
-  return Object.keys(obj).reduce((a, k) => fn(a, k, obj), acc);
-};
-const DevSupConstructor = isNavigator();
+import DevSupConstructor from "./dev";
 class Native extends DevSupConstructor {
   constructor() {
     super();
+    console.log(this);
   }
   // ====================================================== //
   // ====================== 获取地理位置接口 ====================== //

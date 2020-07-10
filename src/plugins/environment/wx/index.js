@@ -1,17 +1,10 @@
-import wx from "weixin-js-sdk";
 import axios from "axios";
 import qs from "qs";
-import def from "@/settings.js";
-// 需要变为promise的方法
-const asyncMethods = def.wx["jsApiList"];
+import WxTransformPromise from "./promise/wx.promise";
 
-class WxPro {
+class WxPro extends WxTransformPromise {
   constructor() {
-    this.wx = wx;
-    this.init();
-  }
-  init() {
-    this._promisifyAll();
+    super();
   }
   // ====================================================== //
   // ======================= 拍照和打开相册 ====================== //
@@ -151,41 +144,6 @@ class WxPro {
     } catch (error) {
       console.log(error);
     }
-  }
-  /**
-   * @description
-   * 将需要promise化的属性放入asyncMethods中,自动修改为promise Api
-   * (注：因为有些元素不需要promise化,如wx.ready 、wx.error等)
-   * @author wsy
-   * @date 2020-06-28  16:56:49
-   */
-  _promisifyAll() {
-    Object.keys(this.wx).forEach((key) => {
-      if (!!~asyncMethods.indexOf(key)) {
-        this[key] = this._promisify(this.wx[key]);
-      } else {
-        this[key] = this.wx[key];
-      }
-    });
-  }
-  /**
-   * @description
-   * 回调函数promise化
-   * @author wsy
-   * @date 2020-06-28  16:44:01
-   */
-  _promisify(original) {
-    return (args = {}) => {
-      return new Promise((resolve, reject) => {
-        original({
-          // fail: reject,
-          fail: reject,
-          // success: resolve,
-          success: resolve,
-          ...args,
-        });
-      });
-    };
   }
 }
 const WxJSApi = WxPro;

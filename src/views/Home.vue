@@ -49,7 +49,11 @@ export default {
   created() {
     console.log("首页开始");
   },
-  mounted() {},
+  mounted() {
+    native.getNetworkType().then(res => {
+      console.log(res);
+    });
+  },
   activated() {
     console.log("复用的页面");
   },
