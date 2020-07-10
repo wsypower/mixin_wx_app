@@ -5,6 +5,7 @@ import WxTransformPromise from "./promise/wx.promise";
 class WxPro extends WxTransformPromise {
   constructor() {
     super();
+    this.envName = "微信";
   }
   // ====================================================== //
   // ======================= 拍照和打开相册 ====================== //

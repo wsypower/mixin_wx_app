@@ -6,6 +6,7 @@ import qs from "qs";
 class hescPro {
   constructor() {
     this.hesc = null;
+    this.envName = "hesc";
     this.init();
   }
   init() {

@@ -95,5 +95,20 @@ class Native extends DevSupConstructor {
     });
   }
 }
-const native = new Native();
+
+const nativeTarget = new Native();
+
+// 简单部署一个代理，防止各环境api混调
+let native = new Proxy(nativeTarget, {
+  get(target, propKey) {
+    if (propKey in target) {
+      return target[propKey];
+    } else {
+      throw new ReferenceError(
+        `${target.envName}环境没有${propKey}属性,这是其他环境的属性!!`
+      );
+    }
+  },
+});
+
 export default native;
