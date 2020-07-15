@@ -132,10 +132,10 @@
                                 let pointInfo = {
                                     id: item.dogServicePoint.id,
                                     servicePointName: item.dogServicePoint.servicePointName,
-                                    servicePhone: item.phone,
+                                    servicePhone: item.dogServicePoint.phone,
                                     distance: item.dogServicePoint.distance,
                                     address: item.dogServicePoint.address,
-                                    serviceTime: item.dogServicePoint.serviceTime,
+                                    serviceTime: item.dogServicePoint.serviceBeginTime + '至' + item.dogServicePoint.serviceEndTime + ' ' + item.dogServicePoint.serviceTime,
                                     originLon: item.dogServicePoint.longitude,
                                     originLat: item.dogServicePoint.latitude,
                                 }
