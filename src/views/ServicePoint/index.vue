@@ -72,7 +72,7 @@
                 //地图使用参数
                 BMap: null,
                 map: null,
-                center: {lng: 0, lat: 0},  //{lng: 120.59, lat: 29.98}
+                center: {},  //{lng: 120.59, lat: 29.98}
                 zoom: 3,
                 showAll: false,
                 firstPlace: {
@@ -116,10 +116,11 @@
                 console.log('ready map')
                 this.BMap = BMap;
                 this.map = map;
-                this.center.lng = this.firstPlace.originLon || this.$store.getters['originLon'];
-                // let lng = this.firstPlace.originLon || this.$store.getters['originLon'];
-                this.center.lat = this.firstPlace.originLat || this.$store.getters['originLat'];
-                // let lat = this.firstPlace.originLat || this.$store.getters['originLat'];
+                // this.center.lng = this.firstPlace.originLon || this.$store.getters['originLon'];
+                let lng = this.firstPlace.originLon || this.$store.getters['originLon'];
+                // this.center.lat = this.firstPlace.originLat || this.$store.getters['originLat'];
+                let lat = this.firstPlace.originLat || this.$store.getters['originLat'];
+                this.center = {lng: lng, lat: lat};
                 // let point = new BMap.Point(lng, lat);
                 // map.centerAndZoom(point, 15);
                 this.zoom = 15;
@@ -195,6 +196,7 @@
         .map-panel{
             width: 100%;
             flex: auto;
+            height: calc(100% - 88px);
             .bm-view{
                 width: 100%;
                 height: 100%;

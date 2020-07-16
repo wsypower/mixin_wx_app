@@ -36,18 +36,18 @@ FastClick.attach(document.body);
 import Plugins from "@/plugins";
 Vue.use(Plugins);
 
-import vuescroll from 'vuescroll';
-// 你可以在这里设置全局配置
-Vue.use(vuescroll, {
-    ops: {
-        bar: {
-            background: '#c1c1c1',
-            size: '3px',
-            opacity: 0
-        }
-    },
-    name: 'myScroll' // 在这里自定义组件名字，默认是vueScroll
-});
+// import vuescroll from 'vuescroll';
+// // 你可以在这里设置全局配置
+// Vue.use(vuescroll, {
+//     ops: {
+//         bar: {
+//             background: '#c1c1c1',
+//             size: '3px',
+//             opacity: 0
+//         }
+//     },
+//     name: 'myScroll' // 在这里自定义组件名字，默认是vueScroll
+// });
 
 import Vconsole from 'vconsole'
 let vConsole = new Vconsole()
