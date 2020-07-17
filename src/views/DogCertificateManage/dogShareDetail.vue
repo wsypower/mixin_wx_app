@@ -96,7 +96,9 @@
         methods:{
             getShareData(){
                 console.log(`qrCode: ${this.qrCode}`);
+                this.$store.commit('updateIsLoading',true);
                 queryDogByQrCode({qrCode: this.qrCode}).then(res => {
+                    this.$store.commit('updateIsLoading',false);
                     this.dogDetail = res.data;
                 })
             },

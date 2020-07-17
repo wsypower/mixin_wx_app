@@ -7,7 +7,7 @@ export default {
             dogName: "",
             breed: "",
             dogSex: "",
-            hairColor: "",
+            dogType: 0,
             adoptServiceName: "",
             servicePhone: "",
             adoptBeginTime: "",

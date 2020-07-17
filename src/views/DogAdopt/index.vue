@@ -10,8 +10,8 @@
                     class="list-panel"
             >
                 <div class="dog-adopt-item" flex="dir:left cross:center main:justify" v-for="item in adoptDogList" :key="item.id" @click="itemClickHandle(item)">
-                    <div class="top-flag">
-                        <span>进行中</span>
+                    <div class="top-flag" :class="{red:item.adoptTag==='已过期'}">
+                        <span>{{item.adoptTag}}</span>
                     </div>
                     <div class="message" flex="dir:top main:justify">
                         <div flex="dir:left"><span class="title">{{item.dogName}}</span><span class="message-text">品种：{{item.breed}}</span></div>
@@ -81,7 +81,7 @@
                     dogName: item.dogName,
                     breed: item.breed,
                     dogSex: item.dogSex,
-                    hairColor: item.hairColor,
+                    dogType: item.dogType,
                     adoptServiceName: item.adoptServiceName,
                     servicePhone: item.servicePhone,
                     adoptBeginTime: item.adoptBeginTime,
@@ -131,6 +131,9 @@
                 font-size: 14px;
                 color: #ffffff;
                 text-align: center;
+                &.red{
+                    background-color: #e00808;
+                }
             }
             &:last-child{
                 margin-bottom: 0px;
