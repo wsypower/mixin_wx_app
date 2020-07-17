@@ -128,7 +128,7 @@
                 background-color: #009944;
                 border-radius: 10px 0px 0px 0px;
                 font-family: PingFang-SC-Medium;
-                font-size: 14px;
+                font-size: 20px;
                 color: #ffffff;
                 text-align: center;
                 &.red{
