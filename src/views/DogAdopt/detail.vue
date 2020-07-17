@@ -15,7 +15,7 @@
             </div>
             <div class="row" flex="dir:left cross:center">
                 <span>联系电话：</span>
-                <span @click="phoneToService(dogInfo.servicePhone)">{{dogInfo.servicePhone}}</span>
+                <span class="phone" @click="phoneToService(dogInfo.servicePhone)">{{dogInfo.servicePhone}}</span>
             </div>
             <div class="row" flex="dir:left cross:center">
                 <span>领养时间：</span>
@@ -96,6 +96,9 @@ export default {
                     border-radius: 20px;
                     margin-top: 20px;
                 }
+            }
+            .phone{
+                color: #306ce7;
             }
         }
     }

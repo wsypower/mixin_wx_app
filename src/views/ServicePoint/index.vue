@@ -3,6 +3,11 @@
         <page-header title="服务点"></page-header>
         <div class="map-panel">
             <baidu-map class="bm-view" :center="center" :zoom="zoom" @ready="mapReadyHandler" ak="fyqKIIAp1Vg3BN5KGd4ZBbhpUeuYhZW7">
+<!--                <bm-geolocation-->
+<!--                        anchor="BMAP_ANCHOR_TOP_RIGHT"-->
+<!--                        :showAddressBar="false"-->
+<!--                        :autoLocation="true"-->
+<!--                ></bm-geolocation>-->
                 <bm-marker :key="-1"
                            :position="{lng: pinLon, lat: pinLat}"
                            :icon="{url: require('@/assets/images/pin.png'), size: {width: 30, height: 30}}">
@@ -34,7 +39,7 @@
                     <span class="show-place-point"><span class="icon iconfont point">&#xe63e;</span>{{(firstPlace.distance/1000).toFixed(2)}}km</span>
                 </div>
                 <div class="text-panel"><span>地址：</span><span>{{firstPlace.address}}</span></div>
-                <div class="text-panel"><span>电话：</span><span @click.stop="phoneToService(firstPlace.servicePhone)">{{firstPlace.servicePhone}}</span></div>
+                <div class="text-panel"><span>电话：</span><span class="phone" @click.stop="phoneToService(firstPlace.servicePhone)">{{firstPlace.servicePhone}}</span></div>
                 <div class="text-panel"><span>服务时间：</span><span>{{firstPlace.serviceTime}}</span></div>
             </div>
         </div>
@@ -54,8 +59,9 @@
 <script type="text/ecmascript-6">
     import PageHeader from '@/components/pageHeader.vue';
     import BaiduMap from 'vue-baidu-map/components/map/Map.vue';
-    import BmMarker from 'vue-baidu-map/components/overlays/Marker.vue'
-    import BmLabel from 'vue-baidu-map/components/overlays/Label.vue'
+    import BmMarker from 'vue-baidu-map/components/overlays/Marker.vue';
+    import BmLabel from 'vue-baidu-map/components/overlays/Label.vue';
+    // import BmGeolocation from 'vue-baidu-map/components/controls/Geolocation.vue';
     import ServicePointList from './components/servicePointList.vue';
     import externalMethods from '@/utils/externalMethods/index.js'
     export default {
@@ -65,6 +71,7 @@
             BaiduMap,
             BmMarker,
             BmLabel,
+            // BmGeolocation,
             ServicePointList
         },
         data(){
@@ -171,8 +178,12 @@
             },
             //设置当前位置为中心位置
             setCenter(){
-                this.center.lng = this.pinLon;
-                this.center.lat = this.pinLat;
+                this.center.lng = this.pinLon - 0.1;
+                this.center.lat = this.pinLat - 0.1;
+                setTimeout(() => {
+                    this.center.lng = this.pinLon;
+                    this.center.lat = this.pinLat;
+                },200);
                 // let BMap = this.BMap;
                 // let map = this.map;
                 // let point = new BMap.Point(this.center.lng, this.center.lat);
@@ -259,6 +270,9 @@
                         font-size: 26px;
                         letter-spacing: 0px;
                         color: #4d4d4d;
+                    }
+                    .phone{
+                        color: #306ce7 !important;
                     }
                 }
             }
