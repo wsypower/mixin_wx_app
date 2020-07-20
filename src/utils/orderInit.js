@@ -54,6 +54,8 @@ const orderInitInfo = {
     residencyProofFront: '',
     //居住证照片反面
     residencyProofBack: '',
+    //单位名称
+    company: '',
     //单位营业执照照片
     businessLicense: '',
 

@@ -100,6 +100,9 @@ const mixin = {
                 if(this.submitData.businessLicense===''){
                     return '单位营业执照照片必填'
                 }
+                if(this.submitData.company===''){
+                    return '单位名称必填'
+                }
             }
 
             if(this.submitData.phone===''){

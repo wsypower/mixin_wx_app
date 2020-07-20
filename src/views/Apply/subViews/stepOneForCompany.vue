@@ -49,6 +49,8 @@
             <span class="header-left">单位信息</span>
         </div>
         <van-form>
+            <van-field v-model="submitData.company" label="单位名称：" placeholder="请输入" input-align="right"/>
+            <van-divider></van-divider>
             <van-field
                     readonly
                     clickable
@@ -202,6 +204,8 @@
                     //验证码
                     verificationCode: '',
 
+                    //单位名称
+                    company: '',
                     //现居住区县名称
                     region: '',
                     //现居住区县ID
