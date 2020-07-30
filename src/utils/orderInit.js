@@ -57,7 +57,7 @@ const orderInitInfo = {
     //单位名称
     company: '',
     //单位营业执照照片
-    businessLicense: '',
+    businessLicensePic: '',
 
     //犬只相关
     //昵称

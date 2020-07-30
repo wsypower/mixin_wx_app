@@ -97,7 +97,7 @@ const mixin = {
                 if(this.submitData.idCard===''){
                     return '身份证号必填'
                 }
-                if(this.submitData.businessLicense===''){
+                if(this.submitData.businessLicensePic===''){
                     return '单位营业执照照片必填'
                 }
                 if(this.submitData.company===''){

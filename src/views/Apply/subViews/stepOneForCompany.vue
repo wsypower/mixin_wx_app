@@ -120,8 +120,8 @@
                 <upload-image textValue="上传单位营业执照"
                               uploadIconType="1"
                               @changeImage="getResultImage"
-                              imageType="businessLicense"
-                              :initImageUrl="imageList.businessLicense"></upload-image>
+                              imageType="businessLicensePic"
+                              :initImageUrl="imageList.businessLicensePic"></upload-image>
             </div>
         </van-form>
         <div class="btn-panel" flex="dir:top cross:center main:center">
@@ -173,7 +173,7 @@
                 imageList:{
                     idCardFront: '',
                     idCardBack: '',
-                    businessLicense:''
+                    businessLicensePic:''
                 },
                 submitData:{
                     userId: null,
@@ -221,7 +221,7 @@
                     //详细地址
                     address: '',
                     //单位营业执照照片
-                    businessLicense: ''
+                    businessLicensePic: ''
                 }
             }
         },
@@ -237,8 +237,8 @@
             if(this.submitData.idCardBack) {
                 this.imageList.idCardBack = this.submitData.imgHost + this.submitData.idCardBack;
             }
-            if(this.submitData.businessLicense) {
-                this.imageList.businessLicense = this.submitData.imgHost + this.submitData.businessLicense;
+            if(this.submitData.businessLicensePic) {
+                this.imageList.businessLicensePic = this.submitData.imgHost + this.submitData.businessLicensePic;
             }
 
             if(orderInfo.dogOrderId){
