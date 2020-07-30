@@ -356,6 +356,8 @@
                     this.submitData.country = '';
                     this.submitData.passport = '';
                     this.submitData.sex = 0;
+                    this.imageList.idCardFront = '';
+                    this.imageList.idCardBack = '';
                 }
                 else{
                     this.isEditInit = false;

@@ -26,8 +26,8 @@ Vue.use(animated)
 import vueFiltersDate from '@/filters/moment/main'
 Vue.use(vueFiltersDate)
 
-import FastClick from "fastclick";
-FastClick.attach(document.body);
+// import FastClick from "fastclick";
+// FastClick.attach(document.body);
 
 //
 // ─── PLUGINS ────────────────────────────────────────────────────────────────────
