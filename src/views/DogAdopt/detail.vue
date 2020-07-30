@@ -4,7 +4,7 @@
         <div class="page-main">
             <div class="row" flex="dir:left cross:center">
                 <div class="col" flex="dir:left cross:center"><span>犬名：</span><span class="value-text">{{dogInfo.dogName}}</span></div>
-                <div class="col" flex="dir:left cross:center"><span>性别：</span><span class="value-text">{{dogInfo.dogSex===0?'公':'母'}}</span></div>
+                <div class="col" flex="dir:left cross:center"><span>性别：</span><span class="value-text">{{dogInfo.dogSex===1?'公':'母'}}</span></div>
             </div>
             <div class="row" flex="dir:left cross:center">
                 <div class="col" flex="dir:left cross:center"><span>品种：</span><span class="value-text">{{dogInfo.breed}}</span></div>
