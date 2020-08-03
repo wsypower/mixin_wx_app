@@ -4,9 +4,9 @@
             <div class="no-data-img"></div>
             <div class="no-data-text">暂时没有您的爱犬信息~</div>
         </div>
-        <van-swipe v-else class="dog-swipe" indicator-color="white">
+        <van-swipe v-else class="dog-swipe" indicator-color="white" ref="swiper">
             <van-swipe-item v-for="item in dogCards" :key="item.id">
-                <dog-item :dogData="item" :needToDetail="true"></dog-item>
+                <dog-item :dogData="item" :needToDetail="true" @prev="prev" @next="next"></dog-item>
             </van-swipe-item>
         </van-swipe>
     </div>
@@ -33,7 +33,14 @@
             return {}
         },
         mounted(){},
-        methods:{}
+        methods:{
+            prev(){
+                this.$refs.swiper.prev();
+            },
+            next(){
+                this.$refs.swiper.next();
+            }
+        }
     }
 </script>
 <style lang="scss" scoped>

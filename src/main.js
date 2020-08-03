@@ -27,7 +27,7 @@ import vueFiltersDate from '@/filters/moment/main'
 Vue.use(vueFiltersDate)
 
 import FastClick from "fastclick";
-
+// FastClick.attach(document.body);
 if ('addEventListener' in document) {
   document.addEventListener('DOMContentLoaded', function() {
     if (FastClick) {
