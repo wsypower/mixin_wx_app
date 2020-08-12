@@ -207,10 +207,9 @@
         },
         mounted(){
             this.submitData.userId = this.$store.getters['userId'];
-            let areaCode = this.$store.getters['areaCode'];
             let paramsImmuneSite = {
                 userId: this.submitData.userId,
-                areaCode,
+                areaCode: ''
             }
             //获取免疫点数据
             queryImmuneSite(paramsImmuneSite).then( res => {
