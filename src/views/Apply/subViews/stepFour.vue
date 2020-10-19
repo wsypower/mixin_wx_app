@@ -44,7 +44,7 @@
         </van-form>
         <div class="btn-panel" flex="dir:left cross:center main:justify">
             <van-button type="info" class="btn pre-btn" @click="preStep">上一步</van-button>
-            <van-button type="info" class="btn next-btn" @click="submit">提交</van-button>
+            <van-button type="info" class="btn next-btn" @click="submit" :loading="submitLoading">提交</van-button>
         </div>
         <van-popup v-model="showDialog" class="dialog-warp">
             <div class="dialog" flex="dir:top cross:center">
@@ -87,6 +87,8 @@
                     //其他材料
                     otherPic: '',
                 },
+                //提交按钮提交时显示加载中
+                submitLoading: false,
                 submitData:{
                     userId: '',
                     // 图片上传的IP以及端口
@@ -140,16 +142,19 @@
             },
             //最终提交
             submit(){
+                this.submitLoading = true;
                 console.log('submitData', this.submitData);
                 let warnMessage = this.checkParams(4);
                 if(warnMessage!=='success'){
                     Toast.fail({message: warnMessage,duration: 3000});
+                    this.submitLoading = false;
                     return
                 }
                 this.$store.commit('updateIsLoading', true);
                 bidDogCard(this.submitData).then( res => {
                     this.$store.commit('updateIsLoading', false);
                     console.log(res, res);
+                    this.submitLoading = false;
                     if(res.errno === 0){
                         this.$store.commit('order/updateOrderInfo', this.submitData);
                         this.showDialog = true;
