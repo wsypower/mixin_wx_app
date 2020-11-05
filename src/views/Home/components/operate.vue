@@ -27,11 +27,13 @@
                     iconClass: 'qzgl',
                     name: '犬证管理',
                     path: '/dogCertificateManage'
-                },{
-                    iconClass: 'cwly',
-                    name: '宠物领养',
-                    path: '/dogAdopt'
-                },{
+                }
+                // ,{
+                //     iconClass: 'cwly',
+                //     name: '宠物领养',
+                //     path: '/dogAdopt'
+                // }
+                ,{
                     iconClass: 'zdfg',
                     name: '制度法规',
                     path: '/laws'
