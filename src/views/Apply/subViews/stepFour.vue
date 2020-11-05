@@ -4,6 +4,12 @@
             <span class="header-left">基本信息</span>
         </div>
         <van-form>
+            <van-field name="radio" label="是否需要实体证(30元制作费)：" class="label-width-300">
+                <template #input>
+                    <my-radio-group :initValue="submitData.certificate.toString()" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('certificate', name)}"></my-radio-group>
+                </template>
+            </van-field>
+            <van-divider></van-divider>
             <van-field name="radio" label="社区是否盖章：" class="label-width-200">
                 <template #input>
                     <my-radio-group :initValue="submitData.isStamp.toString()" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isStamp', name)}"></my-radio-group>
@@ -99,6 +105,8 @@
                     currentStep: 4,
                     //手机号码
                     phone: '',
+                    //是否需要实体证(30元制作费)
+                    certificate: 0,
                     //是否盖章
                     isStamp: 1,
                     //信息登记表
@@ -124,6 +132,7 @@
             //在缓存中的currentStep是当时提交之后的下一步，故需要在这里重新指向当前步
             this.submitData.currentStep = 4;
             this.submitData.userId = this.$store.getters['userId'];
+            this.submitData.certificate = this.submitData.certificate===null ? 0 : this.submitData.certificate;
             this.submitData.isStamp = this.submitData.isStamp ? this.submitData.isStamp : 1;
         },
         methods:{
@@ -272,6 +281,12 @@
         .label-width-200{
             .van-field__label{
                 width: 260px;
+                padding-top: 10px;
+            }
+        }
+        .label-width-300{
+            .van-field__label{
+                width: 430px;
                 padding-top: 10px;
             }
         }

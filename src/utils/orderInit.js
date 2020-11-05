@@ -100,7 +100,8 @@ const orderInitInfo = {
 
     //PDF文件链接
     picPath: '',
-
+    //是否需要实体证(30元制作费)
+    certificate: 0,
     //是否盖章
     isStamp: 1,
     //信息登记表
