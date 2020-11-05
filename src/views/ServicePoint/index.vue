@@ -2,7 +2,12 @@
     <div class="service-point-page">
         <page-header title="服务点"></page-header>
         <div class="map-panel">
-            <baidu-map class="bm-view" ak="fyqKIIAp1Vg3BN5KGd4ZBbhpUeuYhZW7" :center="center" :zoom="zoom" @ready="mapReadyHandler">
+            <baidu-map class="bm-view" :center="center" :zoom="zoom" @ready="mapReadyHandler" ak="fyqKIIAp1Vg3BN5KGd4ZBbhpUeuYhZW7">
+<!--                <bm-geolocation-->
+<!--                        anchor="BMAP_ANCHOR_TOP_RIGHT"-->
+<!--                        :showAddressBar="false"-->
+<!--                        :autoLocation="true"-->
+<!--                ></bm-geolocation>-->
                 <bm-marker :key="-1"
                            :position="{lng: pinLon, lat: pinLat}"
                            :icon="{url: require('@/assets/images/pin.png'), size: {width: 30, height: 30}}">
@@ -34,7 +39,7 @@
                     <span class="show-place-point"><span class="icon iconfont point">&#xe63e;</span>{{(firstPlace.distance/1000).toFixed(2)}}km</span>
                 </div>
                 <div class="text-panel"><span>地址：</span><span>{{firstPlace.address}}</span></div>
-                <div class="text-panel"><span>电话：</span><span @click="phoneToService(firstPlace.servicePhone)">{{firstPlace.servicePhone}}</span></div>
+                <div class="text-panel"><span>电话：</span><span class="phone" @click.stop="phoneToService(firstPlace.servicePhone)">{{firstPlace.servicePhone}}</span></div>
                 <div class="text-panel"><span>服务时间：</span><span>{{firstPlace.serviceTime}}</span></div>
             </div>
         </div>
@@ -54,8 +59,9 @@
 <script type="text/ecmascript-6">
     import PageHeader from '@/components/pageHeader.vue';
     import BaiduMap from 'vue-baidu-map/components/map/Map.vue';
-    import bmMarker from 'vue-baidu-map/components/overlays/Marker.vue'
-    import bmLabel from 'vue-baidu-map/components/overlays/Label.vue'
+    import BmMarker from 'vue-baidu-map/components/overlays/Marker.vue';
+    import BmLabel from 'vue-baidu-map/components/overlays/Label.vue';
+    // import BmGeolocation from 'vue-baidu-map/components/controls/Geolocation.vue';
     import ServicePointList from './components/servicePointList.vue';
     import externalMethods from '@/utils/externalMethods/index.js'
     export default {
@@ -63,14 +69,17 @@
         components:{
             PageHeader,
             BaiduMap,
-            bmMarker,
-            bmLabel,
+            BmMarker,
+            BmLabel,
+            // BmGeolocation,
             ServicePointList
         },
         data(){
             return {
                 //地图使用参数
-                center: {lng: 120.59, lat: 29.98},
+                BMap: null,
+                map: null,
+                center: {},  //{lng: 120.59, lat: 29.98}
                 zoom: 3,
                 showAll: false,
                 firstPlace: {
@@ -111,8 +120,16 @@
             //地图ready之后操作
             mapReadyHandler({BMap, map}) {
                 //console.log(BMap, map);
-                this.center.lng = this.firstPlace.originLon || this.$store.getters['originLon'];
-                this.center.lat = this.firstPlace.originLat || this.$store.getters['originLat'];
+                console.log('ready map')
+                this.BMap = BMap;
+                this.map = map;
+                // this.center.lng = this.firstPlace.originLon || this.$store.getters['originLon'];
+                let lng = this.firstPlace.originLon || this.$store.getters['originLon'];
+                // this.center.lat = this.firstPlace.originLat || this.$store.getters['originLat'];
+                let lat = this.firstPlace.originLat || this.$store.getters['originLat'];
+                this.center = {lng: lng, lat: lat};
+                // let point = new BMap.Point(lng, lat);
+                // map.centerAndZoom(point, 15);
                 this.zoom = 15;
                 //console.log('this.center',this.center.lng,  this.center.lat);
             },
@@ -142,6 +159,10 @@
                     this.firstPlace = data.firstPlace;
                     this.center.lng = this.firstPlace.originLon;
                     this.center.lat = this.firstPlace.originLat;
+                    // let BMap = this.BMap;
+                    // let map = this.map;
+                    // let point = new BMap.Point(this.center.lng, this.center.lat);
+                    // map.centerAndZoom(point, 15);
                 }
             },
             //跳转到点击的点位
@@ -150,11 +171,23 @@
                 this.center.lng = this.firstPlace.originLon;
                 this.center.lat = this.firstPlace.originLat;
                 this.showAll = false;
+                // let BMap = this.BMap;
+                // let map = this.map;
+                // let point = new BMap.Point(this.center.lng, this.center.lat);
+                // map.centerAndZoom(point, 15);
             },
             //设置当前位置为中心位置
             setCenter(){
-                this.center.lng = this.pinLon;
-                this.center.lat = this.pinLat;
+                this.center.lng = this.pinLon - 0.1;
+                this.center.lat = this.pinLat - 0.1;
+                setTimeout(() => {
+                    this.center.lng = this.pinLon;
+                    this.center.lat = this.pinLat;
+                },200);
+                // let BMap = this.BMap;
+                // let map = this.map;
+                // let point = new BMap.Point(this.center.lng, this.center.lat);
+                // map.centerAndZoom(point, 15);
             },
             //打电话至服务点
             phoneToService(servicePhone){
@@ -174,6 +207,7 @@
         .map-panel{
             width: 100%;
             flex: auto;
+            height: calc(100% - 88px);
             .bm-view{
                 width: 100%;
                 height: 100%;
@@ -236,6 +270,9 @@
                         font-size: 26px;
                         letter-spacing: 0px;
                         color: #4d4d4d;
+                    }
+                    .phone{
+                        color: #306ce7 !important;
                     }
                 }
             }

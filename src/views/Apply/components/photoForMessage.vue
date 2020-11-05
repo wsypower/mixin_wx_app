@@ -75,7 +75,9 @@
                 externalMethods.getImageUrlAndMoreMessage(this.imageType).then(res => {
                     this.loading = true;
                     console.log('photo for message components: 9999999999999', res);
+                    res.imageUrl = res.imageUrl.replace('220.191.224.215','qlxxjg.zfj.sx.gov.cn');
                     this.imgUrl = res.imageUrl;
+                    console.log('change after',this.imgUrl);
                     this.originPath = res.originPath;
                     this.$emit('getMessage',{imageType:this.imageType, data:res});
                     setTimeout(() => {

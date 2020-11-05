@@ -86,7 +86,7 @@
                 externalMethods.getImageUrl(method).then((res)=>{
                     this.loading = true;
                     console.log('upload Image components 000000000000000000000',res);
-                    this.imgUrl = res.pics[0].path;
+                    this.imgUrl = res.pics[0].path.replace('220.191.224.215','qlxxjg.zfj.sx.gov.cn');
                     console.log('this.imgUrl',this.imgUrl);
                     this.originPath = res.pics[0].originPath;
                     setTimeout(() => {

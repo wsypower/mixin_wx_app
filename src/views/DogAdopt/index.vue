@@ -10,12 +10,12 @@
                     class="list-panel"
             >
                 <div class="dog-adopt-item" flex="dir:left cross:center main:justify" v-for="item in adoptDogList" :key="item.id" @click="itemClickHandle(item)">
-                    <div class="top-flag">
-                        <span>进行中</span>
+                    <div class="top-flag" :class="{red:item.adoptTag==='已过期'}">
+                        <span>{{item.adoptTag}}</span>
                     </div>
                     <div class="message" flex="dir:top main:justify">
-                        <div flex="dir:left main:justify"><span class="title">{{item.dogName}}</span><span class="message-text">品种：{{item.breed}}</span></div>
-                        <div class="message-text">领养服务点：{{item.adoptServiceName}}</div>
+                        <div flex="dir:left"><span class="title">{{item.dogName}}</span><span class="message-text">品种：{{item.breed}}</span></div>
+                        <div class="message-text service">领养服务点：{{item.adoptServiceName}}</div>
                     </div>
                     <div class="img-panel" flex="cross:center main:center">
                         <img :src="item.picPath" :onerror="defaultImg"/>
@@ -81,7 +81,7 @@
                     dogName: item.dogName,
                     breed: item.breed,
                     dogSex: item.dogSex,
-                    hairColor: item.hairColor,
+                    dogType: item.dogType,
                     adoptServiceName: item.adoptServiceName,
                     servicePhone: item.servicePhone,
                     adoptBeginTime: item.adoptBeginTime,
@@ -128,9 +128,12 @@
                 background-color: #009944;
                 border-radius: 10px 0px 0px 0px;
                 font-family: PingFang-SC-Medium;
-                font-size: 14px;
+                font-size: 20px;
                 color: #ffffff;
                 text-align: center;
+                &.red{
+                    background-color: #e00808;
+                }
             }
             &:last-child{
                 margin-bottom: 0px;
@@ -150,6 +153,12 @@
                     font-size: 26px;
                     letter-spacing: 0px;
                     color: #4d4d4d;
+                }
+                .service{
+                    width: 420px;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
                 }
             }
             .img-panel{

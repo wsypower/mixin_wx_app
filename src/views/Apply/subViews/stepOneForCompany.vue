@@ -49,6 +49,8 @@
             <span class="header-left">单位信息</span>
         </div>
         <van-form>
+            <van-field v-model="submitData.company" label="单位名称：" placeholder="请输入" input-align="right"/>
+            <van-divider></van-divider>
             <van-field
                     readonly
                     clickable
@@ -118,8 +120,8 @@
                 <upload-image textValue="上传单位营业执照"
                               uploadIconType="1"
                               @changeImage="getResultImage"
-                              imageType="businessLicense"
-                              :initImageUrl="imageList.businessLicense"></upload-image>
+                              imageType="businessLicensePic"
+                              :initImageUrl="imageList.businessLicensePic"></upload-image>
             </div>
         </van-form>
         <div class="btn-panel" flex="dir:top cross:center main:center">
@@ -171,7 +173,7 @@
                 imageList:{
                     idCardFront: '',
                     idCardBack: '',
-                    businessLicense:''
+                    businessLicensePic:''
                 },
                 submitData:{
                     userId: null,
@@ -202,6 +204,8 @@
                     //验证码
                     verificationCode: '',
 
+                    //单位名称
+                    company: '',
                     //现居住区县名称
                     region: '',
                     //现居住区县ID
@@ -217,7 +221,7 @@
                     //详细地址
                     address: '',
                     //单位营业执照照片
-                    businessLicense: ''
+                    businessLicensePic: ''
                 }
             }
         },
@@ -233,8 +237,8 @@
             if(this.submitData.idCardBack) {
                 this.imageList.idCardBack = this.submitData.imgHost + this.submitData.idCardBack;
             }
-            if(this.submitData.businessLicense) {
-                this.imageList.businessLicense = this.submitData.imgHost + this.submitData.businessLicense;
+            if(this.submitData.businessLicensePic) {
+                this.imageList.businessLicensePic = this.submitData.imgHost + this.submitData.businessLicensePic;
             }
 
             if(orderInfo.dogOrderId){

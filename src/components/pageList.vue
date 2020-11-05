@@ -122,11 +122,11 @@
                 background-color: #e00808;
                 border-radius: 10px 0px 0px 0px;
                 font-family: PingFang-SC-Medium;
-                font-size: 14px;
+                font-size: 20px;
                 color: #ffffff;
                 text-align: center;
                 .icon-zhiding{
-                    font-size: 14px;
+                    font-size: 20px;
                     width: 20px;
                 }
             }

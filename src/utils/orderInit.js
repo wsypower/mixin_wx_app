@@ -54,8 +54,10 @@ const orderInitInfo = {
     residencyProofFront: '',
     //居住证照片反面
     residencyProofBack: '',
+    //单位名称
+    company: '',
     //单位营业执照照片
-    businessLicense: '',
+    businessLicensePic: '',
 
     //犬只相关
     //昵称
@@ -98,7 +100,8 @@ const orderInitInfo = {
 
     //PDF文件链接
     picPath: '',
-
+    //是否需要实体证(30元制作费)
+    certificate: 0,
     //是否盖章
     isStamp: 1,
     //信息登记表

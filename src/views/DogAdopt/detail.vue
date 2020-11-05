@@ -4,18 +4,18 @@
         <div class="page-main">
             <div class="row" flex="dir:left cross:center">
                 <div class="col" flex="dir:left cross:center"><span>犬名：</span><span class="value-text">{{dogInfo.dogName}}</span></div>
-                <div class="col" flex="dir:left cross:center"><span>性别：</span><span class="value-text">{{dogInfo.dogSex}}</span></div>
+                <div class="col" flex="dir:left cross:center"><span>性别：</span><span class="value-text">{{dogInfo.dogSex===1?'公':'母'}}</span></div>
             </div>
             <div class="row" flex="dir:left cross:center">
-                <div class="col" flex="dir:left cross:center"><span>犬种：</span><span class="value-text">{{dogInfo.breed}}</span></div>
-                <div class="col" flex="dir:left cross:center"><span>毛色：</span><span class="value-text">{{dogInfo.hairColor}}</span></div>
+                <div class="col" flex="dir:left cross:center"><span>品种：</span><span class="value-text">{{dogInfo.breed}}</span></div>
+                <div class="col" flex="dir:left cross:center"><span>犬型：</span><span class="value-text">{{dogInfo.dogType}}</span></div>
             </div>
             <div class="row" flex="dir:left cross:center">
                 <span>领养服务点：</span><span>{{dogInfo.adoptServiceName}}</span>
             </div>
             <div class="row" flex="dir:left cross:center">
                 <span>联系电话：</span>
-                <span @click="phoneToService(dogInfo.servicePhone)">{{dogInfo.servicePhone}}</span>
+                <span class="phone" @click="phoneToService(dogInfo.servicePhone)">{{dogInfo.servicePhone}}</span>
             </div>
             <div class="row" flex="dir:left cross:center">
                 <span>领养时间：</span>
@@ -96,6 +96,9 @@ export default {
                     border-radius: 20px;
                     margin-top: 20px;
                 }
+            }
+            .phone{
+                color: #306ce7;
             }
         }
     }

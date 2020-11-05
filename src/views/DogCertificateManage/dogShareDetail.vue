@@ -2,7 +2,7 @@
     <div class="share-page">
         <page-header title="犬证详情" :leftArrow="false"></page-header>
         <div class="share-page-main">
-            <div class="share-page-main-content">
+            <div v-if="hasData" class="share-page-main-content">
                 <div class="dog-img-bg">
                     <div class="img-panel" flex="cross:center main:center">
                         <img :src="dogDetail.imgHost + dogDetail.dogPhotoFront" />
@@ -43,6 +43,9 @@
                     </div>
                 </div>
             </div>
+            <div v-else class="no-data">
+                该二维码未关联犬证
+            </div>
             <!--<van-button type="info" class="btn" @click="phoneToDogManageCenter"><span class="icon iconfont icon-dianhua"></span>联系犬管中心</van-button>-->
         </div>
     </div>
@@ -63,6 +66,8 @@
             return {
                 //二维码
                 qrCode: '',
+                //是否关联犬证
+                hasData: true,
                 //犬管中心电话
                 telPhone: '0571-********',
                 dogDetail:{
@@ -89,15 +94,23 @@
         },
         mounted(){
             //从URL上面获取qrCode
-            this.qrCode = getURLParameters('qrcode');
+            this.qrCode = getURLParameters('code');
             //获取分享信息
             this.getShareData();
+
         },
         methods:{
             getShareData(){
                 console.log(`qrCode: ${this.qrCode}`);
+                this.$store.commit('updateIsLoading',true);
                 queryDogByQrCode({qrCode: this.qrCode}).then(res => {
-                    this.dogDetail = res.data;
+                    this.$store.commit('updateIsLoading',false);
+                    if(res.errno === 0){
+                        this.dogDetail = res.data;
+                    }
+                    else{
+                        this.hasData = false;
+                    }
                 })
             },
             phoneToDogManageCenter(){
@@ -168,6 +181,13 @@
                     }
 
                 }
+            }
+            .no-data{
+                width: 100%;
+                text-align: center;
+                font-family: PingFang-SC-Medium;
+                font-size: 28px;
+                color: #4d4d4d;
             }
             .btn{
                 width: 100%;

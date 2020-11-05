@@ -81,7 +81,7 @@
                 />
             </van-form>
             <div class="btn-panel" flex="dir:left cross:center main:center">
-                <van-button type="info" class="btn next-btn" @click="submit">提交</van-button>
+                <van-button type="info" class="btn next-btn" @click="submit" :loading="submitLoading">提交</van-button>
             </div>
         </div>
         <van-popup v-model="showDialog" class="dialog-warp">
@@ -134,6 +134,8 @@
                     //其他材料
                     otherPic: '',
                 },
+                //提交时给予提示
+                submitLoading: false,
                 submitData:{
                     userId: '',
                     // 图片上传的IP以及端口
@@ -207,10 +209,9 @@
         },
         mounted(){
             this.submitData.userId = this.$store.getters['userId'];
-            let areaCode = this.$store.getters['areaCode'];
             let paramsImmuneSite = {
                 userId: this.submitData.userId,
-                areaCode,
+                areaCode: ''
             }
             //获取免疫点数据
             queryImmuneSite(paramsImmuneSite).then( res => {
@@ -240,16 +241,19 @@
             },
             //提交
             submit(){
+                this.submitLoading = true;
                 console.log('submitData', this.submitData);
                 let warnMessage = this.checkParams(5);
                 if(warnMessage!=='success'){
                     Toast.fail({message: warnMessage,duration: 3000});
+                    this.submitLoading = false;
                     return
                 }
                 this.$store.commit('updateIsLoading', true);
                 bidDogCard(this.submitData).then( res => {
                     this.$store.commit('updateIsLoading', false);
                     console.log(res, res);
+                    this.submitLoading = false;
                     if(res.errno === 0){
                         this.showDialog = true;
                         this.$store.commit('order/updateOrderInfo', this.submitData);

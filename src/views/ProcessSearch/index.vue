@@ -167,7 +167,7 @@
             //跳转到编辑页或者订单详情页
             gotoDetail(item){
                 console.log('item:', item);
-                if(item.statusId === '0'){
+                if(item.statusId === 0){
                     this.$router.push({
                         path:'/newApply',
                         query:{

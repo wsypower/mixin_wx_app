@@ -1,12 +1,14 @@
 <template>
-    <div class="dog-item" flex="dir:top" @click="gotToDogDetailPage(dogData.dogCardNumber)">
+    <div class="dog-item" flex="dir:top"
+         @touchstart.stop.prevent="touchStartFun"
+         @touchend.stop.prevent="touchEndFun">
         <div flex="dir:left cross:center" style="position: relative">
             <img class="dog-item-img" :src="dogData.imgHost + dogData.dogPhotoFront">
             <div flex="dir:top" class="dog-item_mes">
                 <span class="dog-item_name">{{dogData.dogName}}</span>
                 <span class="dog-item_status" :class="{warning: statusId===1,wrong: statusId===2,gray: statusId===3}">{{dogData.dogCarStatus}}</span>
             </div>
-            <div class="share_btn" flex="dir:left cross:center main:center" v-if="needShare" @click.stop="share">
+            <div class="share_btn" flex="dir:left cross:center main:center" v-if="needShare" @touchend.stop="share">
                 <span class="icon iconfont icon-fenxiang3"></span>
                 <span>分享</span>
             </div>
@@ -16,7 +18,7 @@
                 <div>有效期：{{dogData.validityStart|timeFormatter('YYYY-MM-DD')}}至{{dogData.validityEnd|timeFormatter('YYYY-MM-DD')}}</div>
                 <div>登记证号：{{dogData.dogCardNumber}}</div>
             </div>
-            <div class="dog-item-qr" :style="{ backgroundImage: backgroundImage }" @click.stop="previewQrImg(dogData.imgHost + dogData.qrCodePath)"></div>
+            <div class="dog-item-qr" :style="{ backgroundImage: backgroundImage }" @touchend.stop="previewQrImg(dogData.imgHost + dogData.qrCodePath)"></div>
         </div>
     </div>
 </template>
@@ -45,6 +47,11 @@
                 }
             }
         },
+        data(){
+           return {
+               startX: 0
+           }
+        },
         computed:{
            statusId: function(){
                return statusArr.findIndex(it => it === this.dogData.dogCarStatus);
@@ -71,6 +78,27 @@
             previewQrImg(qRCodePath){
                 ImagePreview([qRCodePath]);
             },
+            touchStartFun(e){
+                let touch = e.touches[0]; //获取第一个触点
+                this.startX = Number(touch.pageX);
+            },
+            touchEndFun(e){
+
+                let touch = e.changedTouches[0]; //获取最后一个触点
+                let x = Number(touch.pageX);
+                console.log('x: ' + x);
+
+                if(Math.abs(x-this.startX)<=5){
+                    this.gotToDogDetailPage(this.dogData.dogCardNumber);
+                }
+                else if(x-this.startX>5){
+                    this.$emit('prev');
+                }
+                else{
+                    this.$emit('next');
+                }
+            },
+            //@click="gotToDogDetailPage(dogData.dogCardNumber)"
             gotToDogDetailPage(dogCardNumber){
                 if(this.needToDetail){
                     console.log(`dogCardNumber: ${dogCardNumber}`);

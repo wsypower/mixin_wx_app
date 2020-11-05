@@ -27,7 +27,24 @@ import vueFiltersDate from '@/filters/moment/main'
 Vue.use(vueFiltersDate)
 
 import FastClick from "fastclick";
-FastClick.attach(document.body);
+// FastClick.attach(document.body);
+if ('addEventListener' in document) {
+  document.addEventListener('DOMContentLoaded', function() {
+    if (FastClick) {
+      FastClick.attach(document.body);
+    }
+  }, false);
+}
+FastClick.prototype.focus = function (targetElement) {
+  let length;
+  if (targetElement.setSelectionRange && targetElement.type.indexOf('date') !== 0 && targetElement.type !== 'time' && targetElement.type !== 'month') {
+    length = targetElement.value.length;
+    targetElement.focus();
+    targetElement.setSelectionRange(length, length);
+  } else {
+    targetElement.focus();
+  }
+};
 
 //
 // ─── PLUGINS ────────────────────────────────────────────────────────────────────
@@ -36,18 +53,19 @@ FastClick.attach(document.body);
 import Plugins from "@/plugins";
 Vue.use(Plugins);
 
-import vuescroll from 'vuescroll';
-// 你可以在这里设置全局配置
-Vue.use(vuescroll, {
-    ops: {
-        bar: {
-            background: '#c1c1c1',
-            size: '3px',
-            opacity: 0
-        }
-    },
-    name: 'myScroll' // 在这里自定义组件名字，默认是vueScroll
-});
+// import vuescroll from 'vuescroll';
+// // 你可以在这里设置全局配置
+// Vue.use(vuescroll, {
+//     ops: {
+//         bar: {
+//             background: '#c1c1c1',
+//             size: '3px',
+//             opacity: 0
+//         }
+//     },
+//     name: 'myScroll' // 在这里自定义组件名字，默认是vueScroll
+// });
+
 // import Vconsole from 'vconsole'
 // let vConsole = new Vconsole()
 // Vue.use(vConsole)
