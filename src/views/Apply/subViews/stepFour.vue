@@ -4,18 +4,18 @@
             <span class="header-left">基本信息</span>
         </div>
         <van-form>
-            <van-field name="radio" label="是否需要实体证(30元制作费)：" class="label-width-300">
+            <van-field name="radio" label="是否需要实体证：" class="label-width-200">
                 <template #input>
                     <my-radio-group :initValue="submitData.certificate.toString()" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('certificate', name)}"></my-radio-group>
                 </template>
             </van-field>
-            <van-divider></van-divider>
-            <van-field name="radio" label="社区是否盖章：" class="label-width-200">
-                <template #input>
-                    <my-radio-group :initValue="submitData.isStamp.toString()" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isStamp', name)}"></my-radio-group>
-                </template>
-            </van-field>
-            <div class="warn-note">（若未盖章，请在“添加其他材料项”中，上传“房产证/租房合同/居住证（三者任选一项）”信息。）</div>
+<!--            <van-divider></van-divider>-->
+<!--            <van-field name="radio" label="社区是否盖章：" class="label-width-200">-->
+<!--                <template #input>-->
+<!--                    <my-radio-group :initValue="submitData.isStamp.toString()" :radioGroup="ynArray" @getRealValue="(name)=>{getRealValue('isStamp', name)}"></my-radio-group>-->
+<!--                </template>-->
+<!--            </van-field>-->
+<!--            <div class="warn-note">（若未盖章，请在“添加其他材料项”中，上传“房产证/租房合同/居住证（三者任选一项）”信息。）</div>-->
             <van-divider class="large-line"></van-divider>
             <div class="upload-img" flex="dir:left cross:center main:justify">
                 <upload-image textValue="添加信息登记表"
