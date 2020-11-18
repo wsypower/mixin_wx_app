@@ -320,7 +320,7 @@
                     //领养日期
                     adoptTime: null,
                     //是否绝育
-                    isSterilization: 1,
+                    isSterilization: 2,
                     //体重
                     weight: '',
                     //毛色
@@ -433,7 +433,7 @@
                 //设置性别默认值
                 vm.submitData.dogSex = vm.submitData.dogSex ? vm.submitData.dogSex : 1;
                 //设置是否绝育默认值
-                vm.submitData.isSterilization = vm.submitData.isSterilization ? vm.submitData.isSterilization : 1;
+                vm.submitData.isSterilization = vm.submitData.isSterilization ? vm.submitData.isSterilization : 2;
             })
         },
         methods:{

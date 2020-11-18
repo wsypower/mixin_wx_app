@@ -71,7 +71,7 @@ const orderInitInfo = {
     //领养日期
     adoptTime: null,
     //是否绝育
-    isSterilization: 0,
+    isSterilization: 2,
     //体重
     weight: '',
     //毛色
