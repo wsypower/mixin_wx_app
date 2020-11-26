@@ -65,6 +65,7 @@
     import { Divider, Form, Field, Button, Popup, Picker, Toast } from 'vant';
     import MyRadioGroup from '@/components/myRadioGroup.vue';
     import UploadImage from '../components/uploadImage.vue';
+    import { queryDogByOwnerIdCard } from '@/api/common.js'
     import { bidDogCard } from '@/api/apply.js'
     import myMixin from '@/utils/mixin.js'
     export default{
@@ -160,16 +161,30 @@
                     return
                 }
                 this.$store.commit('updateIsLoading', true);
-                bidDogCard(this.submitData).then( res => {
-                    this.$store.commit('updateIsLoading', false);
-                    console.log(res, res);
-                    this.submitLoading = false;
-                    if(res.errno === 0){
-                        this.$store.commit('order/updateOrderInfo', this.submitData);
-                        this.showDialog = true;
+                let params = {
+                    userId: this.submitData.userId,
+                    idType: this.$store.getters['order/orderInfo'].idType,
+                    idCard: this.$store.getters['order/orderInfo'].idCard||this.$store.getters['order/orderInfo'].passport,
+                    phone: this.submitData.phone
+                }
+                queryDogByOwnerIdCard(params).then(res => {
+                    if (res.errno === 0) {
+                        bidDogCard(this.submitData).then(res => {
+                            this.$store.commit('updateIsLoading', false);
+                            console.log(res, res);
+                            this.submitLoading = false;
+                            if (res.errno === 0) {
+                                this.$store.commit('order/updateOrderInfo', this.submitData);
+                                this.showDialog = true;
+                            } else {
+                                Toast.fail({message: res.errmsg, duration: 3000});
+                            }
+                        });
                     }
-                    else{
-                        Toast.fail({message: res.errmsg,duration: 3000});
+                    else {
+                        this.submitLoading = false;
+                        this.$store.commit('updateIsLoading', false);
+                        Toast.fail({message: res.errmsg, duration: 3000});
                     }
                 });
             },

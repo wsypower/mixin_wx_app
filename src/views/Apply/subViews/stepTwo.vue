@@ -207,7 +207,7 @@
     import MyRadioGroup from '@/components/myRadioGroup.vue';
     import UploadImage from '../components/uploadImage.vue';
     import { formatDate } from '@/utils/index';
-    import { queryImmuneSite, queryDogType } from '@/api/common.js'
+    import { queryImmuneSite, queryDogType, queryDogByOwnerIdCard } from '@/api/common.js'
     import { queryDogServicePoint } from '@/api/home.js'
     import { bidDogCard } from '@/api/apply.js'
     import myMixin from '@/utils/mixin.js'
@@ -500,27 +500,40 @@
                 }
             },
             //提交进入下一步
-            nextStep(){
+            nextStep() {
                 console.log('submitData', this.submitData);
                 let warnMessage = this.checkParams(2);
-                if(warnMessage!=='success'){
-                    Toast.fail({message: warnMessage,duration: 3000});
+                if (warnMessage !== 'success') {
+                    Toast.fail({message: warnMessage, duration: 3000});
                     return
                 }
                 this.$store.commit('updateIsLoading', true);
-                bidDogCard(this.submitData).then( res => {
-                    this.$store.commit('updateIsLoading', false);
-                    console.log(res, res);
-                    if(res.errno === 0){
-                        //pdf地址是提交成功之后生成的，所以需要额外引入
-                        let sData = Object.assign({},this.submitData, { picPath: res.data.picPath});
-                        this.$store.commit('order/updateOrderInfo', sData);
-                        this.$router.push('/newApply/stepThree');
+                //身份证判断
+                let params = {
+                    userId: this.submitData.userId,
+                    idType: this.$store.getters['order/orderInfo'].idType,
+                    idCard: this.$store.getters['order/orderInfo'].idCard || this.$store.getters['order/orderInfo'].passport,
+                    phone: this.submitData.phone
+                }
+                queryDogByOwnerIdCard(params).then(res => {
+                    if (res.errno === 0) {
+                        bidDogCard(this.submitData).then(res => {
+                            this.$store.commit('updateIsLoading', false);
+                            console.log(res, res);
+                            if (res.errno === 0) {
+                                //pdf地址是提交成功之后生成的，所以需要额外引入
+                                let sData = Object.assign({}, this.submitData, {picPath: res.data.picPath});
+                                this.$store.commit('order/updateOrderInfo', sData);
+                                this.$router.push('/newApply/stepThree');
+                            } else {
+                                Toast.fail({message: res.errmsg, duration: 3000});
+                            }
+                        });
+                    } else {
+                        this.$store.commit('updateIsLoading', false);
+                        Toast.fail({message: res.errmsg, duration: 3000});
                     }
-                    else{
-                        Toast.fail({message: res.errmsg,duration: 3000});
-                    }
-                });
+                })
             }
         }
     }

@@ -547,6 +547,7 @@
                 //身份证判断
                 let params = {
                     userId: this.submitData.userId,
+                    idType: this.submitData.idType,
                     idCard: this.submitData.idCard||this.submitData.passport,
                     phone: this.submitData.phone
                 }

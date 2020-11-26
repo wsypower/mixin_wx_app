@@ -42,6 +42,7 @@
     import { Button, Popup, Toast } from 'vant';
     import Clipboard from 'clipboard';
     import pdf from 'vue-pdf'
+    import { queryDogByOwnerIdCard } from '@/api/common.js'
     import { bidDogCard } from '@/api/apply.js'
     export default{
         name: 'stepThree',
@@ -129,16 +130,27 @@
             },
             nextStep(){
                 console.log('submitData', this.submitData);
-                bidDogCard(this.submitData).then( res => {
-                    console.log(res, res);
-                    if(res.errno === 0){
-                        this.$store.commit('order/updateOrderInfo', { currentStep : '3'});
-                        this.$router.push('/newApply/stepFour');
+                let params = {
+                    userId: this.submitData.userId,
+                    idType: this.$store.getters['order/orderInfo'].idType,
+                    idCard: this.$store.getters['order/orderInfo'].idCard||this.$store.getters['order/orderInfo'].passport,
+                    phone: this.submitData.phone
+                }
+                queryDogByOwnerIdCard(params).then(res => {
+                    if (res.errno === 0) {
+                        bidDogCard(this.submitData).then(res => {
+                            console.log(res, res);
+                            if (res.errno === 0) {
+                                this.$store.commit('order/updateOrderInfo', {currentStep: '3'});
+                                this.$router.push('/newApply/stepFour');
+                            } else {
+                                Toast.fail({message: res.errmsg, duration: 3000});
+                            }
+                        });
+                    } else {
+                        Toast.fail({message: res.errmsg, duration: 3000});
                     }
-                    else{
-                        Toast.fail({message: res.errmsg,duration: 3000});
-                    }
-                });
+                })
             }
         }
     }

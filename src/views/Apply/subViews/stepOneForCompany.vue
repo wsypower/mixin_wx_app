@@ -420,6 +420,7 @@
                 }
                 let params = {
                     userId: this.submitData.userId,
+                    idType: this.submitData.idType,
                     idCard: this.submitData.idCard,
                     phone: this.submitData.phone
                 }
