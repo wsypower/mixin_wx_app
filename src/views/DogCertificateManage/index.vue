@@ -1,10 +1,10 @@
 <template>
     <div class="dog-manage-page">
         <page-header title="犬证管理"></page-header>
-        <div class="dog-manage-body" flex="dir:top cross:center" v-if="dogList.length>0">
+        <div class="dog-manage-body" v-if="dogList.length>0">
             <dog-item v-for="item in dogList" :key="item.id" :dogData="item" :needToDetail="true" :needShare="true" class="mt20"></dog-item>
         </div>
-        <div class="no-data" v-else flex="dir:top cross:center main:center">
+        <div v-else class="no-data" flex="dir:top cross:center main:center">
             <div class="no-data_icon"></div>
             <div class="no-data_text">暂无狗证</div>
         </div>
@@ -55,8 +55,7 @@
         flex-direction: column;
         .dog-manage-body{
             width: 100%;
-            padding: 0px 24px;
-            padding-bottom: 20px;
+            padding: 0px 24px 20px 24px;
             flex: auto;
             overflow-y: auto;
             .mt20{

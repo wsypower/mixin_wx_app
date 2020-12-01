@@ -30,7 +30,7 @@
                 </div>
             </div>
 <!--            v-if="dogData.dogCarStatus==='即将到期'||dogData.dogCarStatus==='已到期'"-->
-            <div class="btn-panel" flex="dir:left cross:center main:center">
+            <div v-if="dogData.dogCarStatus!=='注销'" class="btn-panel" flex="dir:left cross:center main:center">
 <!--                <van-button type="info" class="btn pre-btn" @click="unBind">注销</van-button>-->
                 <van-button type="info" class="btn" @click="continuedApply">续办</van-button>
             </div>

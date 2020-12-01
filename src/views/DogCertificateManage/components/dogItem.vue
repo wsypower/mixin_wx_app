@@ -1,7 +1,5 @@
 <template>
-    <div class="dog-item" flex="dir:top"
-         @touchstart.stop.prevent="touchStartFun"
-         @touchend.stop.prevent="touchEndFun">
+    <div class="dog-item" flex="dir:top" @click="gotToDogDetailPage(dogData.dogCardNumber)">
         <div flex="dir:left cross:center" style="position: relative">
             <img class="dog-item-img" :src="dogData.imgHost + dogData.dogPhotoFront">
             <div flex="dir:top" class="dog-item_mes">
@@ -78,26 +76,7 @@
             previewQrImg(qRCodePath){
                 ImagePreview([qRCodePath]);
             },
-            touchStartFun(e){
-                let touch = e.touches[0]; //获取第一个触点
-                this.startX = Number(touch.pageX);
-            },
-            touchEndFun(e){
 
-                let touch = e.changedTouches[0]; //获取最后一个触点
-                let x = Number(touch.pageX);
-                console.log('x: ' + x);
-
-                if(Math.abs(x-this.startX)<=5){
-                    this.gotToDogDetailPage(this.dogData.dogCardNumber);
-                }
-                else if(x-this.startX>5){
-                    this.$emit('prev');
-                }
-                else{
-                    this.$emit('next');
-                }
-            },
             //@click="gotToDogDetailPage(dogData.dogCardNumber)"
             gotToDogDetailPage(dogCardNumber){
                 if(this.needToDetail){

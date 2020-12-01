@@ -5,8 +5,8 @@
             <div class="no-data-text">暂时没有您的爱犬信息~</div>
         </div>
         <van-swipe v-else class="dog-swipe" indicator-color="white" ref="swiper">
-            <van-swipe-item v-for="item in dogCards" :key="item.id">
-                <dog-item :dogData="item" :needToDetail="true" @prev="prev" @next="next"></dog-item>
+            <van-swipe-item v-for="item in dogCards" :key="item.id" @touchstart="touchStartFun" @touchend="touchEndFun">
+                <dog-item :dogData="item" :needToDetail="true"></dog-item>
             </van-swipe-item>
         </van-swipe>
     </div>
@@ -34,12 +34,31 @@
         },
         mounted(){},
         methods:{
-            prev(){
-                this.$refs.swiper.prev();
+            touchStartFun(e){
+                let touch = e.touches[0]; //获取第一个触点
+                this.startX = Number(touch.pageX);
             },
-            next(){
-                this.$refs.swiper.next();
+            touchEndFun(e){
+                let touch = e.changedTouches[0]; //获取最后一个触点
+                let x = Number(touch.pageX);
+                console.log('x: ' + x);
+                if(Math.abs(x-this.startX)>5){
+                    if(x-this.startX>5){
+                        // this.$emit('prev');
+                        this.$refs.swiper.prev();
+                    }
+                    else{
+                        this.$refs.swiper.next();
+                        // this.$emit('next');
+                    }
+                }
             }
+            // prev(){
+            //     this.$refs.swiper.prev();
+            // },
+            // next(){
+            //     this.$refs.swiper.next();
+            // }
         }
     }
 </script>
