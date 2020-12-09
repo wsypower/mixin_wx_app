@@ -39,7 +39,7 @@
                     </div>
                     <div class="item">
                         <span class="item_title">犬管中心:</span>
-                        <a class="item_value" :href="'tel:'+ telPhone">{{telPhone}}</a>
+                        <a class="item_value" :href="'tel:'+ dogDetail.dogCenterPhone">{{dogDetail.dogCenterPhone}}</a>
                     </div>
                 </div>
             </div>
@@ -88,7 +88,9 @@
                     //犬主手机号
                     phone: '',
                     //犬证编号
-                    dogCardNumber: ''
+                    dogCardNumber: '',
+                    //犬管中心联系方式
+                    dogCenterPhone: ''
                 }
             }
         },

@@ -139,8 +139,8 @@
                 />
             </van-popup>
             <van-divider></van-divider>
-            <van-field v-model="submitData.immuneNumber" label="免疫证编号：" placeholder="请输入编号" input-align="right"/>
-            <van-divider></van-divider>
+<!--            <van-field v-model="submitData.immuneNumber" label="免疫证编号：" placeholder="请输入编号" input-align="right"/>-->
+<!--            <van-divider></van-divider>-->
             <van-field
                     readonly
                     clickable
