@@ -50,7 +50,7 @@
         </van-form>
         <div class="btn-panel" flex="dir:left cross:center main:justify">
             <van-button type="info" class="btn pre-btn" @click="preStep">上一步</van-button>
-            <van-button type="info" class="btn next-btn" @click="submit" :loading="submitLoading">提交</van-button>
+            <van-button type="info" class="btn next-btn" @click="submit" :loading="submitLoading" :disabled="submitLoading">提交</van-button>
         </div>
         <van-popup v-model="showDialog" class="dialog-warp">
             <div class="dialog" flex="dir:top cross:center">

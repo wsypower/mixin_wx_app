@@ -58,7 +58,7 @@
         methods:{
             gotoModulePage(path){
                 if(path===''){
-                    Toast('还没开发');
+                    Toast('该功能暂未上线');
                 }
                 else{
                     if(path==='/service'){

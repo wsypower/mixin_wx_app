@@ -81,7 +81,7 @@
                 />
             </van-form>
             <div class="btn-panel" flex="dir:left cross:center main:center">
-                <van-button type="info" class="btn next-btn" @click="submit" :loading="submitLoading">提交</van-button>
+                <van-button type="info" class="btn next-btn" @click="submit" :loading="submitLoading" :disabled="submitLoading">提交</van-button>
             </div>
         </div>
         <van-popup v-model="showDialog" class="dialog-warp">

@@ -71,7 +71,7 @@
         },
         methods:{
             share(){
-                Toast('还未开发分享');
+                Toast('该功能暂未上线');
             },
             previewQrImg(qRCodePath){
                 ImagePreview([qRCodePath]);

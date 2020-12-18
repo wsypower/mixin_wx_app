@@ -121,7 +121,7 @@
             goToPage(page){
                 if(page==='wg'){
                     Toast({
-                        message: '还未开发',
+                        message: '该功能暂未上线',
                         duration: 2000
                     });
                 }
