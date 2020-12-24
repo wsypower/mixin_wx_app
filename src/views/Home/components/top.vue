@@ -6,7 +6,7 @@
         </div>
         <van-swipe v-else class="dog-swipe" indicator-color="white" ref="swiper">
             <van-swipe-item v-for="item in dogCards" :key="item.id" @touchstart="touchStartFun" @touchend="touchEndFun">
-                <dog-item :dogData="item" :needToDetail="true"></dog-item>
+                <dog-item :dogData="item" :needToDetail="true" :isRealClick="isRealClick"></dog-item>
             </van-swipe-item>
         </van-swipe>
     </div>
@@ -30,11 +30,14 @@
             }
         },
         data(){
-            return {}
+            return {
+                isRealClick: true
+            }
         },
         mounted(){},
         methods:{
             touchStartFun(e){
+                e.preventDefault;
                 let touch = e.touches[0]; //获取第一个触点
                 this.startX = Number(touch.pageX);
             },
@@ -43,6 +46,7 @@
                 let x = Number(touch.pageX);
                 console.log('x: ' + x);
                 if(Math.abs(x-this.startX)>5){
+                    this.isRealClick = false
                     if(x-this.startX>5){
                         // this.$emit('prev');
                         this.$refs.swiper.prev();
@@ -51,6 +55,9 @@
                         this.$refs.swiper.next();
                         // this.$emit('next');
                     }
+                }
+                else{
+                    this.isRealClick = true
                 }
             }
             // prev(){

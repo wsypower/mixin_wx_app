@@ -20,6 +20,7 @@
     import { List } from 'vant';
     import externalMethods from '@/utils/externalMethods/index.js'
     import { queryDogServicePoint } from '@/api/home.js'
+    const coordtransform = require('coordtransform');
     export default {
         name: 'servicePointList',
         components: {
@@ -93,6 +94,10 @@
                     this.totalSize = res.data.totalCount;
                     if(res.data.list){
                         this.placeList = res.data.list.reduce((acc,item) => {
+                            let gcj02 = coordtransform.wgs84togcj02(item.longitude, item.latitude);
+                            let bd09 = coordtransform.gcj02tobd09(gcj02[0], gcj02[1]);
+                            item.longitude = bd09[0];
+                            item.latitude = bd09[1];
                             let temp = {
                                 id: item.id,
                                 servicePointName: item.servicePointName,

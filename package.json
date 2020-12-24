@@ -12,6 +12,7 @@
     "animate.css": "^4.1.0",
     "axios": "^0.19.2",
     "clipboard": "^2.0.6",
+    "coordtransform": "^2.1.2",
     "core-js": "^2.6.5",
     "fastclick": "^1.0.6",
     "hesc-jsapi": "^1.1.3",

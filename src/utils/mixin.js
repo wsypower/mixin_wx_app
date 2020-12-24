@@ -156,9 +156,9 @@ const mixin = {
             if(this.submitData.immuneAddress===''){
                 return '免疫地点必选'
             }
-            if(this.submitData.immuneNumber===''){
-                return '免疫证编号必填'
-            }
+            // if(this.submitData.immuneNumber===''){
+            //     return '免疫证编号必填'
+            // }
             if(this.submitData.immuneTime===null){
                 return '免疫登记日期必填'
             }
@@ -197,9 +197,9 @@ const mixin = {
             if(this.submitData.immuneAddress===''){
                 return '免疫地点必选'
             }
-            if(this.submitData.immuneNumber===''){
-                return '免疫证编号必填'
-            }
+            // if(this.submitData.immuneNumber===''){
+            //     return '免疫证编号必填'
+            // }
             if(this.submitData.immuneTime===null){
                 return '免疫登记日期必填'
             }
