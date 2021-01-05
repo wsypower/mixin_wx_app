@@ -47,6 +47,7 @@
             <van-popup v-model="showBirthdatePicker" position="bottom">
                 <van-datetime-picker
                         type="date"
+                        :min-date="minDate"
                         @confirm="onBirthdateConfirm"
                         @cancel="showBirthdatePicker = false"
                 />
@@ -66,6 +67,7 @@
             <van-popup v-model="showAdoptTimePicker" position="bottom">
                 <van-datetime-picker
                         type="date"
+                        :min-date="minDate"
                         @confirm="onAdoptTimeConfirm"
                         @cancel="showAdoptTimePicker = false"
                 />
@@ -156,6 +158,7 @@
             <van-popup v-model="showImmuneTimePicker" position="bottom">
                 <van-datetime-picker
                         type="date"
+                        :min-date="minDate"
                         @confirm="onImmuneTimeConfirm"
                         @cancel="showImmuneTimePicker = false"
                 />
@@ -267,6 +270,7 @@
                         longitude: '120.90435'
                     }
                 ],
+                minDate: new Date(2000, 0, 1),
                 //展示时间选择（出生日期、领养日期、免疫登记日期）
                 showBirthdatePicker: false,
                 showAdoptTimePicker: false,
