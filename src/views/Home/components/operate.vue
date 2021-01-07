@@ -34,20 +34,20 @@
                 //     path: '/dogAdopt'
                 // }
                 ,{
-                    iconClass: 'zdfg',
-                    name: '制度法规',
-                    path: '/laws'
+                    iconClass: 'fwjg',
+                    name: '办证网点',
+                    path: '/service'
                 },{
                     iconClass: 'yqzs',
                     name: '养犬知识',
                     path: '/dogKnowledge'
                 },{
-                    iconClass: 'fwjg',
-                    name: '服务机构',
-                    path: '/service'
+                    iconClass: 'zdfg',
+                    name: '制度法规',
+                    path: '/laws'
                 },{
                     iconClass: 'tsjb',
-                    name: '投诉举报',
+                    name: '服务热线',
                     path: ''
                 }]
             }
