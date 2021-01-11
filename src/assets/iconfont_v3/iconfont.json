@@ -6,27 +6,6 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "17283024",
-      "name": "电 话",
-      "font_class": "dianhua1",
-      "unicode": "e601",
-      "unicode_decimal": 58881
-    },
-    {
-      "icon_id": "16564965",
-      "name": "箭头",
-      "font_class": "jiantou-copy",
-      "unicode": "e8bf",
-      "unicode_decimal": 59583
-    },
-    {
-      "icon_id": "479409",
-      "name": "箭头",
-      "font_class": "jiantou",
-      "unicode": "e618",
-      "unicode_decimal": 58904
-    },
-    {
       "icon_id": "10019542",
       "name": "退出",
       "font_class": "exittuichu",
@@ -252,7 +231,7 @@
     },
     {
       "icon_id": "9512485",
-      "name": "向右",
+      "name": "右箭头",
       "font_class": "arrowRight-fill",
       "unicode": "e60f",
       "unicode_decimal": 58895
@@ -287,7 +266,7 @@
     },
     {
       "icon_id": "9512486",
-      "name": "向下",
+      "name": "下箭头",
       "font_class": "arrowBottom-fill",
       "unicode": "e60e",
       "unicode_decimal": 58894

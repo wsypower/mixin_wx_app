@@ -48,7 +48,7 @@
                 },{
                     iconClass: 'tsjb',
                     name: '服务热线',
-                    path: ''
+                    path: '/hotline'
                 }]
             }
         },
