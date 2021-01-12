@@ -69,6 +69,7 @@
         },
         data(){
             return {
+                dogCardId: '',
                 showButton: false,
                 buttonName: '',
                 pagePath: '',
@@ -114,6 +115,7 @@
                 queryOrderDetail(params).then( res => {
                     console.log('queryOrderDetail', res);
                     if(res.errno===0){
+                        this.dogCardId = res.data.dogCardId;
                         let order = res.data.dogOrder;
                         this.orderInfo.orderId = order.id;
                         this.orderInfo.orderNo = order.orderNo;
@@ -167,7 +169,7 @@
             //跳转到编辑页、犬证详情页、服务页
             goToPage(){
                 if(this.pagePath==='dogDetail'){
-                    this.$router.push('/dogCertificateManage/' + this.orderInfo.dogCardNumber + '/detail');
+                    this.$router.push('/dogCertificateManage/' + this.dogCardId + '/detail');
                 }
                 else if(this.pagePath==='service'){
                     this.$router.push('/service');

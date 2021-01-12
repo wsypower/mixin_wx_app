@@ -6,7 +6,7 @@ const routes = [
         meta: { keepAlive:false }
     },
     {
-        path: '/dogCertificateManage/:dogCardNumber/detail',
+        path: '/dogCertificateManage/:dogCardId/detail',
         name: 'dogDetail',
         component: () => import(/* webpackChunkName: "dogCertificateManage" */ '@/views/DogCertificateManage/detail.vue'),
         meta: { keepAlive:false }

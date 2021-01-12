@@ -1,5 +1,5 @@
 <template>
-    <div class="dog-item" flex="dir:top" @click.stop="gotToDogDetailPage(dogData.dogCardNumber)">
+    <div class="dog-item" flex="dir:top" @click.stop="gotToDogDetailPage(dogData.id)">
         <div flex="dir:left cross:center" style="position: relative">
             <img class="dog-item-img" :src="dogData.imgHost + dogData.dogPhotoFront">
             <div flex="dir:top" class="dog-item_mes">
@@ -83,11 +83,11 @@
                 ImagePreview([qRCodePath]);
             },
 
-            //@click="gotToDogDetailPage(dogData.dogCardNumber)"
-            gotToDogDetailPage(dogCardNumber){
+            //@click="gotToDogDetailPage(dogData.id)"
+            gotToDogDetailPage(dogCardId){
                 if(this.isRealClick&&this.needToDetail){
-                    console.log(`dogCardNumber: ${dogCardNumber}`);
-                    this.$router.push('/dogCertificateManage/' + dogCardNumber + '/detail');
+                    console.log(`dogCardId: ${dogCardId}`);
+                    this.$router.push('/dogCertificateManage/' + dogCardId + '/detail');
                 }
             }
         }

@@ -99,7 +99,7 @@
     import UploadImage from './components/uploadImage.vue';
     import { formatDate } from '@/utils/index.js'
     import { queryImmuneSite } from '@/api/common.js'
-    import { bidDogCard } from '@/api/apply.js'
+    import { bidDogCard, dogCardNumberGenerate } from '@/api/apply.js'
     import { queryPidDogCard } from '@/api/process.js'
     import myMixin from '@/utils/mixin.js';
     export default{
@@ -202,8 +202,15 @@
                     });
                 }
                 if(to.query.dogCardNumber){
-                    vm.submitData.dogCardNumber = to.query.dogCardNumber;
-                    vm.submitData.chipNumber = to.query.chipNumber;
+                    if(to.query.dogCardNumber.indexOf('none')>=0 ){
+                        dogCardNumberGenerate({id: to.query.dogCardNumber.substring(4)}).then( res => {
+                            vm.submitData.dogCardNumber = res;
+                        });
+                    }
+                    else{
+                        vm.submitData.dogCardNumber = to.query.dogCardNumber;
+                        vm.submitData.chipNumber = to.query.chipNumber;
+                    }
                 }
             })
         },

@@ -58,7 +58,7 @@
                 //获取单个狗证详情的入参
                 params:{
                     userId: '',
-                    dogCardNumber: ''
+                    dogCardId: ''
                 },
                 dogData: {
                     qrCodePath: require('@/assets/images/no_data@2x.png')
@@ -67,8 +67,8 @@
         },
         mounted(){
             this.params.userId = this.$store.getters['userId'];
-            this.params.dogCardNumber = this.$route.params.dogCardNumber;
-            console.log('dogCardNumber', this.params.dogCardNumber);
+            this.params.dogCardId = this.$route.params.dogCardId;
+            console.log('dogCardId', this.params.dogCardId);
             this.getDogDetail();
         },
         methods:{
@@ -138,7 +138,7 @@
                 this.$router.push({
                     path:'/continuedApply',
                     query:{
-                        dogCardNumber: this.dogData.dogCardNumber,
+                        dogCardNumber: this.dogData.dogCardNumber|| 'none'+ this.dogData.id,
                         chipNumber: this.dogData.chipNumber
                     }
                 });
