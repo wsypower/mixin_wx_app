@@ -25,7 +25,7 @@
                     path: '/process'
                 },{
                     iconClass: 'qzgl',
-                    name: '犬证管理',
+                    name: '犬证年审',
                     path: '/dogCertificateManage'
                 }
                 // ,{
