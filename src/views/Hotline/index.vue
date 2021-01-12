@@ -36,7 +36,7 @@
                     {areaName: '上虞区', phone: '0575-82191617'},
                     {areaName: '诸暨市', phone: '0575-89093916'},
                     {areaName: '嵊州市', phone: '0575-83003520'},
-                    {areaName: '新昌市', phone: '0575-86073639'}]
+                    {areaName: '新昌县', phone: '0575-86073639'}]
             }
         },
         methods:{

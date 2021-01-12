@@ -23,7 +23,7 @@
         <van-popup v-model="showDialog" class="dialog-warp">
             <div class="dialog" flex="dir:top cross:center">
                 <div class="dialog-header">温馨提示</div>
-                <div class="dialog-main">表格链接已复制，请用浏览器打开链接并下载。</div>
+                <div class="dialog-main">附件链接已复制，请用浏览器打开链接并下载。</div>
                 <div class="dialog-footer"><van-button type="info" size="mini" @click="showDialog=false">关闭</van-button></div>
             </div>
         </van-popup>
@@ -63,13 +63,13 @@
                         let arr = info[key].split('@@@link@@@');
                         fileNumNameArray = arr.reduce((acc, ns,index) => {
                             if((index+1)%2===0){
-                                acc.push(ns);
+                                acc.push('@@@link@@@' + ns + '@@@link@@@');
                             }
                             return acc
                         },[]);
                         console.log('fileNumNameArray',fileNumNameArray);
                     }
-                    this.articleInfo[key] = info[key].replace(/@@@link@@@/g,'');
+                    this.articleInfo[key] = info[key]; //.replace(/@@@link@@@/g,'')
                 }else{
                     this.articleInfo[key] = info[key];
                 }
@@ -180,9 +180,9 @@
             }
         }
         .file-panel{
-            padding: 10px 25px 25px 25px;
+            padding: 30px 25px 25px 25px;
             p{
-                line-height: 30px;
+                line-height: 40px;
                 font-size: 20px;
                 color: #306CE7;
                 .copyDJFileUrl{
