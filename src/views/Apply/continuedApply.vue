@@ -137,6 +137,8 @@
                 //提交时给予提示
                 submitLoading: false,
                 submitData:{
+                    //犬证ID
+                    dogCardId: '',
                     userId: '',
                     // 图片上传的IP以及端口
                     imgHost: '',
@@ -203,7 +205,8 @@
                 }
                 if(to.query.dogCardNumber){
                     if(to.query.dogCardNumber.indexOf('none')>=0 ){
-                        dogCardNumberGenerate({id: to.query.dogCardNumber.substring(4)}).then( res => {
+                        vm.submitData.dogCardId = to.query.dogCardNumber.substring(4);
+                        dogCardNumberGenerate({id: vm.submitData.dogCardId}).then( res => {
                             vm.submitData.dogCardNumber = res;
                         });
                     }
