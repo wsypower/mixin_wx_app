@@ -138,8 +138,9 @@
                 this.$router.push({
                     path:'/continuedApply',
                     query:{
-                        dogCardNumber: this.dogData.dogCardNumber|| 'none'+ this.dogData.id,
-                        chipNumber: this.dogData.chipNumber
+                        dogCardNumber: this.dogData.dogCardNumber|| 'none' ,
+                        chipNumber: this.dogData.chipNumber,
+                        dagCardId: this.dogData.id
                     }
                 });
             }

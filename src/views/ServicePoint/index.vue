@@ -1,6 +1,6 @@
 <template>
     <div class="service-point-page">
-        <page-header title="服务点"></page-header>
+        <page-header title="办证网点"></page-header>
         <div class="map-panel">
             <baidu-map class="bm-view" :center="center" :zoom="zoom" @ready="mapReadyHandler" ak="fyqKIIAp1Vg3BN5KGd4ZBbhpUeuYhZW7">
 <!--                <bm-geolocation-->

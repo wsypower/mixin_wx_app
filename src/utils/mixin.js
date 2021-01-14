@@ -1,5 +1,5 @@
 const typeArray = [{labelName: '个人',value:'0'},{labelName: '单位',value:'1'}];
-const methodArray = [{labelName: '新办',value:'0'},{labelName: '续办',value:'1'}];
+const methodArray = [{labelName: '新办',value:'0'}];
 const ynArray = [{labelName: '是',value: '1'},{labelName: '否',value: '0'}];
 const fileTypeArray = [{labelName: '身份证',value: '1'},{labelName: '驾驶证',value: '2'},{labelName: '护照',value: '3'}];
 const sexArray = [{labelName: '男',value: '1'},{labelName: '女',value: '0'}];

@@ -1,6 +1,6 @@
 <template>
     <div class="dog-manage-page">
-        <page-header title="犬证管理"></page-header>
+        <page-header title="犬证年审"></page-header>
         <div class="dog-manage-body" v-if="dogList.length>0">
             <dog-item v-for="item in dogList" :key="item.id" :dogData="item" :needToDetail="true" :needShare="true" class="mt20"></dog-item>
         </div>

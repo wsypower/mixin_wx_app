@@ -205,7 +205,7 @@
                 }
                 if(to.query.dogCardNumber){
                     if(to.query.dogCardNumber.indexOf('none')>=0 ){
-                        vm.submitData.dogCardId = to.query.dogCardNumber.substring(4);
+                        vm.submitData.dogCardId = to.query.dagCardId;
                         dogCardNumberGenerate({id: vm.submitData.dogCardId}).then( res => {
                             vm.submitData.dogCardNumber = res;
                         });
@@ -213,6 +213,7 @@
                     else{
                         vm.submitData.dogCardNumber = to.query.dogCardNumber;
                         vm.submitData.chipNumber = to.query.chipNumber;
+                        vm.submitData.dogCardId = to.query.dagCardId;
                     }
                 }
             })
